@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 280" fill="none">
+  <defs>
+    <linearGradient id="banner" x1="0" y1="0" x2="800" y2="280" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f766e"/>
+      <stop offset=".45" stop-color="#115e59"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="280" fill="url(#banner)"/>
+  <circle cx="680" cy="50" r="90" fill="#fff" opacity=".07"/>
+  <circle cx="100" cy="230" r="60" fill="#fff" opacity=".06"/>
+  <text x="400" y="130" text-anchor="middle" font-family="Arial,sans-serif" font-size="42" font-weight="bold" fill="#fff">ALSHAYEB SHOP</text>
+  <text x="400" y="175" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" fill="#fff" opacity=".85">متجرك — منتجاتك — أرباحك</text>
+</svg>

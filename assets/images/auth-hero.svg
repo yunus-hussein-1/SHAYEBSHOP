@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 420" fill="none">
+  <rect width="480" height="420" rx="24" fill="#eef8f5"/>
+  <circle cx="240" cy="200" r="130" fill="#0f766e" opacity=".08"/>
+  <circle cx="380" cy="80" r="40" fill="#f97316" opacity=".15"/>
+  <rect x="100" y="120" width="280" height="200" rx="20" fill="#fff" stroke="#dfe7e2" stroke-width="2"/>
+  <rect x="100" y="120" width="280" height="56" rx="20" fill="#0f766e"/>
+  <rect x="100" y="152" width="280" height="24" fill="#0f766e"/>
+  <circle cx="132" cy="148" r="8" fill="#fff" opacity=".9"/>
+  <circle cx="158" cy="148" r="8" fill="#fff" opacity=".6"/>
+  <rect x="130" y="200" width="220" height="16" rx="8" fill="#eef8f5"/>
+  <rect x="130" y="230" width="170" height="16" rx="8" fill="#eef8f5"/>
+  <rect x="130" y="260" width="110" height="36" rx="10" fill="#f97316"/>
+  <text x="240" y="370" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" font-weight="bold" fill="#0f766e">ALSHAYEB SHOP</text>
+</svg>

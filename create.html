@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تقديم متجر | Shayeb Shop</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <nav class="navbar compact">
+    <a class="brand" href="index.html">
+      <img src="assets/images/shop-logo.svg" alt="Shayeb Shop" class="brand-logo">
+      <div class="brand-text"><span class="brand-title">Shayeb Shop</span></div>
+    </a>
+  </nav>
+
+  <main class="builder-layout">
+    <section class="builder-panel">
+      <h1>تقديم طلب فتح متجر</h1>
+
+      <form id="storeForm" class="form-grid">
+        <label>اسم صاحب المتجر<input id="ownerName" type="text" required></label>
+        <label>اسم المتجر<input id="storeName" type="text" required></label>
+        <label>رابط المتجر<input id="slug" type="text" placeholder="my-store" required></label>
+        <label>حرف الشعار<input id="logo" type="text" maxlength="2"></label>
+        <label class="full">وصف المتجر<textarea id="tagline" required></textarea></label>
+        <label>رابط البانر<input id="bannerUrl" type="url"></label>
+        <label class="file-field">أو ارفع بانر<input id="bannerFile" type="file" accept="image/*"></label>
+
+        <div class="form-divider full">أول منتج</div>
+        <label>اسم المنتج<input id="productTitle" type="text" required></label>
+        <label>السعر<input id="productPrice" type="number" min="1" required></label>
+        <label>التصنيف<select id="productCategory" required>
+          <option value="إلكترونيات">إلكترونيات</option>
+          <option value="ألبسة">ألبسة</option>
+        </select></label>
+        <label>رابط صورة<input id="productImageUrl" type="url"></label>
+        <label class="file-field">أو ارفع صورة<input id="productImageFile" type="file" accept="image/*"></label>
+
+        <div class="agreement-box full">
+          <label class="full agreement-box" style="border:0;padding:0;background:transparent;">
+            <input id="agreeCommission" type="checkbox" required>
+            <div>
+              <strong>اتفاقية العمولة</strong>
+              <p>أوافق على أن تأخذ المنصة نسبة <strong>10%</strong> من قيمة كل منتج يُباع عبر متجري. أستلم <strong>90%</strong> من المبلغ. هذا الاتفاق ساري من لحظة قبول الطلب.</p>
+            </div>
+          </label>
+        </div>
+
+        <button class="primary-btn full" type="submit">إرسال الطلب</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/create-store.js"></script>
+</body>
+</html>

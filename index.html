@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shayeb Shop | شايب شوب</title>
+  <meta name="description" content="Shayeb Shop — منصة متخصصة للإلكترونيات والألبسة">
+  <link rel="canonical" href="https://shayebshop.com">
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a class="brand" href="index.html">
+      <img src="assets/images/shop-logo.svg" alt="Shayeb Shop" class="brand-logo">
+      <div class="brand-text">
+        <span class="brand-title">Shayeb Shop</span>
+        <small class="brand-sub">شايب شوب · إلكترونيات وألبسة</small>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#stores">المتاجر</a></li>
+      <li><a href="#products">المنتجات</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a class="cart-link" href="cart.html" title="السلة">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge" id="cartCount">0</span>
+      </a>
+      <a class="primary-btn" href="login.html" id="navAuthBtn">تسجيل الدخول</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy animate-in">
+        <h1>Shayeb Shop</h1>
+        <p class="hero-subtitle">شايب شوب</p>
+        <p class="hero-desc">منصة متخصصة للإلكترونيات والألبسة</p>
+        <div class="hero-actions">
+          <a href="#products" class="primary-btn large">تصفّح المنتجات</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="assets/images/marketplace-hero.svg" alt="Shayeb Shop">
+      </div>
+    </section>
+
+    <section id="stores" class="section-band muted">
+      <div class="section-title-row">
+        <div><h2>المتاجر</h2></div>
+      </div>
+      <div id="featuredStores" class="store-grid"></div>
+    </section>
+
+    <section id="products" class="section-band">
+      <div class="section-title-row">
+        <div><h2>المنتجات</h2></div>
+      </div>
+      <div class="category-pills" id="categoryFilter"></div>
+      <div id="featuredProducts" class="product-grid" style="margin-top:24px;"></div>
+    </section>
+  </main>
+
+  <footer>Shayeb Shop · شايب شوب</footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>

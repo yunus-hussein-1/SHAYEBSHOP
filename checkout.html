@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إتمام الطلب | Shayeb Shop</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <nav class="navbar compact">
+    <a class="brand" href="index.html">
+      <img src="assets/images/shop-logo.svg" alt="Shayeb Shop" class="brand-logo">
+      <div class="brand-text"><span class="brand-title">Shayeb Shop</span></div>
+    </a>
+    <a class="secondary-btn" href="cart.html">السلة</a>
+  </nav>
+
+  <main class="checkout-layout">
+    <section class="checkout-card">
+      <h1>إتمام الطلب</h1>
+      <div id="selectedPlan" class="selected-plan"></div>
+
+      <form id="paymentForm" class="form-grid">
+        <label>الاسم<input id="payerName" type="text" required></label>
+        <label>الهاتف<input id="payerPhone" type="tel" required></label>
+        <label class="full">العنوان<textarea id="payerAddress" required></textarea></label>
+        <label class="full">ملاحظات<input id="payerNotes" type="text" placeholder="اختياري"></label>
+        <button class="primary-btn full" type="submit">تأكيد الطلب</button>
+      </form>
+      <div id="paymentMessage" class="form-message"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/payment-storely.js"></script>
+</body>
+</html>

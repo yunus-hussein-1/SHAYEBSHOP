@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة المؤسس | ALSHAYEB SHOP</title>
+  <link rel="canonical" href="https://alshayeb.shop/admin.html">
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <nav class="navbar compact">
+    <a class="brand" href="index.html">
+      <img src="assets/images/shop-logo.svg" alt="ALSHAYEB SHOP" class="brand-logo">
+      <span>ALSHAYEB SHOP</span><small>لوحة المؤسس</small>
+    </a>
+    <span class="founder-badge">👑 مؤسس المنصة</span>
+    <a class="secondary-btn" href="index.html">السوق</a>
+  </nav>
+
+  <main class="admin-page">
+    <section class="admin-hero">
+      <div>
+        <span class="eyebrow">إدارة المنصة</span>
+        <h1>لوحة تحكم المؤسس</h1>
+        <p>تحكم بكل المتاجر — احذف، ارفض، أو أوقف أي متجر. راجع الطلبات والعمولات.</p>
+      </div>
+      <div class="admin-hero-visual">
+        <img src="assets/images/dashboard-hero.svg" alt="لوحة المؤسس">
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card"><span>المتاجر</span><strong id="adminTotalStores">0</strong></div>
+      <div class="stat-card accent"><span>متاجر موقوفة</span><strong id="adminBannedStores">0</strong></div>
+      <div class="stat-card"><span>المنتجات</span><strong id="adminTotalProducts">0</strong></div>
+      <div class="stat-card"><span>إجمالي العمولات</span><strong id="adminTotalCommission">0 ل.س</strong></div>
+    </section>
+
+    <section class="workspace-grid">
+      <div class="workspace-panel admin-card">
+        <div class="section-title-row"><h2>كل المتاجر</h2></div>
+        <div id="adminStoresList" class="product-table"></div>
+      </div>
+      <aside class="workspace-panel admin-card">
+        <h2>الطلبات</h2>
+        <p style="color:var(--muted); font-size:.9rem; margin-top:8px;">طلبات بانتظار التأكيد</p>
+        <div id="adminOrdersList" class="product-table" style="margin-top:16px;"></div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

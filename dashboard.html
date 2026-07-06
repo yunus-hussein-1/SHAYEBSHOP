@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم | Shayeb Shop</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <nav class="navbar compact">
+    <a class="brand" href="index.html">
+      <img src="assets/images/shop-logo.svg" alt="Shayeb Shop" class="brand-logo">
+      <div class="brand-text"><span class="brand-title">Shayeb Shop</span></div>
+    </a>
+    <a id="openStoreBtn" class="primary-btn" href="store.html">المتجر</a>
+  </nav>
+
+  <main class="dashboard-page">
+    <section class="dashboard-hero">
+      <div class="dashboard-hero-content">
+        <h1 id="dashboardTitle">متجري</h1>
+        <p id="dashboardSubtitle"></p>
+        <a href="create.html" class="secondary-btn" id="createStoreLink" style="display:none; margin-top:12px;">تقديم طلب متجر</a>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card"><span>المنتجات</span><strong id="totalProducts">0</strong></div>
+      <div class="stat-card"><span>المبيعات</span><strong id="totalSales">0</strong></div>
+      <div class="stat-card"><span>الأرباح</span><strong id="totalRevenue">0</strong></div>
+    </section>
+
+    <section class="workspace-grid">
+      <div class="workspace-panel">
+        <h2>المنتجات</h2>
+        <div id="productsList" class="product-table" style="margin-top:16px;"></div>
+      </div>
+      <aside class="workspace-panel">
+        <h2>إضافة منتج</h2>
+        <form id="productForm" class="stack-form">
+          <input id="newProductTitle" type="text" placeholder="الاسم" required>
+          <input id="newProductPrice" type="number" min="1" placeholder="السعر" required>
+          <select id="newProductCategory" required>
+            <option value="إلكترونيات">إلكترونيات</option>
+            <option value="ألبسة">ألبسة</option>
+          </select>
+          <input id="newProductImageUrl" type="url" placeholder="رابط الصورة">
+          <label class="file-field">صورة<input id="newProductImageFile" type="file" accept="image/*"></label>
+          <button class="primary-btn" type="submit">إضافة</button>
+        </form>
+      </aside>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/dashboard-store.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بروفايل | ALSHAYEB SHOP</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <main class="page-shell">
+    <h1 class="page-title">👤 بروفايل</h1>
+    <p class="page-lead">معلوماتك الشخصية وموقعك.</p>
+
+    <section class="panel-card">
+      <form id="profileForm" class="stack-form">
+        <div class="profile-avatar-row">
+          <div id="avatarPreview" class="profile-avatar-preview">?</div>
+          <label class="file-field">تغيير الصورة<input id="avatarFile" type="file" accept="image/*"></label>
+        </div>
+        <label>الاسم<input id="profileName" type="text" required></label>
+        <label>البريد<input id="profileEmail" type="email" readonly></label>
+        <label>رقم سوري<input id="profilePhone" type="tel" placeholder="09xxxxxxxx"></label>
+        <label>موقعك الشخصي
+          <div class="location-row">
+            <input id="profileLocation" type="text" placeholder="المدينة / العنوان">
+            <button type="button" class="secondary-btn" id="getLocationBtn">📍</button>
+          </div>
+        </label>
+        <button class="primary-btn" type="submit">حفظ</button>
+      </form>
+      <div id="profileMessage" class="form-message"></div>
+    </section>
+
+    <section class="panel-card highlight">
+      <h2>تريد تفتح متجر؟</h2>
+      <p>قدّم طلب فتح متجر وبيع منتجاتك من صفحة الإعدادات.</p>
+      <a class="primary-btn" href="settings.html#store">طلب فتح متجر ←</a>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/nav-shell.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

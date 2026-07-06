@@ -98,7 +98,13 @@ async function dbRestoreSession() {
     email: session.user.email,
     storeId: profile?.store_id || null,
     role: isFounder ? "founder" : (profile?.role || "buyer"),
-    emailVerified: Boolean(session.user.email_confirmed_at)
+    emailVerified: Boolean(session.user.email_confirmed_at),
+    phone: profile?.phone || session.user.user_metadata?.phone || "",
+    avatar: profile?.avatar || session.user.user_metadata?.avatar || "",
+    location: profile?.location || session.user.user_metadata?.location || "",
+    deliveryAddress: profile?.delivery_address || session.user.user_metadata?.deliveryAddress || "",
+    deliveryTime: profile?.delivery_time || session.user.user_metadata?.deliveryTime || "",
+    paymentMethod: profile?.payment_method || session.user.user_metadata?.paymentMethod || ""
   };
   return _dbSession;
 }
@@ -171,6 +177,7 @@ async function dbSignIn(email, password) {
 
 async function dbSignInWithGoogle() {
   const sb = dbClient();
+  if (!sb) throw new Error("Google يتطلب تفعيل Supabase في db-config.js");
   const redirectTo = (ALSHAYEB_DB_CONFIG.siteDomain || window.location.origin) + "/login.html";
   const { error } = await sb.auth.signInWithOAuth({
     provider: "google",
@@ -181,6 +188,7 @@ async function dbSignInWithGoogle() {
 
 async function dbHandleOAuthCallback() {
   const sb = dbClient();
+  if (!sb) return null;
   const { data: { session } } = await sb.auth.getSession();
   if (session) await dbRestoreSession();
   return session;
@@ -190,6 +198,68 @@ async function dbSignOut() {
   const sb = dbClient();
   await sb.auth.signOut();
   _dbSession = null;
+}
+
+async function dbResetPassword(email) {
+  const sb = dbClient();
+  if (!sb) throw new Error("خدمة البريد غير مفعّلة بعد.");
+  const base = (ALSHAYEB_DB_CONFIG.siteDomain || window.location.origin).replace(/\/$/, "");
+  const redirectTo = base + "/reset-password.html";
+  const { error } = await sb.auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo });
+  if (error) throw error;
+}
+
+async function dbUpdatePasswordFromRecovery(newPassword) {
+  const sb = dbClient();
+  if (!sb) throw new Error("خدمة إعادة التعيين غير متاحة.");
+  const { error } = await sb.auth.updateUser({ password: newPassword });
+  if (error) throw error;
+  await sb.auth.signOut();
+}
+
+async function dbUpdateProfile({ name, phone, avatar, location, deliveryAddress, deliveryTime, paymentMethod, newPassword }) {
+  const sb = dbClient();
+  if (!sb || !_dbSession?.userId) throw new Error("غير متصل.");
+
+  if (newPassword) {
+    const { error } = await sb.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+  }
+
+  const profileUpdates = {};
+  if (name !== undefined) profileUpdates.name = name;
+  if (phone !== undefined) profileUpdates.phone = phone;
+  if (avatar !== undefined) profileUpdates.avatar = avatar;
+  if (location !== undefined) profileUpdates.location = location;
+  if (deliveryAddress !== undefined) profileUpdates.delivery_address = deliveryAddress;
+  if (deliveryTime !== undefined) profileUpdates.delivery_time = deliveryTime;
+  if (paymentMethod !== undefined) profileUpdates.payment_method = paymentMethod;
+
+  if (Object.keys(profileUpdates).length) {
+    const { error } = await sb.from("profiles").update(profileUpdates).eq("id", _dbSession.userId);
+    if (error) console.warn("Profile columns may need migration:", error.message);
+    const meta = {};
+    if (name !== undefined) meta.name = name;
+    if (phone !== undefined) meta.phone = phone;
+    if (avatar !== undefined) meta.avatar = avatar;
+    if (location !== undefined) meta.location = location;
+    if (deliveryAddress !== undefined) meta.deliveryAddress = deliveryAddress;
+    if (deliveryTime !== undefined) meta.deliveryTime = deliveryTime;
+    if (paymentMethod !== undefined) meta.paymentMethod = paymentMethod;
+    if (Object.keys(meta).length) {
+      const { error: metaError } = await sb.auth.updateUser({ data: meta });
+      if (metaError) throw metaError;
+    }
+  }
+
+  if (name !== undefined) _dbSession.name = name;
+  if (phone !== undefined) _dbSession.phone = phone;
+  if (avatar !== undefined) _dbSession.avatar = avatar;
+  if (location !== undefined) _dbSession.location = location;
+  if (deliveryAddress !== undefined) _dbSession.deliveryAddress = deliveryAddress;
+  if (deliveryTime !== undefined) _dbSession.deliveryTime = deliveryTime;
+  if (paymentMethod !== undefined) _dbSession.paymentMethod = paymentMethod;
+  return _dbSession;
 }
 
 async function dbUpdateProfileStoreId(userId, storeId) {

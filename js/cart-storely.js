@@ -1,10 +1,4 @@
 storelyInit().then(async () => {
-  if (!storelyIsLoggedIn()) {
-    localStorage.setItem("storelyRedirectAfterLogin", "cart.html");
-    window.location.href = "login.html";
-    return;
-  }
-
   const cartStores = storelyGetStores();
 
   async function getCartDetailed() {
@@ -23,33 +17,41 @@ storelyInit().then(async () => {
     const checkoutBtn = document.getElementById("checkoutBtn");
 
     if (!items.length) {
-      container.innerHTML = `
-        <div class="empty-page">
-          <h2>السلة فارغة</h2>
-          <p>تصفح متاجر ALSHAYEB SHOP وأضف ما يعجبك.</p>
-          <a class="primary-btn" href="index.html">تصفح المنتجات</a>
-        </div>`;
+      container.innerHTML = storelyEmptyState("السلة فارغة", "تصفّح المنتجات وأضف ما يعجبك.", "تصفح المنتجات", "index.html#products");
       totalEl.textContent = storelyMoney(0);
       checkoutBtn.className = "secondary-btn full";
-      checkoutBtn.href = "index.html";
+      checkoutBtn.href = "index.html#products";
       checkoutBtn.textContent = "تصفح المنتجات";
+      checkoutBtn.onclick = null;
       return;
     }
 
     container.innerHTML = items.map((item) => `
       <div class="product-row">
         <div>
-          <div class="row-product-image" style="${storelyMediaStyle(item.product.image)}"></div>
+          <div class="row-product-image" style="${storelyMediaStyle(item.product.image, "assets/images/product-electronics.svg")}"></div>
           <strong>${item.product.title}</strong>
-          <span>${item.store.storeName} - ${item.product.category}</span>
+          <span>${item.store.storeName} · ${item.product.category}</span>
         </div>
         <b>${storelyMoney(item.product.price)}</b>
-        <span>الكمية: ${item.qty}</span>
+        <span>× ${item.qty}</span>
         <button class="danger-btn" onclick="removeCartItem('${item.storeId}','${item.productId}')">إزالة</button>
       </div>
     `).join("");
 
     totalEl.textContent = storelyMoney(items.reduce((sum, item) => sum + Number(item.product.price || 0) * item.qty, 0));
+    checkoutBtn.className = "primary-btn full";
+    checkoutBtn.textContent = storelyIsLoggedIn() ? "ادفع الآن" : "سجّل دخولك للدفع";
+    checkoutBtn.href = "#";
+    checkoutBtn.onclick = (event) => {
+      event.preventDefault();
+      if (!storelyIsLoggedIn()) {
+        localStorage.setItem("storelyRedirectAfterLogin", "checkout.html?plan=cart");
+        window.location.href = "login.html";
+        return;
+      }
+      window.location.href = "checkout.html?plan=cart";
+    };
   }
 
   window.removeCartItem = async (storeId, productId) => {
@@ -60,4 +62,5 @@ storelyInit().then(async () => {
   };
 
   renderCart();
+  storelyUpdateCartBadge();
 });

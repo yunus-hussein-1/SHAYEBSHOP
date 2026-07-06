@@ -3,59 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة التحكم | Shayeb Shop</title>
+  <title>حسابي | ALSHAYEB SHOP</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <nav class="navbar compact">
-    <a class="brand" href="index.html">
-      <img src="assets/images/shop-logo.svg" alt="Shayeb Shop" class="brand-logo">
-      <div class="brand-text"><span class="brand-title">Shayeb Shop</span></div>
-    </a>
-    <a id="openStoreBtn" class="primary-btn" href="store.html">المتجر</a>
-  </nav>
-
   <main class="dashboard-page">
-    <section class="dashboard-hero">
-      <div class="dashboard-hero-content">
-        <h1 id="dashboardTitle">متجري</h1>
-        <p id="dashboardSubtitle"></p>
-        <a href="create.html" class="secondary-btn" id="createStoreLink" style="display:none; margin-top:12px;">تقديم طلب متجر</a>
-      </div>
-    </section>
+    <!-- لوحة المشتري -->
+    <div id="buyerDashboard" style="display:none;">
+      <section class="dashboard-hero buyer-hero">
+        <div class="dashboard-hero-content">
+          <span class="role-badge buyer">مشتري</span>
+          <h1 id="buyerTitle">حسابي</h1>
+          <p id="buyerSubtitle"></p>
+        </div>
+      </section>
 
-    <section class="stats-grid">
-      <div class="stat-card"><span>المنتجات</span><strong id="totalProducts">0</strong></div>
-      <div class="stat-card"><span>المبيعات</span><strong id="totalSales">0</strong></div>
-      <div class="stat-card"><span>الأرباح</span><strong id="totalRevenue">0</strong></div>
-    </section>
+      <section class="stats-grid buyer-stats">
+        <div class="stat-card"><span>السلة</span><strong id="buyerCartCount">0</strong></div>
+        <div class="stat-card"><span>طلباتي</span><strong id="buyerOrdersCount">0</strong></div>
+      </section>
 
-    <section class="workspace-grid">
-      <div class="workspace-panel">
-        <h2>المنتجات</h2>
-        <div id="productsList" class="product-table" style="margin-top:16px;"></div>
-      </div>
-      <aside class="workspace-panel">
-        <h2>إضافة منتج</h2>
-        <form id="productForm" class="stack-form">
-          <input id="newProductTitle" type="text" placeholder="الاسم" required>
-          <input id="newProductPrice" type="number" min="1" placeholder="السعر" required>
-          <select id="newProductCategory" required>
-            <option value="إلكترونيات">إلكترونيات</option>
-            <option value="ألبسة">ألبسة</option>
-          </select>
-          <input id="newProductImageUrl" type="url" placeholder="رابط الصورة">
-          <label class="file-field">صورة<input id="newProductImageFile" type="file" accept="image/*"></label>
-          <button class="primary-btn" type="submit">إضافة</button>
-        </form>
-      </aside>
-    </section>
+      <section class="workspace-grid buyer-actions">
+        <div class="workspace-panel">
+          <h2>اختصارات</h2>
+          <div class="quick-links">
+            <a class="secondary-btn" href="profile.html">بروفايلي</a>
+            <a class="secondary-btn" href="cart.html">سلة المشتريات</a>
+            <a class="secondary-btn" href="index.html#products">تصفّح المنتجات</a>
+          </div>
+        </div>
+        <aside class="workspace-panel">
+          <h2>آخر الطلبات</h2>
+          <div id="buyerOrdersList" class="product-table" style="margin-top:16px;"></div>
+        </aside>
+      </section>
+
+      <section class="seller-apply-card">
+        <div>
+          <span class="role-badge seller">تاجر</span>
+          <h2>هل تريد البيع على ALSHAYEB SHOP؟</h2>
+          <p>قدّم طلب فتح متجر من هنا. بعد الموافقة تتحول حسابك إلى تاجر وتدير منتجاتك من لوحة منفصلة.</p>
+        </div>
+        <a href="create.html" class="primary-btn large">طلب أن تصبح تاجراً</a>
+      </section>
+    </div>
+
+    <!-- لوحة التاجر -->
+    <div id="sellerDashboard" style="display:none;">
+      <section class="dashboard-hero">
+        <div class="dashboard-hero-content">
+          <span class="role-badge seller">تاجر</span>
+          <h1 id="dashboardTitle">متجري</h1>
+          <p id="dashboardSubtitle"></p>
+          <a id="openStoreBtn" class="secondary-btn" href="store.html" style="margin-top:12px;display:inline-flex;">عرض المتجر</a>
+        </div>
+      </section>
+
+      <section class="stats-grid">
+        <div class="stat-card"><span>المنتجات</span><strong id="totalProducts">0</strong></div>
+        <div class="stat-card"><span>المبيعات</span><strong id="totalSales">0</strong></div>
+        <div class="stat-card"><span>الأرباح</span><strong id="totalRevenue">0</strong></div>
+      </section>
+
+      <section class="workspace-grid">
+        <div class="workspace-panel">
+          <h2>المنتجات</h2>
+          <div id="productsList" class="product-table" style="margin-top:16px;"></div>
+        </div>
+        <aside class="workspace-panel">
+          <h2>إضافة منتج</h2>
+          <form id="productForm" class="stack-form">
+            <input id="newProductTitle" type="text" placeholder="الاسم" required>
+            <input id="newProductPrice" type="number" min="1" placeholder="السعر" required>
+            <select id="newProductCategory" required></select>
+            <input id="newProductImageUrl" type="url" placeholder="رابط الصورة">
+            <label class="file-field">صورة<input id="newProductImageFile" type="file" accept="image/*"></label>
+            <button class="primary-btn" type="submit">إضافة</button>
+          </form>
+        </aside>
+      </section>
+
+      <section class="workspace-panel" style="margin-top:24px;">
+        <h2>طلبات المشترين</h2>
+        <p style="color:var(--muted);margin:8px 0 16px;">موقع المشتري وموعد الاستلام — حدّد موعد التسليم.</p>
+        <div id="sellerOrdersList" class="product-table"></div>
+      </section>
+
+      <section class="workspace-panel" style="margin-top:24px;">
+        <h2>آراء المشترين</h2>
+        <p style="color:var(--muted);margin-top:8px;">تقييمات وآراء الأعضاء عن منتجاتك.</p>
+        <div id="sellerReviewsList" class="product-table" style="margin-top:16px;"></div>
+      </section>
+    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/db-config.js"></script>
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
+  <script src="js/nav-shell.js"></script>
   <script src="js/dashboard-store.js"></script>
 </body>
 </html>

@@ -5,26 +5,31 @@ const STORELY_USERS_KEY = "storelyUsers";
 const STORELY_AD_COUNTER_KEY = "storelyAdCounter";
 const STORELY_CART_PREFIX = "storelyCart_";
 const STORELY_DATA_VERSION_KEY = "storelyDataVersion";
-const STORELY_DATA_VERSION = "3";
-const SITE_NAME = "Shayeb Shop";
-const SITE_NAME_AR = "شايب شوب";
-const SITE_TAGLINE = "منصة متخصصة للإلكترونيات والألبسة";
+const STORELY_GUEST_CART_KEY = "storelyGuestCart";
+const STORELY_DATA_VERSION = "4";
+const SITE_NAME = "ALSHAYEB SHOP";
+const SITE_NAME_AR = "ALSHAYEB SHOP";
+const SITE_TAGLINE = "إلكترونيات وألبسة";
 const PLATFORM_COMMISSION = () => (window.ALSHAYEB_DB_CONFIG?.platformCommission ?? 0.10);
 
 const STORELY_CATEGORIES = [
   "إلكترونيات",
-  "ألبسة",
-  "إكسسوارات",
-  "أحذية",
-  "شنط",
-  "ساعات",
-  "سماعات",
-  "هواتف",
-  "أخرى"
+  "ألبسة نسائية",
+  "ألبسة رجالية",
+  "ألبسة أطفال"
 ];
 
+const STORELY_PAYMENT_OPTIONS = [
+  { id: "hand", label: "تسليم باليد — الدفع عند الاستلام (ل.س)" },
+  { id: "sham_cash", label: "شام كاش — الدفع بالليرة السورية" }
+];
+
+function storelyShamCashNumber() {
+  return storelyConfig().shamCashNumber || "";
+}
+
 function storelyConfig() {
-  return window.ALSHAYEB_DB_CONFIG || {};
+  return window.APP_CONFIG || window.ALSHAYEB_DB_CONFIG || {};
 }
 
 function storelyIsFounder(user) {
@@ -33,6 +38,23 @@ function storelyIsFounder(user) {
   const founderEmail = storelyConfig().founderEmail?.toLowerCase();
   if (u.role === "founder") return true;
   return founderEmail && u.email.toLowerCase() === founderEmail;
+}
+
+function storelyUserRole(user) {
+  const u = user || storelyCurrentUser();
+  if (!u) return null;
+  if (storelyIsFounder(u)) return "founder";
+  if (u.storeId) return "seller";
+  return u.role || "buyer";
+}
+
+function storelyIsSeller(user) {
+  return storelyUserRole(user) === "seller";
+}
+
+function storelyIsBuyer(user) {
+  const role = storelyUserRole(user);
+  return role === "buyer";
 }
 
 function storelyActiveStores(stores) {
@@ -58,6 +80,50 @@ function storelyMigrateData() {
 }
 
 storelyMigrateData();
+
+function storelySeedDemoStores() {
+  const demo = [
+    {
+      id: "demo-electronics",
+      userId: "demo",
+      slug: "tech-syria",
+      ownerName: "ALSHAYEB SHOP",
+      storeName: "تك سوريا",
+      tagline: "إلكترونيات بأسعار منافسة",
+      storeLocation: "دمشق",
+      location: "دمشق",
+      logo: "ت",
+      banner: "assets/images/store-banner.svg",
+      rating: 4.8, sales: 120, revenue: 0, reviews: [],
+      banned: false, agreedCommission: true, status: "active",
+      products: [
+        { id: "p1", title: "سماعات بلوتوث", price: 85000, category: "إلكترونيات", featured: true, sales: 45, image: "assets/images/product-electronics.svg" },
+        { id: "p2", title: "شاحن سريع 65W", price: 42000, category: "إلكترونيات", featured: false, sales: 30, image: "assets/images/product-electronics.svg" }
+      ]
+    },
+    {
+      id: "demo-fashion",
+      userId: "demo",
+      slug: "style-shop",
+      ownerName: "ALSHAYEB SHOP",
+      storeName: "ستايل شوب",
+      tagline: "ألبسة عصرية للجميع",
+      storeLocation: "حلب",
+      location: "حلب",
+      logo: "س",
+      banner: "assets/images/store-banner.svg",
+      rating: 4.6, sales: 80, revenue: 0, reviews: [],
+      banned: false, agreedCommission: true, status: "active",
+      products: [
+        { id: "p3", title: "فستان صيفي", price: 95000, category: "ألبسة نسائية", featured: true, sales: 20, image: "assets/images/product-placeholder.svg" },
+        { id: "p4", title: "قميص رجالي", price: 55000, category: "ألبسة رجالية", featured: false, sales: 15, image: "assets/images/product-placeholder.svg" },
+        { id: "p5", title: "طقم أطفال", price: 38000, category: "ألبسة أطفال", featured: false, sales: 10, image: "assets/images/product-placeholder.svg" }
+      ]
+    }
+  ];
+  localStorage.setItem(STORELY_STORES_KEY, JSON.stringify(demo));
+  return demo;
+}
 
 let _dbMode = false;
 let _storesCache = [];
@@ -92,7 +158,8 @@ async function storelyRefreshStores() {
 }
 
 function storelyGetStores(includeBanned = false) {
-  const list = _dbMode ? _storesCache : (JSON.parse(localStorage.getItem(STORELY_STORES_KEY)) || []);
+  let list = _dbMode ? _storesCache : (JSON.parse(localStorage.getItem(STORELY_STORES_KEY)) || []);
+  if (!_dbMode && (!list || !list.length)) list = storelySeedDemoStores();
   const stores = Array.isArray(list) ? list : [];
   return includeBanned ? stores : stores.filter((s) => !s.banned);
 }
@@ -141,22 +208,26 @@ function storelySaveUsers(users) {
 }
 
 function storelyCurrentUser() {
-  if (_dbMode) return dbCurrentUser() || JSON.parse(localStorage.getItem(STORELY_SESSION_KEY));
-  return JSON.parse(localStorage.getItem(STORELY_SESSION_KEY));
+  const local = JSON.parse(localStorage.getItem(STORELY_SESSION_KEY) || "null");
+  if (_dbMode) {
+    return dbCurrentUser() || local;
+  }
+  return local;
 }
 
 function storelyIsLoggedIn() {
-  return Boolean(storelyCurrentUser()?.userId);
+  const user = storelyCurrentUser();
+  return Boolean(user?.userId);
+}
+
+function storelyLogout() {
+  localStorage.removeItem(STORELY_SESSION_KEY);
+  if (typeof dbSignOut === "function") dbSignOut().catch(() => {});
 }
 
 function storelyRequireProductAccess(targetUrl) {
-  if (storelyIsLoggedIn()) {
-    window.location.href = targetUrl;
-    return true;
-  }
-  localStorage.setItem("storelyRedirectAfterLogin", targetUrl);
-  window.location.href = "login.html";
-  return false;
+  window.location.href = targetUrl;
+  return true;
 }
 
 async function storelyRequireLoginAsync(redirectTo) {
@@ -207,20 +278,22 @@ function storelyPlanLabel() {
 
 function storelyCartKey() {
   const user = storelyCurrentUser();
-  return user?.userId ? STORELY_CART_PREFIX + user.userId : null;
+  return user?.userId ? STORELY_CART_PREFIX + user.userId : STORELY_GUEST_CART_KEY;
 }
 
-async function storelyGetCartAsync() {
-  if (_dbMode) return dbGetCart();
-  return storelyGetCart();
-}
-
-async function storelySaveCartAsync(items) {
-  if (_dbMode) {
-    await dbSaveCart(items);
-    return;
-  }
-  storelySaveCart(items);
+async function storelyMergeGuestCartOnLogin() {
+  const guest = JSON.parse(localStorage.getItem(STORELY_GUEST_CART_KEY) || "[]");
+  if (!guest.length || !storelyIsLoggedIn()) return;
+  const userCart = _dbMode && storelyIsLoggedIn()
+    ? await dbGetCart()
+    : JSON.parse(localStorage.getItem(STORELY_CART_PREFIX + storelyCurrentUser().userId) || "[]");
+  guest.forEach((item) => {
+    const existing = userCart.find((i) => i.storeId === item.storeId && i.productId === item.productId);
+    if (existing) existing.qty += item.qty;
+    else userCart.push(item);
+  });
+  await storelySaveCartAsync(userCart);
+  localStorage.removeItem(STORELY_GUEST_CART_KEY);
 }
 
 function storelyGetCart() {
@@ -233,6 +306,23 @@ function storelySaveCart(items) {
   const key = storelyCartKey();
   if (!key) return;
   localStorage.setItem(key, JSON.stringify(items));
+}
+
+async function storelyGetCartAsync() {
+  if (_dbMode && storelyIsLoggedIn()) return dbGetCart();
+  return storelyGetCart();
+}
+
+async function storelySaveCartAsync(items) {
+  if (_dbMode && storelyIsLoggedIn()) {
+    await dbSaveCart(items);
+    return;
+  }
+  if (!storelyIsLoggedIn()) {
+    localStorage.setItem(STORELY_GUEST_CART_KEY, JSON.stringify(items));
+    return;
+  }
+  storelySaveCart(items);
 }
 
 async function storelyAddToCartAsync(storeId, productId) {
@@ -271,41 +361,52 @@ function storelyCartCount() {
 }
 
 function storelyUpdateCartBadge() {
-  const badge = document.getElementById("cartCount");
-  if (!badge) return;
-  badge.textContent = storelyIsLoggedIn() ? storelyCartCount() : "0";
+  const count = storelyCartCount();
+  document.querySelectorAll(".topbar-cart").forEach((el) => {
+    let badge = el.querySelector(".badge");
+    if (count > 0) {
+      if (!badge) {
+        badge = document.createElement("span");
+        badge.className = "badge";
+        el.appendChild(badge);
+      }
+      badge.textContent = count;
+    } else if (badge) badge.remove();
+  });
 }
 
 async function storelyRequestAddToCartAsync(storeId, productId, returnUrl) {
   await storelyInit();
-  if (!storelyIsLoggedIn()) {
-    localStorage.setItem("storelyPendingCartAdd", JSON.stringify({ storeId, productId }));
-    localStorage.setItem("storelyRedirectAfterLogin", returnUrl || window.location.pathname + window.location.search);
-    window.location.href = "login.html";
-    return false;
-  }
   await storelyAddToCartAsync(storeId, productId);
   storelyUpdateCartBadge();
-  if (storelyShouldShowAd()) storelyShowAdModal();
-  else storelyToast("تمت إضافة المنتج إلى السلة");
+  if (storelyIsLoggedIn()) {
+    storelyToast("تمت الإضافة للسلة");
+  } else {
+    storelyToast("تمت الإضافة — سجّل دخولك لإتمام الشراء");
+  }
   return true;
 }
 
-function storelyRequestAddToCart(storeId, productId, returnUrl) {
-  if (!storelyIsLoggedIn()) {
-    localStorage.setItem("storelyPendingCartAdd", JSON.stringify({ storeId, productId }));
-    localStorage.setItem("storelyRedirectAfterLogin", returnUrl || window.location.pathname + window.location.search);
-    window.location.href = "login.html";
-    return false;
-  }
+function storelyRequestAddToCart(storeId, productId) {
   storelyAddToCart(storeId, productId);
   storelyUpdateCartBadge();
-  if (storelyShouldShowAd()) {
-    storelyShowAdModal();
-  } else {
-    storelyToast("تمت إضافة المنتج إلى السلة");
-  }
+  storelyToast(storelyIsLoggedIn() ? "تمت الإضافة للسلة" : "تمت الإضافة — سجّل دخولك لإتمام الشراء");
   return true;
+}
+
+function storelyGetStoreOrders(storeId) {
+  const orders = JSON.parse(localStorage.getItem("shayebOrders") || "[]");
+  return orders.filter((o) => o.storeId === storeId);
+}
+
+async function storelyUpdateOrderDelivery(orderId, sellerDeliverySlot) {
+  const orders = JSON.parse(localStorage.getItem("shayebOrders") || "[]");
+  const idx = orders.findIndex((o) => o.id === orderId);
+  if (idx === -1) throw new Error("الطلب غير موجود.");
+  orders[idx].sellerDeliverySlot = sellerDeliverySlot;
+  orders[idx].status = "scheduled";
+  localStorage.setItem("shayebOrders", JSON.stringify(orders));
+  return orders[idx];
 }
 
 /* -------------------- إعلانات دورية -------------------- */
@@ -324,7 +425,7 @@ function storelyShowAdModal() {
     <div class="ad-modal">
       <span class="ad-tag">إعلان</span>
       <div class="ad-modal-img" style="background-image:url('assets/images/marketplace-hero.svg')"></div>
-      <h3>Shayeb Shop</h3>
+      <h3>ALSHAYEB SHOP</h3>
       <p>منصة متخصصة للإلكترونيات والألبسة</p>
       <div class="ad-actions">
         <button class="secondary-btn" type="button" id="storelyAdClose">متابعة</button>
@@ -363,4 +464,142 @@ function storelyEmptyState(title, text, btnLabel, btnHref) {
       <p>${text}</p>
       ${btnLabel ? `<a class="primary-btn" href="${btnHref}">${btnLabel}</a>` : ""}
     </div>`;
+}
+
+/* -------------------- البروفايل -------------------- */
+
+function storelyValidateSyrianPhone(phone) {
+  const digits = String(phone || "").replace(/\D/g, "");
+  if (!digits) return true;
+  if (digits.startsWith("9639") && digits.length === 12) return true;
+  if (digits.startsWith("09") && digits.length === 10) return true;
+  if (digits.startsWith("9") && digits.length === 9) return true;
+  return false;
+}
+
+function storelyNormalizeSyrianPhone(phone) {
+  const digits = String(phone || "").replace(/\D/g, "");
+  if (!digits) return "";
+  if (digits.startsWith("9639")) return "0" + digits.slice(3);
+  if (digits.startsWith("09")) return digits;
+  if (digits.startsWith("9") && digits.length === 9) return "0" + digits;
+  return digits;
+}
+
+function storelySyncSession(updates) {
+  const session = { ...storelyCurrentUser(), ...updates };
+  localStorage.setItem(STORELY_SESSION_KEY, JSON.stringify(session));
+  return session;
+}
+
+async function storelyUpdateProfile(updates = {}) {
+  await storelyInit();
+  const user = storelyCurrentUser();
+  if (!user?.userId) throw new Error("يجب تسجيل الدخول أولاً.");
+
+  const {
+    name, phone, avatar, location, deliveryAddress, deliveryTime, paymentMethod,
+    currentPassword, newPassword
+  } = updates;
+
+  if (phone && !storelyValidateSyrianPhone(phone)) {
+    throw new Error("رقم سوري غير صالح. مثال: 09xxxxxxxx");
+  }
+  const normalizedPhone = phone !== undefined ? storelyNormalizeSyrianPhone(phone) : undefined;
+
+  if (storelyUsingDatabase()) {
+    await dbUpdateProfile({
+      name: name !== undefined ? name : user.name,
+      phone: normalizedPhone !== undefined ? normalizedPhone : user.phone,
+      avatar: avatar !== undefined ? avatar : user.avatar,
+      location: location !== undefined ? location : user.location,
+      deliveryAddress: deliveryAddress !== undefined ? deliveryAddress : user.deliveryAddress,
+      deliveryTime: deliveryTime !== undefined ? deliveryTime : user.deliveryTime,
+      paymentMethod: paymentMethod !== undefined ? paymentMethod : user.paymentMethod,
+      newPassword
+    });
+    const refreshed = dbCurrentUser();
+    if (refreshed) localStorage.setItem(STORELY_SESSION_KEY, JSON.stringify(refreshed));
+    return refreshed;
+  }
+
+  const users = storelyGetUsers();
+  const index = users.findIndex((item) => item.id === user.userId);
+  if (index === -1) throw new Error("المستخدم غير موجود.");
+
+  if (newPassword) {
+    if (!currentPassword) throw new Error("أدخل كلمة المرور الحالية.");
+    if (users[index].password !== currentPassword) {
+      throw new Error("كلمة المرور الحالية غير صحيحة.");
+    }
+    users[index].password = newPassword;
+  }
+
+  const fields = {
+    name, phone: normalizedPhone, avatar, location, deliveryAddress, deliveryTime, paymentMethod
+  };
+  Object.entries(fields).forEach(([key, value]) => {
+    if (value !== undefined) users[index][key] = value;
+  });
+  storelySaveUsers(users);
+
+  return storelySyncSession({
+    name: users[index].name,
+    phone: users[index].phone || "",
+    avatar: users[index].avatar || "",
+    location: users[index].location || "",
+    deliveryAddress: users[index].deliveryAddress || "",
+    deliveryTime: users[index].deliveryTime || "",
+    paymentMethod: users[index].paymentMethod || ""
+  });
+}
+
+/* -------------------- تقييمات المنتجات -------------------- */
+
+async function storelySubmitReview(storeId, productId, rating, comment) {
+  await storelyInit();
+  const user = storelyCurrentUser();
+  if (!user?.userId) throw new Error("سجّل دخولك لإرسال تقييم.");
+
+  const stores = storelyGetStores(true);
+  const storeIndex = stores.findIndex((s) => s.id === storeId);
+  if (storeIndex === -1) throw new Error("المتجر غير موجود.");
+
+  const store = stores[storeIndex];
+  const product = (store.products || []).find((p) => p.id === productId);
+  if (!product) throw new Error("المنتج غير موجود.");
+
+  const review = {
+    id: "review-" + Date.now(),
+    userId: user.userId,
+    userName: user.name || "مشتري",
+    productId,
+    productTitle: product.title,
+    rating: Number(rating),
+    comment: String(comment || "").trim(),
+    createdAt: new Date().toISOString()
+  };
+
+  if (!review.rating || review.rating < 1 || review.rating > 5) {
+    throw new Error("اختر تقييم من 1 إلى 5.");
+  }
+
+  store.reviews = store.reviews || [];
+  const existing = store.reviews.findIndex((r) => r.userId === user.userId && r.productId === productId);
+  if (existing >= 0) store.reviews[existing] = review;
+  else store.reviews.unshift(review);
+
+  const ratings = store.reviews.map((r) => r.rating).filter(Boolean);
+  store.rating = ratings.length
+    ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
+    : store.rating;
+
+  stores[storeIndex] = store;
+  await storelySaveStoresAsync(stores);
+  return review;
+}
+
+function storelyStoreReviews(storeId) {
+  const store = storelyGetStores(true).find((s) => s.id === storeId);
+  return store?.reviews || [];
 }

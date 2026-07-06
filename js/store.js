@@ -7,13 +7,6 @@ storelyInit().then(() => {
 
   if (!store) {
     app.innerHTML = `
-      <nav class="navbar compact">
-        <a class="brand" href="index.html">
-          <img src="assets/images/shop-logo.svg" alt="Shayeb Shop" class="brand-logo">
-          <div class="brand-text"><span class="brand-title">Shayeb Shop</span></div>
-        </a>
-        <a class="primary-btn" href="index.html">الرئيسية</a>
-      </nav>
       <main class="empty-page"><div class="empty-state"><h1>المتجر غير موجود</h1><a class="primary-btn" href="index.html">العودة</a></div></main>
     `;
   } else {
@@ -26,37 +19,32 @@ storelyInit().then(() => {
 });
 
 function renderStore(app, store) {
-  document.title = `${store.storeName} | Shayeb Shop`;
+  document.title = `${store.storeName} | ALSHAYEB SHOP`;
   const products = store.products || [];
+  const loggedIn = storelyIsLoggedIn();
+  const user = storelyCurrentUser();
+  const reviews = store.reviews || [];
 
   app.innerHTML = `
-    <nav class="navbar compact">
-      <a class="brand" href="index.html">
-        <img src="assets/images/shop-logo.svg" alt="Shayeb Shop" class="brand-logo">
-        <div class="brand-text"><span class="brand-title">Shayeb Shop</span></div>
-      </a>
-      <div class="navbar-actions">
-        <a class="cart-link" href="cart.html">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          <span class="cart-badge" id="cartCount">0</span>
-        </a>
-        <a class="secondary-btn" href="login.html">دخول</a>
-      </div>
-    </nav>
-
     <main class="public-store">
       <section class="store-hero">
         <div class="store-cover" style="${storelyMediaStyle(store.banner, "assets/images/store-banner.svg")}"></div>
         <div class="store-profile">
           <div class="store-avatar large">${store.logo || store.storeName.charAt(0)}</div>
-          <div><h1>${store.storeName}</h1><p>${store.tagline}</p></div>
+          <div>
+            <h1>${store.storeName}</h1>
+            <p>${store.tagline}</p>
+            <small>التقييم العام: ${store.rating || 5} ★</small>
+          </div>
         </div>
       </section>
 
       <section id="products" class="section-band">
         <h2>المنتجات</h2>
         <div class="product-grid" style="margin-top:20px;">
-          ${products.map((product) => `
+          ${products.map((product) => {
+            const myReview = reviews.find((r) => r.userId === user?.userId && r.productId === product.id);
+            return `
             <article class="product-card" id="${product.id}">
               <div class="product-image" style="${storelyMediaStyle(product.image, "assets/images/product-electronics.svg")}"></div>
               <span>${product.category}</span>
@@ -65,14 +53,68 @@ function renderStore(app, store) {
                 <strong>${storelyMoney(product.price)}</strong>
                 <button class="primary-btn" onclick="addToCart('${store.id}','${product.id}')">أضف للسلة</button>
               </div>
-            </article>
-          `).join("") || storelyEmptyState("لا منتجات", "", "", "")}
+              ${loggedIn && user?.storeId !== store.id ? `
+                <div class="review-form-box" id="reviewBox-${product.id}">
+                  <strong>تقييمي ورأيي</strong>
+                  ${myReview ? `<p class="review-rating">تقييمك: ${"★".repeat(myReview.rating)}${"☆".repeat(5 - myReview.rating)}</p><p>${myReview.comment || ""}</p>` : ""}
+                  <div class="review-stars" data-product="${product.id}">
+                    ${[1, 2, 3, 4, 5].map((n) => `<button type="button" data-star="${n}" class="${myReview?.rating === n ? "active" : ""}">${n}</button>`).join("")}
+                  </div>
+                  <textarea id="reviewComment-${product.id}" rows="2" placeholder="رأيي عن المنتج..." style="margin-top:10px;width:100%;">${myReview?.comment || ""}</textarea>
+                  <button class="secondary-btn" style="margin-top:8px;" onclick="submitReview('${store.id}','${product.id}')">إرسال التقييم</button>
+                  <p id="reviewMsg-${product.id}" class="form-message"></p>
+                </div>` : ""}
+            </article>`;
+          }).join("") || storelyEmptyState("لا منتجات", "", "", "")}
         </div>
       </section>
+      ${loggedIn ? "" : `
+      <section class="login-prompt-band" style="padding-top:32px;">
+        <div class="login-prompt-card">
+          <div>
+            <h2>لإتمام الشراء</h2>
+            <p>يمكنك إضافة المنتجات للسلة، لكن الدفع يتطلب تسجيل الدخول.</p>
+          </div>
+          <a class="primary-btn large" href="login.html">تسجيل الدخول</a>
+        </div>
+      </section>`}
     </main>
   `;
+
+  products.forEach((product) => {
+    const box = document.getElementById(`reviewBox-${product.id}`);
+    if (!box) return;
+    box.querySelectorAll("[data-star]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        box.querySelectorAll("[data-star]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        box.dataset.selectedRating = btn.dataset.star;
+      });
+    });
+    const existing = reviews.find((r) => r.userId === user?.userId && r.productId === product.id);
+    if (existing) box.dataset.selectedRating = String(existing.rating);
+  });
 }
 
 async function addToCart(storeId, productId) {
   await storelyRequestAddToCartAsync(storeId, productId, location.href);
 }
+
+async function submitReview(storeId, productId) {
+  const box = document.getElementById(`reviewBox-${productId}`);
+  const msg = document.getElementById(`reviewMsg-${productId}`);
+  const rating = Number(box?.dataset.selectedRating || box?.querySelector("[data-star].active")?.dataset.star);
+  const comment = document.getElementById(`reviewComment-${productId}`)?.value || "";
+
+  try {
+    await storelySubmitReview(storeId, productId, rating, comment);
+    msg.textContent = "تم إرسال تقييمك.";
+    msg.dataset.type = "success";
+    storelyToast("شكراً على تقييمك!");
+  } catch (err) {
+    msg.textContent = err.message || "تعذر الإرسال";
+    msg.dataset.type = "error";
+  }
+}
+
+window.submitReview = submitReview;

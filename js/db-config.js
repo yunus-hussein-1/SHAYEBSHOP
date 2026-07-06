@@ -1,9 +1,16 @@
-// Shayeb Shop — إعدادات
+// ALSHAYEB SHOP — إعدادات المنصة
 
-window.ALSHAYEB_DB_CONFIG = {
+window.APP_CONFIG = {
   supabaseUrl: "",
   supabaseAnonKey: "",
-  founderEmail: "yunuselhuseyin82@gmail.com",
+  siteName: "ALSHAYEB SHOP",
+  siteNameAr: "ALSHAYEB SHOP",
   siteDomain: "https://shayebshop.com",
-  platformCommission: 0.10
+  supportEmail: "support@shayebshop.com",
+  founderEmail: "yunuselhuseyin82@gmail.com",
+  platformCommission: 0.10,
+  shamCashNumber: "09xxxxxxxx",
+  currency: "ل.س"
 };
+
+window.ALSHAYEB_DB_CONFIG = window.APP_CONFIG;

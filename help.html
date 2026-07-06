@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مساعدة | ALSHAYEB SHOP</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <main class="page-shell">
+    <h1 class="page-title">❓ مساعدة</h1>
+    <p class="page-lead">دليل استخدام ALSHAYEB SHOP.</p>
+
+    <section class="panel-card">
+      <h2>كيف يعمل التطبيق؟</h2>
+      <ol class="help-steps">
+        <li><strong>تصفّح</strong> — أي زائر يشوف المنتجات ويضيف للسلة.</li>
+        <li><strong>شراء</strong> — يتطلب تسجيل دخول ثم <strong>ادفع الآن</strong>.</li>
+        <li><strong>بروفايل</strong> — اسم، صورة، موقعك الشخصي.</li>
+        <li><strong>إعدادات</strong> — كلمة مرور، دفع، طلب متجر.</li>
+        <li><strong>نسيت كلمة السر؟</strong> — من صفحة الدخول → أدخل بريدك → رابط تغيير كلمة المرور.</li>
+      </ol>
+    </section>
+
+    <section class="panel-card">
+      <h2>الدفع (إلزامي)</h2>
+      <p>عند إتمام الطلب بالليرة السورية:</p>
+      <ul class="help-list">
+        <li>🤝 تسليم باليد</li>
+        <li>📱 شام كاش</li>
+      </ul>
+    </section>
+
+    <section class="panel-card">
+      <h2>تواصل</h2>
+      <a class="help-email" id="supportEmailLink" href="#">support@shayebshop.com</a>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/nav-shell.js"></script>
+  <script>
+    storelyInit().then(() => {
+      const email = (window.APP_CONFIG || {}).supportEmail || "support@shayebshop.com";
+      const link = document.getElementById("supportEmailLink");
+      link.textContent = email;
+      link.href = "mailto:" + email;
+    });
+  </script>
+</body>
+</html>

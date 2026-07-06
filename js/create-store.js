@@ -5,13 +5,7 @@ storelyInit().then(async () => {
 
   const activeUser = storelyCurrentUser();
   document.getElementById("ownerName").value = activeUser.name || "";
-  document.getElementById("productCategory").innerHTML = `
-    <option value="إلكترونيات" selected>إلكترونيات</option>
-    <option value="ألبسة">ألبسة</option>
-    <option value="إكسسوارات">إكسسوارات</option>
-    <option value="سماعات">سماعات</option>
-    <option value="هواتف">هواتف</option>
-    <option value="ساعات">ساعات</option>`;
+  document.getElementById("productCategory").innerHTML = storelyCategoryOptions("إلكترونيات");
 
   if (storelyCurrentStore()) {
     window.location.href = "dashboard.html";
@@ -61,11 +55,16 @@ storelyInit().then(async () => {
 
     if (storelyUsingDatabase()) await dbUpdateProfileStoreId(session.userId, newStore.id);
     else {
-      const users = storelyGetUsers().map((u) => u.id === session.userId ? { ...u, storeId: newStore.id } : u);
+      const users = storelyGetUsers().map((u) => u.id === session.userId ? { ...u, storeId: newStore.id, role: "seller" } : u);
       storelySaveUsers(users);
     }
 
-    localStorage.setItem(STORELY_SESSION_KEY, JSON.stringify({ ...session, storeId: newStore.id, storeName: newStore.storeName }));
+    localStorage.setItem(STORELY_SESSION_KEY, JSON.stringify({
+      ...session,
+      storeId: newStore.id,
+      storeName: newStore.storeName,
+      role: "seller"
+    }));
     window.location.href = "dashboard.html";
   });
 });

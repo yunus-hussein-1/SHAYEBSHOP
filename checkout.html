@@ -3,29 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إتمام الطلب | Shayeb Shop</title>
+  <title>إتمام الطلب | ALSHAYEB SHOP</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <nav class="navbar compact">
-    <a class="brand" href="index.html">
-      <img src="assets/images/shop-logo.svg" alt="Shayeb Shop" class="brand-logo">
-      <div class="brand-text"><span class="brand-title">Shayeb Shop</span></div>
-    </a>
-    <a class="secondary-btn" href="cart.html">السلة</a>
-  </nav>
-
   <main class="checkout-layout">
     <section class="checkout-card">
-      <h1>إتمام الطلب</h1>
+      <h1>إتمام الطلب والدفع</h1>
+      <p class="checkout-lead">جميع الأسعار بالليرة السورية (ل.س)</p>
       <div id="selectedPlan" class="selected-plan"></div>
 
       <form id="paymentForm" class="form-grid">
         <label>الاسم<input id="payerName" type="text" required></label>
-        <label>الهاتف<input id="payerPhone" type="tel" required></label>
-        <label class="full">العنوان<textarea id="payerAddress" required></textarea></label>
+        <label>رقم سوري<input id="payerPhone" type="tel" placeholder="09xxxxxxxx" required></label>
+        <label class="full">موقع التسليم / اللوكيشن<textarea id="payerAddress" required placeholder="المدينة، الحي، معلم قريب..."></textarea></label>
+        <label>موعد الاستلام المطلوب
+          <select id="deliveryTime" required>
+            <option value="">اختر الموعد</option>
+            <option value="صباحاً (9-12)">صباحاً (9-12)</option>
+            <option value="ظهراً (12-3)">ظهراً (12-3)</option>
+            <option value="مساءً (3-6)">مساءً (3-6)</option>
+            <option value="ليلاً (6-9)">ليلاً (6-9)</option>
+          </select>
+        </label>
+
+        <div class="full payment-method-box">
+          <strong>طريقة الدفع</strong>
+          <label class="payment-option"><input type="radio" name="payMethod" value="hand" checked> تسليم باليد — الدفع عند الاستلام (ل.س)</label>
+          <label class="payment-option"><input type="radio" name="payMethod" value="sham_cash"> شام كاش — الدفع بالليرة السورية</label>
+        </div>
+
+        <div id="shamCashBox" class="sham-cash-box full" style="display:none;">
+          <strong>تحويل شام كاش</strong>
+          <p>حوّل المبلغ إلى الرقم التالي ثم أكّد الطلب:</p>
+          <div class="sham-cash-number" id="shamCashNumber">—</div>
+          <label>رقم عملية التحويل<input id="shamCashRef" type="text" placeholder="اختياري"></label>
+        </div>
+
         <label class="full">ملاحظات<input id="payerNotes" type="text" placeholder="اختياري"></label>
-        <button class="primary-btn full" type="submit">تأكيد الطلب</button>
+        <button class="primary-btn full" type="submit">تأكيد الطلب والدفع</button>
       </form>
       <div id="paymentMessage" class="form-message"></div>
     </section>
@@ -35,6 +51,7 @@
   <script src="js/db-config.js"></script>
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
+  <script src="js/nav-shell.js"></script>
   <script src="js/payment-storely.js"></script>
 </body>
 </html>

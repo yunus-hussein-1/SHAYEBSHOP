@@ -7,7 +7,7 @@ storelyInit().then(async () => {
       const store = cartStores.find((s) => s.id === item.storeId);
       const product = store?.products.find((p) => p.id === item.productId);
       return product ? { ...item, product, store } : null;
-    }).filter(Boolean);
+    }).filter((item) => item && storelyIsAllowedCategory(item.product.category));
   }
 
   async function renderCart() {

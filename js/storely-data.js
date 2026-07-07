@@ -19,6 +19,14 @@ const STORELY_CATEGORIES = [
   "ألبسة أطفال"
 ];
 
+function storelyAllowedCategories() {
+  return [...STORELY_CATEGORIES];
+}
+
+function storelyIsAllowedCategory(category) {
+  return storelyAllowedCategories().includes(String(category || "").trim());
+}
+
 const STORELY_PAYMENT_OPTIONS = [
   { id: "hand", label: "تسليم باليد — الدفع عند الاستلام (ل.س)" },
   { id: "sham_cash", label: "شام كاش — الدفع بالليرة السورية" }
@@ -326,6 +334,11 @@ async function storelySaveCartAsync(items) {
 }
 
 async function storelyAddToCartAsync(storeId, productId) {
+  const store = storelyGetStores(true).find((s) => s.id === storeId);
+  const product = store?.products?.find((p) => p.id === productId);
+  if (!product || !storelyIsAllowedCategory(product.category)) {
+    throw new Error("هذا المنتج غير متاح ضمن أقسام المتجر الحالية.");
+  }
   const cart = await storelyGetCartAsync();
   const existing = cart.find((item) => item.storeId === storeId && item.productId === productId);
   if (existing) existing.qty += 1;
@@ -335,6 +348,11 @@ async function storelyAddToCartAsync(storeId, productId) {
 }
 
 function storelyAddToCart(storeId, productId) {
+  const store = storelyGetStores(true).find((s) => s.id === storeId);
+  const product = store?.products?.find((p) => p.id === productId);
+  if (!product || !storelyIsAllowedCategory(product.category)) {
+    throw new Error("هذا المنتج غير متاح ضمن أقسام المتجر الحالية.");
+  }
   const cart = storelyGetCart();
   const existing = cart.find((item) => item.storeId === storeId && item.productId === productId);
   if (existing) {

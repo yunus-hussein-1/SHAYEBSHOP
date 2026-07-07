@@ -14,7 +14,7 @@ storelyInit().then(async () => {
     const itemStore = stores.find((s) => s.id === item.storeId);
     const product = itemStore?.products.find((p) => p.id === item.productId);
     return product ? { ...item, product, store: itemStore } : null;
-  }).filter(Boolean);
+  }).filter((item) => item && storelyIsAllowedCategory(item.product.category));
 
   if (!cartItems.length) {
     window.location.href = "cart.html";

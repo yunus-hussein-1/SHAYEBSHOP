@@ -60,6 +60,7 @@ storelyInit().then(() => {
     let products = allStores.flatMap((store) =>
       (store.products || []).map((p) => ({ ...p, storeName: store.storeName, storeSlug: store.slug, storeId: store.id }))
     );
+    products = products.filter((p) => storelyIsAllowedCategory(p.category));
     if (_activeCategory !== "الكل") products = products.filter((p) => p.category === _activeCategory);
     if (_searchQuery) products = products.filter((p) => p.title.toLowerCase().includes(_searchQuery));
 

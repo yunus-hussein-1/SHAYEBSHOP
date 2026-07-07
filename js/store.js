@@ -20,7 +20,7 @@ storelyInit().then(() => {
 
 function renderStore(app, store) {
   document.title = `${store.storeName} | ALSHAYEB SHOP`;
-  const products = store.products || [];
+  const products = (store.products || []).filter((product) => storelyIsAllowedCategory(product.category));
   const loggedIn = storelyIsLoggedIn();
   const user = storelyCurrentUser();
   const reviews = store.reviews || [];

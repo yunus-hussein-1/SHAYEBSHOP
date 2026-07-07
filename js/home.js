@@ -10,6 +10,9 @@ const POPULAR_TAGS = {
 storelyInit().then(() => {
   storelyApplyLang();
   const t = (key) => storelyT(key);
+  const lang = storelyGetLang();
+  const stores = storelyGetStores();
+  const userName = storelyIsLoggedIn() ? storelyCurrentUser().name : null;
   _activeCategory = t("all");
 
   const productsContainer = document.getElementById("featuredProducts");
@@ -18,7 +21,23 @@ storelyInit().then(() => {
   const searchInput = document.getElementById("searchInput");
   const cameraSearchBtn = document.getElementById("cameraSearchBtn");
   const cameraSearchInput = document.getElementById("cameraSearchInput");
-  const stores = storelyActiveStores();
+
+  const desktopPersonalTitle = document.getElementById("desktopPersonalTitle");
+  if (desktopPersonalTitle) {
+    desktopPersonalTitle.textContent = userName
+      ? `${t("hello")} ${userName}, ${t("pickedForYou")}`
+      : t("pickedForYou");
+  }
+  const desktopPersonalSub = document.getElementById("desktopPersonalSub");
+  if (desktopPersonalSub) desktopPersonalSub.textContent = t("pricesNote");
+  const desktopPopularTitle = document.getElementById("desktopPopularTitle");
+  if (desktopPopularTitle) desktopPopularTitle.textContent = lang === "en" ? "Popular Products" : "المنتجات الشائعة";
+  const desktopPicksTitle = document.getElementById("desktopPicksTitle");
+  if (desktopPicksTitle) desktopPicksTitle.textContent = t("pickedForYou");
+  const desktopViewAll = document.getElementById("desktopViewAll");
+  if (desktopViewAll) desktopViewAll.textContent = `${t("viewAll")} ›`;
+
+  if (typeof desktopMountQuickIcons === "function") desktopMountQuickIcons("desktopQuickIcons");
 
   document.title = `${storelySiteName()} | ${storelyT("siteTagline")}`;
 
@@ -40,7 +59,6 @@ storelyInit().then(() => {
   document.getElementById("appFooter").textContent = `${storelySiteName()} · ${t("pricesNote")}`;
   searchInput.placeholder = t("searchPlaceholder");
 
-  const lang = storelyGetLang();
   const homeTabs = [
     { id: "all", label: t("all") },
     { id: "women", label: t("women"), cat: "ألبسة نسائية" },
@@ -179,17 +197,71 @@ storelyInit().then(() => {
     });
   }
 
+  function desktopProductCard(product) {
+    const fav = storelyIsFavorite(product.storeId, product.id);
+    return `
+      <article class="desktop-product-card" data-store="${product.storeId}" data-product="${product.id}" data-slug="${product.storeSlug}">
+        <span class="badge-bestseller">${lang === "en" ? "BEST SELLER" : "الأكثر مبيعاً"}</span>
+        <button type="button" class="fav-corner${fav ? " active" : ""}" data-fav="${product.storeId}:${product.id}">♥</button>
+        <div class="img" style="${storelyMediaStyle(product.image, "assets/images/product-electronics.svg")}"></div>
+        <div class="body">
+          <h3>${product.title}</h3>
+          <div class="price">${storelyMoney(product.price)}</div>
+        </div>
+      </article>`;
+  }
+
+  function bindDesktopProducts(container) {
+    if (!container) return;
+    container.querySelectorAll(".desktop-product-card").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        if (e.target.closest(".fav-corner")) return;
+        const storeId = card.dataset.store;
+        const productId = card.dataset.product;
+        storelyAddBrowseHistory(storeId, productId);
+        const slug = card.dataset.slug || stores.find((s) => s.id === storeId)?.slug;
+        if (slug) window.location.href = `store.html?slug=${slug}`;
+      });
+    });
+    container.querySelectorAll(".fav-corner").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const [storeId, productId] = btn.dataset.fav.split(":");
+        const added = storelyToggleFavorite(storeId, productId);
+        btn.classList.toggle("active", added);
+        storelyToast(added ? t("addedFav") : t("removedFav"));
+      });
+    });
+  }
+
+  function renderDesktop(allStores, products) {
+    const popular = document.getElementById("desktopPopularProducts");
+    const picked = document.getElementById("desktopPickedProducts");
+    if (!popular && !picked) return;
+    const list = products.length ? products : filterProducts(allStores);
+    if (popular) {
+      popular.innerHTML = list.slice(0, 10).map(desktopProductCard).join("");
+      bindDesktopProducts(popular);
+    }
+    if (picked) {
+      picked.innerHTML = list.slice(0, 10).map(desktopProductCard).join("");
+      bindDesktopProducts(picked);
+    }
+  }
+
   function renderAll(allStores) {
     const products = filterProducts(allStores);
     if (!products.length) {
       productsContainer.innerHTML = storelyEmptyState(t("noProducts"), t("tryAnother"), "", "");
       flashProducts.innerHTML = "";
+      renderDesktop(allStores, []);
       return;
     }
     flashProducts.innerHTML = products.slice(0, 6).map((p) => productCard(p, true)).join("");
     productsContainer.innerHTML = products.map((p) => productCard(p)).join("");
     bindProductActions(flashProducts);
     bindProductActions(productsContainer);
+    renderDesktop(allStores, products);
   }
 
   function renderBrowsePrompt() {

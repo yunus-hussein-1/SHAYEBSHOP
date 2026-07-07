@@ -3,57 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إتمام الطلب | متجر الشايب</title>
+  <title>إتمام الطلب | شايب شوب</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
-<body>
-  <main class="checkout-layout">
-    <section class="checkout-card">
-      <h1>إتمام الطلب والدفع</h1>
-      <p class="checkout-lead">جميع الأسعار بالليرة السورية (ل.س)</p>
-      <div id="selectedPlan" class="selected-plan"></div>
+<body class="checkout-page">
+  <div class="desktop-main checkout-page-inner">
+    <div class="desktop-two-col checkout-grid">
+      <div class="checkout-left">
+        <section class="checkout-card mobile-only">
+          <h1 id="checkoutHeading">إتمام الطلب والدفع</h1>
+          <p class="checkout-lead" id="checkoutLead">جميع الأسعار بالليرة السورية (ل.س)</p>
+          <div id="selectedPlan" class="selected-plan"></div>
+        </section>
 
-      <form id="paymentForm" class="form-grid">
-        <label id="payerNameLabel">الاسم<input id="payerName" type="text" required></label>
-        <label id="payerPhoneLabel">رقم سوري<input id="payerPhone" type="tel" placeholder="09xxxxxxxx" required></label>
-        <label class="full" id="payerAddressLabel">موقع التسليم / اللوكيشن<textarea id="payerAddress" required placeholder="المدينة، الحي، معلم قريب..."></textarea></label>
-        <label id="deliveryTimeLabel">موعد الاستلام المطلوب
-          <select id="deliveryTime" required>
-            <option value="">اختر الموعد</option>
-            <option value="صباحاً (9-12)">صباحاً (9-12)</option>
-            <option value="ظهراً (12-3)">ظهراً (12-3)</option>
-            <option value="مساءً (3-6)">مساءً (3-6)</option>
-            <option value="ليلاً (6-9)">ليلاً (6-9)</option>
-          </select>
-        </label>
-
-        <div class="full payment-method-box">
-          <strong id="paymentMethodTitle">طريقة الدفع</strong>
-          <label class="payment-option"><input type="radio" name="payMethod" value="hand" checked> <span id="handPayText">تسليم باليد — الدفع عند الاستلام (ل.س)</span></label>
-          <label class="payment-option"><input type="radio" name="payMethod" value="sham_cash"> <span id="shamPayText">شام كاش — الدفع بالليرة السورية</span></label>
+        <div class="desktop-checkout-section desktop-only">
+          <h3 id="desktopDeliveryTitle">عنوان التسليم</h3>
+          <div class="desktop-address-box" id="desktopAddressPreview"></div>
         </div>
 
-        <div id="shamCashBox" class="sham-cash-box full" style="display:none;">
-          <strong id="shamCashTitle">تحويل شام كاش</strong>
-          <p id="shamCashHint">حوّل المبلغ إلى الرقم التالي ثم أكّد الطلب:</p>
-          <img src="assets/images/sham-cash-barcode.svg" alt="Sham Cash Barcode" class="sham-cash-barcode">
-          <p class="sham-cash-meta"><span id="shamCashAccountLabel">اسم الحساب:</span> <strong id="shamCashAccountName">—</strong></p>
-          <div class="sham-cash-number" id="shamCashNumber">—</div>
-          <label id="shamCashRefLabel">رقم عملية التحويل<input id="shamCashRef" type="text" placeholder="اختياري"></label>
-        </div>
+        <div class="desktop-checkout-section checkout-form-panel">
+          <h3 class="desktop-only" id="desktopPaymentTitle">خيارات الدفع</h3>
 
-        <label class="full" id="payerNotesLabel">ملاحظات<input id="payerNotes" type="text" placeholder="اختياري"></label>
-        <button class="primary-btn full" type="submit" id="submitOrderBtn">تأكيد الطلب والدفع</button>
-      </form>
-      <div id="paymentMessage" class="form-message"></div>
-    </section>
-  </main>
+          <form id="paymentForm" class="form-grid checkout-form">
+            <label id="payerNameLabel">الاسم<input id="payerName" type="text" required></label>
+            <label id="payerPhoneLabel">رقم سوري<input id="payerPhone" type="tel" placeholder="09xxxxxxxx" required></label>
+            <label class="full" id="payerAddressLabel">موقع التسليم<textarea id="payerAddress" required placeholder="المدينة، الحي، معلم قريب..."></textarea></label>
+            <label id="deliveryTimeLabel">موعد الاستلام
+              <select id="deliveryTime" required>
+                <option value="">اختر الموعد</option>
+                <option value="صباحاً (9-12)">صباحاً (9-12)</option>
+                <option value="ظهراً (12-3)">ظهراً (12-3)</option>
+                <option value="مساءً (3-6)">مساءً (3-6)</option>
+                <option value="ليلاً (6-9)">ليلاً (6-9)</option>
+              </select>
+            </label>
+
+            <div class="full payment-method-box">
+              <strong id="paymentMethodTitle">طريقة الدفع</strong>
+              <label class="payment-option"><input type="radio" name="payMethod" value="hand" checked> <span id="handPayText">تسليم باليد</span></label>
+              <label class="payment-option"><input type="radio" name="payMethod" value="sham_cash"> <span id="shamPayText">شام كاش</span></label>
+            </div>
+
+            <div id="shamCashBox" class="sham-cash-box full desktop-sham-box" style="display:none;">
+              <strong id="shamCashTitle">تحويل شام كاش</strong>
+              <p id="shamCashHint">حوّل المبلغ إلى الرقم التالي:</p>
+              <img src="assets/images/sham-cash-barcode.svg" alt="Sham Cash Barcode" class="sham-cash-barcode">
+              <p class="sham-cash-meta"><span id="shamCashAccountLabel">اسم الحساب:</span> <strong id="shamCashAccountName">—</strong></p>
+              <div class="sham-cash-number" id="shamCashNumber">—</div>
+              <label id="shamCashRefLabel">رقم عملية التحويل<input id="shamCashRef" type="text" placeholder="اختياري"></label>
+            </div>
+
+            <label class="full" id="payerNotesLabel">ملاحظات<input id="payerNotes" type="text" placeholder="اختياري"></label>
+            <button class="primary-btn full mobile-only" type="submit" id="submitOrderBtn">تأكيد الطلب والدفع</button>
+          </form>
+          <div id="paymentMessage" class="form-message"></div>
+        </div>
+      </div>
+
+      <aside id="desktopCheckoutSummary" class="checkout-sidebar desktop-only"></aside>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/db-config.js"></script>
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/desktop-shell.js"></script>
   <script src="js/nav-shell.js"></script>
   <script src="js/payment-storely.js"></script>
 </body>

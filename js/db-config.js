@@ -3,9 +3,9 @@
 window.APP_CONFIG = {
   supabaseUrl: "",
   supabaseAnonKey: "",
-  siteName: "Alshayeb Store",
-  siteNameAr: "متجر الشايب",
-  shamCashAccountName: "متجر الشايب",
+  siteName: "Shaib Shop",
+  siteNameAr: "شايب شوب",
+  shamCashAccountName: "شايب شوب",
   siteDomain: "https://shayebshop.com",
   supportEmail: "support@shayebshop.com",
   founderEmail: "yunuselhuseyin82@gmail.com",

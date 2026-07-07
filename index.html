@@ -3,11 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>متجر الشايب | إلكترونيات وألبسة</title>
+  <title>شايب شوب | إلكترونيات وألبسة</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <main class="market-home app-screen">
+  <!-- Desktop layout -->
+  <div class="desktop-only">
+    <div class="desktop-quick-icons" id="desktopQuickIcons"></div>
+    <div class="desktop-main">
+      <div class="desktop-personal-banner" id="desktopPersonalBanner">
+        <h2 id="desktopPersonalTitle">قطع لك خصيصاً</h2>
+        <p id="desktopPersonalSub">تسوق من شايب شوب بعملة سورية</p>
+      </div>
+      <div class="desktop-section-bar">
+        <h2 id="desktopPopularTitle">المنتجات الشائعة</h2>
+        <a href="categories.html" class="view-all-link" id="desktopViewAll">عرض الكل ›</a>
+      </div>
+      <div class="desktop-section-body">
+        <div id="desktopPopularProducts" class="desktop-product-scroll"></div>
+      </div>
+      <div style="height:20px"></div>
+      <div class="desktop-section-bar">
+        <h2 id="desktopPicksTitle">قطع لك خصيصاً</h2>
+      </div>
+      <div class="desktop-section-body">
+        <div id="desktopPickedProducts" class="desktop-product-scroll"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile layout -->
+  <main class="market-home app-screen mobile-only">
     <section class="market-search-band app-like">
       <div class="search-row">
         <button type="button" id="cameraSearchBtn" class="camera-btn" aria-label="camera">📷</button>
@@ -16,15 +42,13 @@
       <input type="file" id="cameraSearchInput" accept="image/*" capture="environment" hidden>
       <div class="home-category-tabs" id="homeCategoryTabs"></div>
     </section>
-
     <section class="promo-banner app-card">
       <div>
-        <span class="promo-tag" id="promoTag">عروض متجر الشايب</span>
+        <span class="promo-tag" id="promoTag">عروض شايب شوب</span>
         <h2 id="promoTitle">خصومات على الإلكترونيات والألبسة</h2>
         <a href="categories.html" class="promo-link" id="promoLink">عرض الكل ›</a>
       </div>
     </section>
-
     <section class="flash-sale-band app-card">
       <div class="section-head">
         <h2 id="flashTitle">تنزيلات خاطفة</h2>
@@ -32,7 +56,6 @@
       </div>
       <div id="flashProducts" class="product-row-scroll"></div>
     </section>
-
     <section class="market-categories">
       <div class="section-head">
         <h2 class="section-mobile-title" id="categoryTitle">كل الفئات</h2>
@@ -40,12 +63,10 @@
       </div>
       <div class="category-scroll" id="categoryFilter"></div>
     </section>
-
     <section class="popular-search app-card">
       <h2 id="popularSearchTitle">البحث الشائع</h2>
       <div class="popular-tags" id="popularTags"></div>
     </section>
-
     <section class="market-products">
       <div class="section-head">
         <h2 id="productsTitle">قطع لك خصيصاً</h2>
@@ -53,17 +74,17 @@
       </div>
       <div id="featuredProducts" class="product-grid-trendy"></div>
     </section>
-
     <section id="welcomeBand" class="login-prompt-band"></section>
   </main>
 
-  <footer class="app-footer" id="appFooter">متجر الشايب · جميع الأسعار بالليرة السورية</footer>
+  <footer class="app-footer mobile-only" id="appFooter">شايب شوب · جميع الأسعار بالليرة السورية</footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/db-config.js"></script>
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/desktop-shell.js"></script>
   <script src="js/nav-shell.js"></script>
   <script src="js/home.js"></script>
 </body>

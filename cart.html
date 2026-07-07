@@ -3,11 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سلة المشتريات | متجر الشايب</title>
+  <title>سلة المشتريات | شايب شوب</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <main class="app-screen cart-screen">
+  <!-- Desktop cart -->
+  <div class="desktop-only">
+    <div class="desktop-main">
+      <h1 class="desktop-page-title" id="desktopCartTitle">سلتي</h1>
+      <div class="desktop-two-col">
+        <div>
+          <div id="desktopCartEmpty" class="desktop-checkout-section" hidden></div>
+          <div id="desktopCartSellers"></div>
+        </div>
+        <div id="desktopCartSummary"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile cart -->
+  <main class="app-screen cart-screen mobile-only">
     <header class="mobile-page-header">
       <h1 id="cartPageTitle">سلة مشترياتك</h1>
       <button type="button" class="icon-plain-btn" id="shareCartBtn">↗</button>
@@ -35,6 +50,7 @@
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/desktop-shell.js"></script>
   <script src="js/nav-shell.js"></script>
   <script src="js/cart-storely.js"></script>
 </body>

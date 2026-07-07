@@ -30,8 +30,14 @@ storelyInit().then(async () => {
   const shamNum = storelyShamCashNumber();
   const shamAccount = storelyShamCashAccountName();
 
-  document.querySelector(".checkout-card h1").textContent = t("checkoutTitle");
-  document.querySelector(".checkout-lead").textContent = t("checkoutLead");
+  const checkoutHeading = document.getElementById("checkoutHeading");
+  if (checkoutHeading) checkoutHeading.textContent = t("checkoutTitle");
+  const checkoutLead = document.getElementById("checkoutLead");
+  if (checkoutLead) checkoutLead.textContent = t("checkoutLead");
+  const desktopDeliveryTitle = document.getElementById("desktopDeliveryTitle");
+  if (desktopDeliveryTitle) desktopDeliveryTitle.textContent = t("deliveryAddress");
+  const desktopPaymentTitle = document.getElementById("desktopPaymentTitle");
+  if (desktopPaymentTitle) desktopPaymentTitle.textContent = t("paymentOptions");
   document.getElementById("paymentMethodTitle").textContent = t("payMethod");
   document.getElementById("handPayText").textContent = t("handPay");
   document.getElementById("shamPayText").textContent = t("shamPay");
@@ -57,17 +63,50 @@ storelyInit().then(async () => {
   deliverySelect.options[3].textContent = t("evening");
   deliverySelect.options[4].textContent = t("night");
 
-  document.getElementById("selectedPlan").innerHTML = `
-    <span>${t("total")}</span>
-    <strong>${storelyMoney(total)}</strong>
-    ${cartItems.map((item) => `<p>${item.product.title} × ${item.qty} — ${storelyMoney(item.product.price * item.qty)}</p>`).join("")}
-  `;
+  const planBox = document.getElementById("selectedPlan");
+  if (planBox) {
+    planBox.innerHTML = `
+      <span>${t("total")}</span>
+      <strong>${storelyMoney(total)}</strong>
+      ${cartItems.map((item) => `<p>${item.product.title} × ${item.qty} — ${storelyMoney(item.product.price * item.qty)}</p>`).join("")}`;
+  }
+
+  const summaryEl = document.getElementById("desktopCheckoutSummary");
+  if (summaryEl) {
+    summaryEl.innerHTML = desktopSummaryHtml({
+      title: t("orderSummary"),
+      subtotal: storelyMoney(total),
+      shipping: storelyMoney(59.99),
+      total: storelyMoney(total),
+      btnText: t("payNow"),
+      btnId: "desktopPayBtn"
+    });
+    document.getElementById("desktopPayBtn")?.addEventListener("click", () => {
+      document.getElementById("paymentForm").requestSubmit();
+    });
+  }
+
+  function updateAddressPreview() {
+    const addr = document.getElementById("payerAddress").value.trim();
+    const name = document.getElementById("payerName").value.trim();
+    const phone = document.getElementById("payerPhone").value.trim();
+    const preview = document.getElementById("desktopAddressPreview");
+    if (!preview) return;
+    preview.innerHTML = addr
+      ? `<strong>📍 ${t("deliveryAddress")}</strong><p>${name} · ${phone}</p><p>${addr}</p>`
+      : `<strong>📍 ${t("deliveryAddress")}</strong><p>${t("addressPlaceholder")}</p>`;
+  }
 
   if (user?.name) document.getElementById("payerName").value = user.name;
   if (user?.phone) document.getElementById("payerPhone").value = user.phone;
   if (user?.deliveryAddress) document.getElementById("payerAddress").value = user.deliveryAddress;
   else if (user?.location) document.getElementById("payerAddress").value = user.location;
   if (user?.deliveryTime) document.getElementById("deliveryTime").value = user.deliveryTime;
+  updateAddressPreview();
+
+  ["payerName", "payerPhone", "payerAddress"].forEach((id) => {
+    document.getElementById(id)?.addEventListener("input", updateAddressPreview);
+  });
 
   document.getElementById("shamCashNumber").textContent = shamNum || t("unspecified");
 

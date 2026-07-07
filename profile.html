@@ -3,11 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حسابي | متجر الشايب</title>
+  <title>حسابي | شايب شوب</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <main class="app-screen profile-hub">
+  <!-- Desktop account -->
+  <div class="desktop-only">
+    <div class="desktop-main">
+      <div class="desktop-account-layout">
+        <div id="desktopAccountSidebar"></div>
+        <div class="desktop-form-panel" id="desktopProfilePanel">
+          <h2 id="desktopProfileTitle">حسابي</h2>
+          <p id="desktopProfileLead">مرحباً بك في شايب شوب</p>
+          <div class="desktop-profile-quick">
+            <a href="cart.html" class="desktop-side-link">📦 <span id="deskTileOrders">طلباتي</span></a>
+            <a href="favorites.html" class="desktop-side-link">❤️ <span id="deskTileFav">المفضلة</span></a>
+            <a href="account-info.html" class="desktop-side-link">👤 <span id="deskTileInfo">بياناتي</span></a>
+            <a href="settings.html" class="desktop-side-link">⚙️ <span id="deskTileSettings">الإعدادات</span></a>
+          </div>
+          <section class="desktop-sham-box" style="margin-top:20px">
+            <img src="assets/images/sham-cash-barcode.svg" alt="Sham Cash" class="sham-cash-barcode">
+            <p><span id="deskShamNameLabel">اسم الحساب:</span> <strong id="deskShamAccountName">—</strong></p>
+            <p><span id="deskShamNumLabel">رقم الحساب:</span> <strong id="deskShamAccountNumber">—</strong></p>
+          </section>
+          <div id="desktopGuestPanel" hidden style="margin-top:20px">
+            <a class="primary-btn" href="login.html" id="desktopGuestBtn">تسجيل الدخول</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile profile -->
+  <main class="app-screen profile-hub mobile-only">
     <section class="profile-hero">
       <div class="profile-hero-top">
         <a href="notifications.html" class="icon-plain-btn">🔔</a>
@@ -15,7 +43,7 @@
       </div>
       <h1 id="profileName">—</h1>
       <p id="profileEmail">—</p>
-      <span class="member-badge" id="memberBadge">عضو متجر الشايب</span>
+      <span class="member-badge" id="memberBadge">عضو شايب شوب</span>
     </section>
 
     <section class="profile-quick-grid">
@@ -66,6 +94,7 @@
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/desktop-shell.js"></script>
   <script src="js/nav-shell.js"></script>
   <script src="js/profile.js"></script>
 </body>

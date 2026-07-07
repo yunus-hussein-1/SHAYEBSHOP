@@ -7,8 +7,8 @@ const STORELY_CART_PREFIX = "storelyCart_";
 const STORELY_DATA_VERSION_KEY = "storelyDataVersion";
 const STORELY_GUEST_CART_KEY = "storelyGuestCart";
 const STORELY_DATA_VERSION = "4";
-const SITE_NAME = "متجر الشايب";
-const SITE_NAME_AR = "متجر الشايب";
+const SITE_NAME = "شايب شوب";
+const SITE_NAME_AR = "شايب شوب";
 const SITE_TAGLINE = "إلكترونيات وألبسة";
 const PLATFORM_COMMISSION = () => (window.ALSHAYEB_DB_CONFIG?.platformCommission ?? 0.10);
 

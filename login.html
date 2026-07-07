@@ -3,14 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل الدخول | متجر الشايب</title>
+  <title>تسجيل الدخول | شايب شوب</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
-<body data-no-shell="1">
-  <main class="auth-page">
+<body>
+  <!-- Desktop login -->
+  <div class="desktop-only desktop-login-page">
+    <section class="desktop-login-card">
+      <a class="brand centered" href="index.html">
+        <span class="brand-title" id="deskAuthBrand">شايب شوب</span>
+      </a>
+      <h1 id="deskAuthTitle">تسجيل الدخول أو التسجيل</h1>
+      <form id="deskLoginForm" class="stack-form">
+        <label id="deskEmailLabel">* بريد إلكتروني<input id="deskLoginEmail" type="email" required></label>
+        <button class="primary-btn full" type="submit" id="deskLoginContinue">يكمل</button>
+      </form>
+      <div class="desktop-login-divider" id="deskAuthDivider">أو</div>
+      <button class="google-btn full" id="deskGoogleBtn" type="button">تابع مع جوجل</button>
+      <button class="secondary-btn full" id="deskFacebookBtn" type="button" style="margin-top:8px">تابع مع فيسبوك</button>
+      <div id="deskAuthMessage" class="form-message"></div>
+    </section>
+  </div>
+
+  <!-- Mobile login -->
+  <main class="auth-page mobile-only">
     <section class="auth-card">
       <a class="brand centered" href="index.html">
-        <span class="brand-title" id="authBrandTitle">متجر الشايب</span>
+        <span class="brand-title" id="authBrandTitle">شايب شوب</span>
         <small class="brand-sub" id="authBrandSub">إلكترونيات وألبسة</small>
       </a>
       <p class="auth-lead" id="authLead">تسجيل دخول عبر Google أو البريد الإلكتروني</p>
@@ -47,6 +66,7 @@
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/desktop-shell.js"></script>
   <script src="js/login-storely.js"></script>
 </body>
 </html>

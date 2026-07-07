@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بيع على شايب شوب</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <div class="desktop-sell-hero">
+    <h1 id="sellTitle">نمِّ أعمالك مع شايب شوب!</h1>
+    <p id="sellLead">انضم إلى منصتنا وابدأ البيع اليوم بعملة سورية.</p>
+  </div>
+  <div class="desktop-sell-cards" id="sellCards">
+    <article class="desktop-sell-card">
+      <div class="emoji">🍔🍩🥤</div>
+      <h3 id="sellFoodTitle">شايب شوب فود</h3>
+      <p id="sellFoodDesc">بيع الطعام والمشروبات مع توصيل سريع في منطقتك.</p>
+      <a href="create.html" class="primary-btn" id="sellFoodBtn">طلب الحصول على الطعام</a>
+    </article>
+    <article class="desktop-sell-card">
+      <div class="emoji">👕🎮👜</div>
+      <h3 id="sellMarketTitle">سوق شايب شوب</h3>
+      <p id="sellMarketDesc">بيع الألبسة والإلكترونيات والمنتجات المتنوعة لملايين المشترين.</p>
+      <a href="create.html" class="primary-btn" id="sellMarketBtn">التقديم إلى السوق</a>
+    </article>
+    <article class="desktop-sell-card">
+      <div class="emoji">🐟🍋🧺</div>
+      <h3 id="sellExpressTitle">السوبرماركت السريع</h3>
+      <p id="sellExpressDesc">بيع المواد الغذائية والمنتجات اليومية بتوصيل خلال ساعات.</p>
+      <a href="create.html" class="primary-btn" id="sellExpressBtn">التقديم إلى السوق السريع</a>
+    </article>
+  </div>
+
+  <main class="app-screen mobile-only" style="padding:20px">
+    <h1 id="sellMobileTitle">بيع على شايب شوب</h1>
+    <p id="sellMobileLead">اختر نوع متجرك وابدأ البيع بالليرة السورية.</p>
+    <a href="create.html" class="primary-btn full" style="margin-top:16px" id="sellMobileBtn">إنشاء متجر</a>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/desktop-shell.js"></script>
+  <script src="js/nav-shell.js"></script>
+  <script>
+    storelyInit().then(() => {
+      storelyApplyLang();
+      const t = (k) => storelyT(k);
+      document.title = `${t("sellTitle")} | ${storelySiteName()}`;
+      document.getElementById("sellTitle").textContent = t("sellTitle");
+      document.getElementById("sellLead").textContent = t("sellLead");
+      document.getElementById("sellFoodTitle").textContent = t("sellFood");
+      document.getElementById("sellMarketTitle").textContent = t("sellMarket");
+      document.getElementById("sellExpressTitle").textContent = t("sellExpress");
+      document.getElementById("sellFoodBtn").textContent = storelyGetLang() === "en" ? "Apply for Food" : "طلب الحصول على الطعام";
+      document.getElementById("sellMarketBtn").textContent = storelyGetLang() === "en" ? "Apply to Marketplace" : "التقديم إلى السوق";
+      document.getElementById("sellExpressBtn").textContent = storelyGetLang() === "en" ? "Apply to Express" : "التقديم إلى السوق السريع";
+      document.getElementById("sellMobileTitle").textContent = t("sellTitle");
+      document.getElementById("sellMobileLead").textContent = t("sellLead");
+      document.getElementById("sellMobileBtn").textContent = storelyGetLang() === "en" ? "Create Store" : "إنشاء متجر";
+    });
+  </script>
+</body>
+</html>

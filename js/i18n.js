@@ -1,6 +1,6 @@
 const APP_I18N = {
   ar: {
-    siteName: "متجر الشايب",
+    siteName: "شايب شوب",
     siteTagline: "إلكترونيات وألبسة",
     home: "الرئيسية",
     delivery: "توصيل",
@@ -31,7 +31,7 @@ const APP_I18N = {
     shamCashPay: "الدفع عبر شام كاش",
     accountName: "اسم الحساب",
     accountNumber: "رقم الحساب",
-    member: "عضو متجر الشايب",
+    member: "عضو شايب شوب بلس",
     orders: "طلباتي",
     buyAgain: "اشترِ مجدداً",
     services: "الخدمات",
@@ -44,7 +44,7 @@ const APP_I18N = {
     payNow: "ادفع الآن",
     total: "الإجمالي",
     pricesNote: "جميع الأسعار بالليرة السورية",
-    promoTag: "عروض متجر الشايب",
+    promoTag: "عروض شايب شوب",
     promoTitle: "خصومات على الإلكترونيات والألبسة",
     women: "نساء",
     men: "رجال",
@@ -52,7 +52,7 @@ const APP_I18N = {
     electronics: "إلكترونيات",
     kids: "أطفال",
     hello: "أهلاً",
-    enjoyShopping: "تسوق ممتع من متجر الشايب",
+    enjoyShopping: "تسوق ممتع من شايب شوب",
     browseFree: "تصفّح بحرية",
     browseSignIn: "سجّل دخولك لإتمام الشراء والدفع عبر شام كاش.",
     guestMode: "وضع الزائر",
@@ -114,7 +114,7 @@ const APP_I18N = {
     createAccount: "إنشاء حساب",
     backHome: "الرئيسية",
     helpTitle: "مساعدة",
-    helpLead: "دليل استخدام متجر الشايب.",
+    helpLead: "دليل استخدام شايب شوب.",
     howItWorks: "كيف يعمل التطبيق؟",
     helpBrowse: "تصفّح — أي زائر يشوف المنتجات ويضيف للسلة.",
     helpBuy: "شراء — يتطلب تسجيل دخول ثم ادفع الآن.",
@@ -156,10 +156,33 @@ const APP_I18N = {
     notifyCoupon: "كوبون جديد",
     notifyCouponBody: "استخدم كود SHAIB10 على مشترياتك القادمة",
     notifyDelivery: "تحديث التوصيل",
-    notifyDeliveryBody: "التوصيل السريع متاح في منطقتك"
+    notifyDeliveryBody: "التوصيل السريع متاح في منطقتك",
+    cartSummary: "ملخص السلة",
+    orderSummary: "ملخص الطلب",
+    subtotal: "المجموع الفرعي",
+    shipping: "تكلفة الشحن",
+    free: "مجاني",
+    confirmCart: "تأكيد سلة التسوق",
+    myCart: "سلتي",
+    deliveryAddress: "عنوان التسليم",
+    paymentOptions: "خيارات الدفع",
+    discountCode: "أدخل رمز الخصم",
+    fastShipNote: "استلم منتجاتك بسرعة! اطلب خلال ساعات قليلة.",
+    sellTitle: "نمِّ أعمالك مع شايب شوب!",
+    sellLead: "انضم إلى منصتنا وابدأ البيع اليوم بعملة سورية.",
+    sellMarket: "سوق شايب شوب",
+    sellFood: "شايب شوب فود",
+    sellExpress: "السوبرماركت السريع",
+    applyNow: "قدّم الآن",
+    myUserInfo: "معلومات المستخدم الخاصة بي",
+    closeAccount: "أغلق حسابي",
+    emailAddress: "البريد الإلكتروني",
+    mobilePhone: "هاتف محمول",
+    dateOfBirth: "تاريخ الميلاد",
+    commercialOffers: "أريد العروض التجارية الخاصة"
   },
   en: {
-    siteName: "Alshayeb Store",
+    siteName: "Shaib Shop",
     siteTagline: "Electronics & Fashion",
     home: "Home",
     delivery: "Delivery",
@@ -190,7 +213,7 @@ const APP_I18N = {
     shamCashPay: "Pay with Sham Cash",
     accountName: "Account Name",
     accountNumber: "Account Number",
-    member: "Alshayeb Member",
+    member: "Shaib Shop Plus Member",
     orders: "My Orders",
     buyAgain: "Buy Again",
     services: "Services",
@@ -203,7 +226,7 @@ const APP_I18N = {
     payNow: "Pay Now",
     total: "Total",
     pricesNote: "All prices in Syrian Pound",
-    promoTag: "Alshayeb Offers",
+    promoTag: "Shaib Shop Offers",
     promoTitle: "Discounts on electronics and fashion",
     women: "Women",
     men: "Men",
@@ -315,7 +338,30 @@ const APP_I18N = {
     notifyCoupon: "New coupon",
     notifyCouponBody: "Use code SHAIB10 on your next purchase",
     notifyDelivery: "Delivery update",
-    notifyDeliveryBody: "Fast delivery is available in your area"
+    notifyDeliveryBody: "Fast delivery is available in your area",
+    cartSummary: "Cart Summary",
+    orderSummary: "Order Summary",
+    subtotal: "Subtotal",
+    shipping: "Shipping",
+    free: "Free",
+    confirmCart: "Confirm Cart",
+    myCart: "My Cart",
+    deliveryAddress: "Delivery Address",
+    paymentOptions: "Payment Options",
+    discountCode: "Enter discount code",
+    fastShipNote: "Get your products fast! Order within a few hours.",
+    sellTitle: "Grow your business with Shaib Shop!",
+    sellLead: "Join our platform and start selling in Syrian Pounds.",
+    sellMarket: "Shaib Shop Marketplace",
+    sellFood: "Shaib Shop Food",
+    sellExpress: "Express Market",
+    applyNow: "Apply Now",
+    myUserInfo: "My User Information",
+    closeAccount: "Close my account",
+    emailAddress: "Email Address",
+    mobilePhone: "Mobile Phone",
+    dateOfBirth: "Date of Birth",
+    commercialOffers: "I want commercial offer updates"
   }
 };
 
@@ -346,7 +392,7 @@ function storelyApplyLang() {
   const lang = storelyGetLang();
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
-  document.title = document.title.replace(/متجر الشايب|Alshayeb Store/g, storelySiteName());
+  document.title = document.title.replace(/متجر الشايب|Alshayeb Store|Shaib Shop/g, storelySiteName());
   return lang;
 }
 

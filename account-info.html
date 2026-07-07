@@ -3,11 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بياناتي الشخصية | متجر الشايب</title>
+  <title>بياناتي الشخصية | شايب شوب</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <main class="app-screen account-info-screen">
+  <!-- Desktop account info -->
+  <div class="desktop-only">
+    <div class="desktop-main">
+      <div class="desktop-account-layout">
+        <div id="desktopAccountSidebar"></div>
+        <div class="desktop-form-panel">
+          <h2 id="desktopFormTitle">معلومات المستخدم الخاصة بي</h2>
+          <form id="desktopProfileForm" class="desktop-form-grid">
+            <label id="deskNameLabel">الاسم<input id="deskProfileName" type="text" required></label>
+            <label id="deskLastNameLabel">اسم العائلة<input id="deskProfileLastName" type="text"></label>
+            <label class="full" id="deskEmailLabel">البريد الإلكتروني<input id="deskProfileEmail" type="email" readonly></label>
+            <label id="deskPhoneLabel">هاتف محمول<input id="deskProfilePhone" type="tel" placeholder="09xxxxxxxx"></label>
+            <label class="full" id="deskLocationLabel">موقع التسليم
+              <div class="location-row">
+                <input id="deskProfileLocation" type="text" placeholder="المدينة / العنوان">
+                <button type="button" class="secondary-btn" id="deskGetLocationBtn">📍</button>
+              </div>
+            </label>
+            <button class="primary-btn full" type="submit" id="deskSaveBtn">تحديث</button>
+          </form>
+          <div id="deskProfileMessage" class="form-message"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile account info -->
+  <main class="app-screen account-info-screen mobile-only">
     <header class="mobile-page-header">
       <a href="profile.html" class="back-link">›</a>
       <h1 id="pageTitle">بياناتي الشخصية</h1>
@@ -37,6 +64,7 @@
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/desktop-shell.js"></script>
   <script src="js/nav-shell.js"></script>
   <script src="js/account-info.js"></script>
 </body>

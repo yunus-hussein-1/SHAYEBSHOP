@@ -25,6 +25,8 @@ const STORELY_PAYMENT_OPTIONS = [
 ];
 
 const STORELY_LANG_KEY = "storelyLang";
+const STORELY_FAVORITES_KEY = "storelyFavorites";
+const STORELY_BROWSE_KEY = "storelyBrowseHistory";
 
 function storelyShamCashNumber() {
   return storelyConfig().shamCashNumber || "";
@@ -43,6 +45,53 @@ function storelySetLang(lang) {
   const next = lang === "en" ? "en" : "ar";
   localStorage.setItem(STORELY_LANG_KEY, next);
   return next;
+}
+
+function storelyGetFavorites() {
+  return JSON.parse(localStorage.getItem(STORELY_FAVORITES_KEY) || "[]");
+}
+
+function storelyIsFavorite(storeId, productId) {
+  return storelyGetFavorites().some((item) => item.storeId === storeId && item.productId === productId);
+}
+
+function storelyToggleFavorite(storeId, productId) {
+  const list = storelyGetFavorites();
+  const idx = list.findIndex((item) => item.storeId === storeId && item.productId === productId);
+  if (idx >= 0) list.splice(idx, 1);
+  else list.unshift({ storeId, productId, at: Date.now() });
+  localStorage.setItem(STORELY_FAVORITES_KEY, JSON.stringify(list));
+  return idx < 0;
+}
+
+function storelyAddBrowseHistory(storeId, productId) {
+  const list = JSON.parse(localStorage.getItem(STORELY_BROWSE_KEY) || "[]")
+    .filter((item) => !(item.storeId === storeId && item.productId === productId));
+  list.unshift({ storeId, productId, at: Date.now() });
+  localStorage.setItem(STORELY_BROWSE_KEY, JSON.stringify(list.slice(0, 30)));
+}
+
+function storelyGetBrowseHistory() {
+  return JSON.parse(localStorage.getItem(STORELY_BROWSE_KEY) || "[]");
+}
+
+function storelyAllProductsFlat() {
+  return storelyActiveStores().flatMap((store) =>
+    (store.products || []).map((product) => ({
+      ...product,
+      storeId: store.id,
+      storeName: store.storeName,
+      storeSlug: store.slug
+    }))
+  );
+}
+
+function storelyResolveProducts(entries) {
+  const products = storelyAllProductsFlat();
+  return entries.map((entry) => {
+    const product = products.find((p) => p.storeId === entry.storeId && p.id === entry.productId);
+    return product ? { ...entry, product } : null;
+  }).filter(Boolean);
 }
 
 function storelyConfig() {

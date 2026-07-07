@@ -3,42 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سلة المشتريات | ALSHAYEB SHOP</title>
+  <title>سلة المشتريات | متجر الشايب</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <main class="dashboard-page">
-    <section class="dashboard-hero">
-      <div class="dashboard-hero-content">
-        <span class="eyebrow">سلة المشتريات</span>
-        <h1>مراجعة طلبك</h1>
-        <p>تأكد من منتجاتك قبل إتمام الشراء.</p>
-      </div>
-      <div class="dashboard-hero-visual">
-        <img src="assets/images/marketplace-hero.svg" alt="سلة التسوق" style="max-width:200px; border-radius:14px;">
+  <main class="app-screen cart-screen">
+    <header class="mobile-page-header">
+      <h1 id="cartPageTitle">سلة مشترياتك</h1>
+      <button type="button" class="icon-plain-btn" id="shareCartBtn">↗</button>
+    </header>
+
+    <section id="cartEmpty" class="cart-empty-state app-card"></section>
+    <section id="cartFilled" class="cart-filled" hidden>
+      <div id="cartItems" class="cart-list"></div>
+      <div class="cart-summary app-card">
+        <span id="cartTotalLabel">الإجمالي</span>
+        <strong id="cartTotal">0 ل.س</strong>
+        <a id="checkoutBtn" href="#" class="primary-btn full">ادفع الآن</a>
       </div>
     </section>
 
-    <section class="workspace-grid">
-      <div class="workspace-panel">
-        <h2>المنتجات</h2>
-        <div id="cartItems" class="product-table" style="margin-top:18px;"></div>
-      </div>
-      <aside class="workspace-panel">
-        <h2>الفاتورة</h2>
-        <div class="selected-plan" style="margin-top:18px;">
-          <span>الإجمالي</span>
-          <strong id="cartTotal">0 ل.س</strong>
-        </div>
-        <a id="checkoutBtn" href="#" class="primary-btn full" style="margin-top:16px;">ادفع الآن</a>
-      </aside>
+    <section class="cart-tabs">
+      <button type="button" class="cart-tab active" id="prevTabBtn">سبق إضافته</button>
+      <button type="button" class="cart-tab" id="favTabBtn">المفضلة</button>
     </section>
+    <div id="cartSuggestions" class="cart-suggestions"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/db-config.js"></script>
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/nav-shell.js"></script>
   <script src="js/cart-storely.js"></script>
 </body>

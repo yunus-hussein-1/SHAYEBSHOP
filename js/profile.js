@@ -1,76 +1,54 @@
 function renderProfileAvatar(user) {
-  const preview = document.getElementById("avatarPreview");
+  const preview = document.getElementById("profileAvatar");
+  if (!preview) return;
   if (user?.avatar) {
     preview.style.backgroundImage = `url('${user.avatar}')`;
     preview.textContent = "";
-    preview.classList.add("has-image");
   } else {
     preview.style.backgroundImage = "";
     preview.textContent = (user?.name || "?").charAt(0);
-    preview.classList.remove("has-image");
   }
 }
 
 storelyInit().then(async () => {
-  if (!(await storelyRequireLoginAsync("profile.html"))) return;
+  storelyApplyLang();
+  const lang = storelyGetLang();
+  const loggedIn = storelyIsLoggedIn();
 
-  const user = storelyCurrentUser();
-  document.getElementById("profileName").value = user.name || "";
-  document.getElementById("profileEmail").value = user.email || "";
-  document.getElementById("profilePhone").value = user.phone || "";
-  document.getElementById("profileLocation").value = user.location || user.personal_location || "";
-  renderProfileAvatar(user);
+  document.getElementById("memberBadge").textContent = storelyT("member");
+  document.getElementById("tileHistory").textContent = storelyT("browsingHistory");
+  document.getElementById("tileCoupons").textContent = storelyT("myCoupons");
+  document.getElementById("tileOrders").textContent = storelyT("orders");
+  document.getElementById("tileFav").textContent = storelyT("favorites");
+  document.getElementById("tileBuyAgain").textContent = storelyT("buyAgain");
+  document.getElementById("servicesTitle").textContent = storelyT("services");
+  document.getElementById("servicesAll").textContent = `${storelyT("viewAll")} ›`;
+  document.getElementById("servicePersonal").textContent = storelyT("personalInfo");
+  document.getElementById("serviceSham").textContent = storelyT("shamCash");
+  document.getElementById("serviceShamSub").textContent = storelyT("shamCashPay");
+  document.getElementById("shamNameLabel").textContent = `${storelyT("accountName")}:`;
+  document.getElementById("shamNumLabel").textContent = `${storelyT("accountNumber")}:`;
+  document.getElementById("shamAccountName").textContent = storelyShamCashAccountName();
+  document.getElementById("shamAccountNumber").textContent = storelyShamCashNumber() || "—";
 
-  if (storelyCurrentStore()) {
-    document.querySelector(".panel-card.highlight").innerHTML = `
-      <h2>متجرك نشط ✅</h2>
-      <p>إدارة متجرك من لوحة التحكم.</p>
-      <a class="primary-btn" href="dashboard.html">لوحة المتجر</a>`;
+  if (loggedIn) {
+    const user = storelyCurrentUser();
+    document.getElementById("profileName").textContent = user.name || storelyT("account");
+    document.getElementById("profileEmail").textContent = user.email || "";
+    renderProfileAvatar(user);
+    document.getElementById("guestCard").hidden = true;
+    if (storelyCurrentStore()) {
+      document.getElementById("sellerCard").hidden = false;
+      document.getElementById("sellerTitle").textContent = lang === "en" ? "Your store is active" : "متجرك نشط ✅";
+      document.getElementById("sellerBtn").textContent = lang === "en" ? "Store Dashboard" : "لوحة المتجر";
+    }
+    return;
   }
 
-  document.getElementById("getLocationBtn").addEventListener("click", () => {
-    const msg = document.getElementById("profileMessage");
-    if (!navigator.geolocation) { msg.textContent = "غير مدعوم"; msg.dataset.type = "error"; return; }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        document.getElementById("profileLocation").value = `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`;
-        msg.textContent = "تم — اضغط حفظ";
-        msg.dataset.type = "success";
-      },
-      () => { msg.textContent = "تعذر تحديد الموقع"; msg.dataset.type = "error"; }
-    );
-  });
-
-  document.getElementById("avatarFile").addEventListener("change", async (e) => {
-    const avatar = await storelyImageFromFile(e.target);
-    if (!avatar) return;
-    const preview = document.getElementById("avatarPreview");
-    preview.style.backgroundImage = `url('${avatar}')`;
-    preview.textContent = "";
-    preview.classList.add("has-image");
-    preview.dataset.pendingAvatar = avatar;
-  });
-
-  document.getElementById("profileForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const msg = document.getElementById("profileMessage");
-    const preview = document.getElementById("avatarPreview");
-    const updates = {
-      name: document.getElementById("profileName").value.trim(),
-      phone: document.getElementById("profilePhone").value.trim(),
-      location: document.getElementById("profileLocation").value.trim()
-    };
-    if (preview.dataset.pendingAvatar) updates.avatar = preview.dataset.pendingAvatar;
-    try {
-      await storelyUpdateProfile(updates);
-      delete preview.dataset.pendingAvatar;
-      renderProfileAvatar(storelyCurrentUser());
-      msg.textContent = "تم الحفظ";
-      msg.dataset.type = "success";
-      appRefreshNav();
-    } catch (err) {
-      msg.textContent = err.message;
-      msg.dataset.type = "error";
-    }
-  });
+  document.getElementById("profileName").textContent = storelyT("siteName");
+  document.getElementById("profileEmail").textContent = lang === "en" ? "Guest mode" : "وضع الزائر";
+  document.getElementById("profileAvatar").textContent = "ش";
+  document.getElementById("guestTitle").textContent = storelyT("login");
+  document.getElementById("guestText").textContent = lang === "en" ? "Sign in to access orders and personal data" : "للوصول لطلباتك وبياناتك الشخصية";
+  document.getElementById("guestBtn").textContent = storelyT("login");
 });

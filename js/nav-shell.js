@@ -16,7 +16,7 @@ function appIsAuthPage() {
 }
 
 function appIsProtectedPage() {
-  return ["profile.html", "settings.html", "dashboard.html", "checkout.html", "admin.html"].includes(appPageName());
+  return ["account-info.html", "settings.html", "dashboard.html", "checkout.html", "admin.html"].includes(appPageName());
 }
 
 function appRequireLogin() {
@@ -46,109 +46,76 @@ function appMountNav() {
   const user = storelyCurrentUser();
   const cartCount = storelyCartCount();
   const path = appPageName();
-  const brand = APP_CONFIG.siteName || APP_CONFIG.siteNameAr || "ALSHAYEB SHOP";
+  const brand = APP_CONFIG.siteNameAr || APP_CONFIG.siteName || storelyT("siteName");
   const lang = storelyGetLang();
-  const t = lang === "en"
-    ? {
-      login: "Login",
-      profile: "Profile",
-      help: "Help",
-      settings: "Settings",
-      home: "Home",
-      cart: "Cart",
-      logout: "Logout",
-      menu: "Menu"
-    }
-    : {
-      login: "تسجيل الدخول",
-      profile: "بروفايل",
-      help: "مساعدة",
-      settings: "إعدادات",
-      home: "الرئيسية",
-      cart: "السلة",
-      logout: "تسجيل خروج",
-      menu: "القائمة"
-    };
   const badge = cartCount > 0 ? `<span class="badge">${cartCount}</span>` : "";
+  const accountPages = ["profile.html", "account-info.html", "settings.html"];
+  const isAccount = accountPages.includes(path);
 
   const top = document.createElement("header");
   top.className = "app-topbar";
-  top.innerHTML = loggedIn ? `
-    <button type="button" class="menu-btn" id="menuBtn" aria-label="${t.menu}">☰</button>
+  top.innerHTML = `
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
     <button type="button" class="lang-chip-btn" id="langToggleBtn">${lang === "ar" ? "EN" : "AR"}</button>
     <a class="topbar-brand" href="index.html">${brand}</a>
-    <a class="topbar-cart" href="cart.html" title="${t.cart}">🛒${badge}</a>
-  ` : `
-    <button type="button" class="lang-chip-btn" id="langToggleBtn">${lang === "ar" ? "EN" : "AR"}</button>
-    <a class="topbar-brand" href="index.html">${brand}</a>
-    <a class="topbar-cart" href="cart.html" title="${t.cart}">🛒${badge}</a>
-    <a class="topbar-login" href="login.html">${t.login}</a>
+    <a class="topbar-icon-btn" href="notifications.html" title="${storelyT("notifications")}">🔔</a>
+    <a class="topbar-cart" href="cart.html" title="${storelyT("cart")}">🛒${badge}</a>
+    ${loggedIn ? "" : `<a class="topbar-login" href="login.html">${storelyT("login")}</a>`}
   `;
   document.body.insertBefore(top, document.body.firstChild);
 
-  if (loggedIn) {
-    const overlay = document.createElement("div");
-    overlay.className = "menu-overlay";
-    overlay.id = "appMenuOverlay";
+  const overlay = document.createElement("div");
+  overlay.className = "menu-overlay";
+  overlay.id = "appMenuOverlay";
 
-    const menu = document.createElement("nav");
-    menu.className = "app-side-menu";
-    menu.id = "appSideMenu";
-    menu.innerHTML = `
-      <div class="menu-user">
-        <span class="menu-avatar">${user.avatar ? `<img src="${user.avatar}" alt="">` : (user.name || "م").charAt(0)}</span>
-        <div><strong>${user.name || "عضو"}</strong><small>${user.email || ""}</small></div>
-        <button type="button" class="menu-close" id="menuClose">×</button>
-      </div>
-      <a href="profile.html" class="menu-link${path === "profile.html" ? " active" : ""}">👤 ${t.profile}</a>
-      <a href="help.html" class="menu-link${path === "help.html" ? " active" : ""}">❓ ${t.help}</a>
-      <a href="settings.html" class="menu-link${path === "settings.html" ? " active" : ""}">⚙️ ${t.settings}</a>
-      <hr>
-      <a href="index.html" class="menu-link">🏠 ${t.home}</a>
-      <a href="cart.html" class="menu-link">🛒 ${t.cart} ${cartCount > 0 ? `(${cartCount})` : ""}</a>
-      <a href="#" class="menu-link" id="logoutLink">🚪 ${t.logout}</a>
-    `;
+  const menu = document.createElement("nav");
+  menu.className = "app-side-menu";
+  menu.id = "appSideMenu";
+  menu.innerHTML = `
+    <div class="menu-user">
+      <span class="menu-avatar">${loggedIn && user?.avatar ? `<img src="${user.avatar}" alt="">` : (loggedIn ? (user.name || "م").charAt(0) : "ش")}</span>
+      <div><strong>${loggedIn ? (user.name || storelyT("account")) : storelyT("siteName")}</strong><small>${loggedIn ? (user.email || "") : storelyT("login")}</small></div>
+      <button type="button" class="menu-close" id="menuClose">×</button>
+    </div>
+    <a href="index.html" class="menu-link${path === "index.html" ? " active" : ""}">🏠 ${storelyT("home")}</a>
+    <a href="categories.html" class="menu-link${path === "categories.html" ? " active" : ""}">📂 ${storelyT("categories")}</a>
+    <a href="favorites.html" class="menu-link${path === "favorites.html" ? " active" : ""}">❤️ ${storelyT("favorites")}</a>
+    <a href="cart.html" class="menu-link${path === "cart.html" ? " active" : ""}">🛒 ${storelyT("cart")}</a>
+    <a href="profile.html" class="menu-link${path === "profile.html" ? " active" : ""}">👤 ${storelyT("account")}</a>
+    <a href="notifications.html" class="menu-link${path === "notifications.html" ? " active" : ""}">🔔 ${storelyT("notifications")}</a>
+    <a href="help.html" class="menu-link${path === "help.html" ? " active" : ""}">❓ ${storelyT("help")}</a>
+    ${loggedIn ? `<a href="settings.html" class="menu-link${path === "settings.html" ? " active" : ""}">⚙️ ${storelyT("settings")}</a>` : ""}
+    <hr>
+    ${loggedIn ? `<a href="#" class="menu-link" id="logoutLink">🚪 ${storelyT("logout")}</a>` : `<a href="login.html" class="menu-link">🔐 ${storelyT("login")}</a>`}
+  `;
 
-    const bottom = document.createElement("nav");
-    bottom.className = "app-bottomnav";
-    bottom.innerHTML = `
-      <a href="index.html" class="${path === "index.html" ? "active" : ""}"><span>🏠</span><small>${t.home}</small></a>
-      <a href="cart.html" class="${path === "cart.html" ? "active" : ""}"><span>🛒</span><small>${t.cart}</small></a>
-      <a href="profile.html" class="${path === "profile.html" ? "active" : ""}"><span>👤</span><small>${t.profile}</small></a>
-      <a href="help.html" class="${path === "help.html" ? "active" : ""}"><span>❓</span><small>${t.help}</small></a>
-      <a href="settings.html" class="${path === "settings.html" ? "active" : ""}"><span>⚙️</span><small>${t.settings}</small></a>
-    `;
+  const bottom = document.createElement("nav");
+  bottom.className = "app-bottomnav";
+  bottom.innerHTML = `
+    <a href="index.html" class="${path === "index.html" ? "active" : ""}"><span>🏠</span><small>${storelyT("home")}</small></a>
+    <a href="categories.html" class="${path === "categories.html" ? "active" : ""}"><span>🚚</span><small>${storelyT("delivery")}</small></a>
+    <a href="favorites.html" class="${path === "favorites.html" ? "active" : ""}"><span>❤️</span><small>${storelyT("favorites")}</small></a>
+    <a href="cart.html" class="${path === "cart.html" ? "active" : ""}"><span>🛒</span><small>${storelyT("cart")}</small></a>
+    <a href="profile.html" class="${isAccount ? "active" : ""}"><span>👤</span><small>${storelyT("account")}</small></a>
+  `;
 
-    document.body.appendChild(overlay);
-    document.body.appendChild(menu);
-    document.body.appendChild(bottom);
+  document.body.appendChild(overlay);
+  document.body.appendChild(menu);
+  document.body.appendChild(bottom);
 
-    top.querySelector("#menuBtn").addEventListener("click", appOpenMenu);
-    overlay.addEventListener("click", appCloseMenu);
-    menu.querySelector("#menuClose").addEventListener("click", appCloseMenu);
-    menu.querySelector("#logoutLink")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      storelyLogout();
-      window.location.href = "login.html";
-    });
-    document.body.classList.add("has-bottomnav");
-  } else {
-    const bottom = document.createElement("nav");
-    bottom.className = "app-bottomnav app-bottomnav-guest";
-    bottom.innerHTML = `
-      <a href="index.html" class="${path === "index.html" ? "active" : ""}"><span>🏠</span><small>${t.home}</small></a>
-      <a href="cart.html" class="${path === "cart.html" ? "active" : ""}"><span>🛒</span><small>${t.cart}</small></a>
-      <a href="help.html" class="${path === "help.html" ? "active" : ""}"><span>❓</span><small>${t.help}</small></a>
-      <a href="login.html" class="${path === "login.html" ? "active" : ""}"><span>🔐</span><small>${t.login}</small></a>
-    `;
-    document.body.appendChild(bottom);
-    document.body.classList.add("has-bottomnav");
-  }
-
+  top.querySelector("#menuBtn").addEventListener("click", appOpenMenu);
+  overlay.addEventListener("click", appCloseMenu);
+  menu.querySelector("#menuClose").addEventListener("click", appCloseMenu);
+  menu.querySelector("#logoutLink")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    storelyLogout();
+    window.location.href = "login.html";
+  });
   top.querySelector("#langToggleBtn")?.addEventListener("click", () => {
     storelySetLang(storelyGetLang() === "ar" ? "en" : "ar");
     window.location.reload();
   });
+  document.body.classList.add("has-bottomnav");
 }
 
 storelyRefreshAppShell = appRefreshNav;

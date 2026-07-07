@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كل الفئات | متجر الشايب</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <main class="app-screen categories-screen">
+    <header class="mobile-page-header compact">
+      <a href="index.html" class="back-link">›</a>
+      <div class="search-row">
+        <button type="button" id="cameraSearchBtn" class="camera-btn">📷</button>
+        <input type="search" id="categorySearch" class="market-search" placeholder="ابحث عن ماركة أو منتج أو فئة">
+      </div>
+      <input type="file" id="cameraSearchInput" accept="image/*" capture="environment" hidden>
+    </header>
+
+    <h2 class="section-mobile-title" id="pageTitle">كل الفئات</h2>
+    <div id="categoryGrid" class="category-grid"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/nav-shell.js"></script>
+  <script src="js/categories.js"></script>
+</body>
+</html>

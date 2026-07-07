@@ -1,5 +1,13 @@
 storelyInit().then(async () => {
+  storelyApplyLang();
+  const lang = storelyGetLang();
+  const t = (k) => storelyT(k);
   const cartStores = storelyGetStores();
+
+  document.getElementById("cartPageTitle").textContent = `${t("cart")} ${lang === "ar" ? "مشترياتك" : ""}`.trim();
+  document.getElementById("cartTotalLabel").textContent = t("total");
+  document.getElementById("prevTabBtn").textContent = t("previouslyAdded");
+  document.getElementById("favTabBtn").textContent = t("favorites");
 
   async function getCartDetailed() {
     const cart = await storelyGetCartAsync();
@@ -10,39 +18,88 @@ storelyInit().then(async () => {
     }).filter(Boolean);
   }
 
+  function suggestionCard(item) {
+    return `
+      <article class="cart-suggest-row">
+        <div class="cart-suggest-img" style="${storelyMediaStyle(item.product.image)}"></div>
+        <div class="cart-suggest-body">
+          <strong>${item.product.title}</strong>
+          <p>${item.store.storeName}</p>
+          <span class="badge-fast">${t("fastDelivery")}</span>
+          <div class="cart-suggest-foot">
+            <strong>${storelyMoney(item.product.price)}</strong>
+            <button type="button" class="secondary-btn" data-add="${item.storeId}:${item.productId}">${t("addToCart")}</button>
+          </div>
+        </div>
+      </article>`;
+  }
+
+  async function renderSuggestions(mode = "history") {
+    const box = document.getElementById("cartSuggestions");
+    let entries = mode === "fav" ? storelyGetFavorites() : storelyGetBrowseHistory();
+    let items = storelyResolveProducts(entries).map((entry) => ({
+      ...entry,
+      store: cartStores.find((s) => s.id === entry.storeId)
+    })).filter((i) => i.store);
+
+    if (!items.length) {
+      items = storelyAllProductsFlat().slice(0, 3).map((product) => ({
+        product,
+        store: cartStores.find((s) => s.id === product.storeId),
+        storeId: product.storeId,
+        productId: product.id
+      }));
+    }
+
+    box.innerHTML = items.map(suggestionCard).join("");
+    box.querySelectorAll("[data-add]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const [storeId, productId] = btn.dataset.add.split(":");
+        await storelyRequestAddToCartAsync(storeId, productId);
+        renderCart();
+      });
+    });
+  }
+
   async function renderCart() {
     const items = await getCartDetailed();
+    const empty = document.getElementById("cartEmpty");
+    const filled = document.getElementById("cartFilled");
     const container = document.getElementById("cartItems");
     const totalEl = document.getElementById("cartTotal");
     const checkoutBtn = document.getElementById("checkoutBtn");
 
     if (!items.length) {
-      container.innerHTML = storelyEmptyState("السلة فارغة", "تصفّح المنتجات وأضف ما يعجبك.", "تصفح المنتجات", "index.html#products");
-      totalEl.textContent = storelyMoney(0);
-      checkoutBtn.className = "secondary-btn full";
-      checkoutBtn.href = "index.html#products";
-      checkoutBtn.textContent = "تصفح المنتجات";
-      checkoutBtn.onclick = null;
+      empty.hidden = false;
+      filled.hidden = true;
+      empty.innerHTML = `
+        <div class="cart-empty-icon">🛍️</div>
+        <p>${t("emptyCart")}</p>
+        <a class="primary-btn full" href="index.html">${t("continueShopping")}</a>`;
+      renderSuggestions("history");
       return;
     }
 
+    empty.hidden = true;
+    filled.hidden = false;
     container.innerHTML = items.map((item) => `
-      <div class="product-row">
-        <div>
-          <div class="row-product-image" style="${storelyMediaStyle(item.product.image, "assets/images/product-electronics.svg")}"></div>
+      <article class="cart-item-row app-card">
+        <div class="cart-item-img" style="${storelyMediaStyle(item.product.image)}"></div>
+        <div class="cart-item-body">
           <strong>${item.product.title}</strong>
-          <span>${item.store.storeName} · ${item.product.category}</span>
+          <p>${item.store.storeName}</p>
+          <span class="badge-fast">${t("fastDelivery")}</span>
+          <div class="cart-item-foot">
+            <strong>${storelyMoney(item.product.price)}</strong>
+            <span>× ${item.qty}</span>
+            <button class="danger-btn" onclick="removeCartItem('${item.storeId}','${item.productId}')">${t("remove")}</button>
+          </div>
         </div>
-        <b>${storelyMoney(item.product.price)}</b>
-        <span>× ${item.qty}</span>
-        <button class="danger-btn" onclick="removeCartItem('${item.storeId}','${item.productId}')">إزالة</button>
-      </div>
+      </article>
     `).join("");
 
     totalEl.textContent = storelyMoney(items.reduce((sum, item) => sum + Number(item.product.price || 0) * item.qty, 0));
-    checkoutBtn.className = "primary-btn full";
-    checkoutBtn.textContent = storelyIsLoggedIn() ? "ادفع الآن" : "سجّل دخولك للدفع";
-    checkoutBtn.href = "#";
+    checkoutBtn.textContent = storelyIsLoggedIn() ? t("payNow") : storelyT("login");
     checkoutBtn.onclick = (event) => {
       event.preventDefault();
       if (!storelyIsLoggedIn()) {
@@ -52,6 +109,7 @@ storelyInit().then(async () => {
       }
       window.location.href = "checkout.html?plan=cart";
     };
+    renderSuggestions("history");
   }
 
   window.removeCartItem = async (storeId, productId) => {
@@ -60,6 +118,20 @@ storelyInit().then(async () => {
     storelyUpdateCartBadge();
     renderCart();
   };
+
+  document.getElementById("prevTabBtn").addEventListener("click", () => {
+    document.getElementById("prevTabBtn").classList.add("active");
+    document.getElementById("favTabBtn").classList.remove("active");
+    renderSuggestions("history");
+  });
+  document.getElementById("favTabBtn").addEventListener("click", () => {
+    document.getElementById("favTabBtn").classList.add("active");
+    document.getElementById("prevTabBtn").classList.remove("active");
+    renderSuggestions("fav");
+  });
+  document.getElementById("shareCartBtn").addEventListener("click", () => {
+    storelyToast(lang === "en" ? "Cart link copied" : "تم نسخ رابط السلة");
+  });
 
   renderCart();
   storelyUpdateCartBadge();

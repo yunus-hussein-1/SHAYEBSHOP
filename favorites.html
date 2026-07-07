@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المفضلة | متجر الشايب</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <main class="app-screen favorites-screen">
+    <header class="mobile-page-header">
+      <h1 id="pageTitle">المفضلة</h1>
+    </header>
+
+    <div class="fav-top-tabs">
+      <button type="button" class="fav-tab active" id="favTab">المفضلة</button>
+      <button type="button" class="fav-tab" id="historyTab">سجل التصفح</button>
+    </div>
+
+    <div class="search-row fav-search">
+      <button type="button" id="cameraSearchBtn" class="camera-btn">📷</button>
+      <input type="search" id="favSearch" class="market-search" placeholder="البحث">
+    </div>
+    <input type="file" id="cameraSearchInput" accept="image/*" capture="environment" hidden>
+
+    <div id="favoritesList" class="product-grid-trendy"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/nav-shell.js"></script>
+  <script src="js/favorites.js"></script>
+</body>
+</html>

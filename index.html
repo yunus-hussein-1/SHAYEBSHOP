@@ -3,50 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ALSHAYEB SHOP | إلكترونيات وألبسة</title>
+  <title>متجر الشايب | إلكترونيات وألبسة</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <main class="market-home">
+  <main class="market-home app-screen">
     <section class="market-search-band app-like">
-      <div class="home-account-strip">
-        <div>
-          <strong id="homeWelcomeTitle">متجر الشايب</strong>
-          <p id="homeWelcomeSub">تسوق بأسلوب تطبيقات حديثة</p>
-        </div>
-        <a href="profile.html" class="secondary-btn profile-mini-btn" id="profileBtnLabel">الحساب</a>
-      </div>
       <div class="search-row">
-        <button type="button" id="cameraSearchBtn" class="camera-btn" aria-label="بحث بالكاميرا">📷</button>
+        <button type="button" id="cameraSearchBtn" class="camera-btn" aria-label="camera">📷</button>
         <input type="search" id="searchInput" class="market-search" placeholder="ابحث عن ماركة أو منتج أو فئة">
       </div>
       <input type="file" id="cameraSearchInput" accept="image/*" capture="environment" hidden>
-      <div class="quick-tabs">
-        <button type="button" class="quick-tab active" data-role="featured" id="featuredTabLabel">عروض مميزة</button>
-        <button type="button" class="quick-tab" data-role="history" id="historyTabLabel">سجل التصفح</button>
-        <button type="button" class="quick-tab" data-role="notifications" id="notifyTabLabel">الإشعارات</button>
+      <div class="home-category-tabs" id="homeCategoryTabs"></div>
+    </section>
+
+    <section class="promo-banner app-card">
+      <div>
+        <span class="promo-tag" id="promoTag">عروض متجر الشايب</span>
+        <h2 id="promoTitle">خصومات على الإلكترونيات والألبسة</h2>
+        <a href="categories.html" class="promo-link" id="promoLink">عرض الكل ›</a>
       </div>
     </section>
 
+    <section class="flash-sale-band app-card">
+      <div class="section-head">
+        <h2 id="flashTitle">تنزيلات خاطفة</h2>
+        <span class="flash-timer" id="flashTimer">02:15:40</span>
+      </div>
+      <div id="flashProducts" class="product-row-scroll"></div>
+    </section>
+
     <section class="market-categories">
-      <h2 class="section-mobile-title" id="categoryTitle">كل الفئات</h2>
+      <div class="section-head">
+        <h2 class="section-mobile-title" id="categoryTitle">كل الفئات</h2>
+        <a href="categories.html" class="view-all-link" id="viewAllCategories">عرض الكل ›</a>
+      </div>
       <div class="category-scroll" id="categoryFilter"></div>
     </section>
 
+    <section class="popular-search app-card">
+      <h2 id="popularSearchTitle">البحث الشائع</h2>
+      <div class="popular-tags" id="popularTags"></div>
+    </section>
+
     <section class="market-products">
-      <h2 id="productsTitle">قطع لك خصيصاً</h2>
+      <div class="section-head">
+        <h2 id="productsTitle">قطع لك خصيصاً</h2>
+        <a href="favorites.html" class="view-all-link" id="viewAllPicks">عرض الكل ›</a>
+      </div>
       <div id="featuredProducts" class="product-grid-trendy"></div>
     </section>
 
     <section id="welcomeBand" class="login-prompt-band"></section>
   </main>
 
-  <footer class="app-footer">ALSHAYEB SHOP · جميع الأسعار بالليرة السورية</footer>
+  <footer class="app-footer" id="appFooter">متجر الشايب · جميع الأسعار بالليرة السورية</footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/db-config.js"></script>
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/nav-shell.js"></script>
   <script src="js/home.js"></script>
 </body>

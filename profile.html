@@ -3,38 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بروفايل | ALSHAYEB SHOP</title>
+  <title>حسابي | متجر الشايب</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <main class="page-shell">
-    <h1 class="page-title">👤 بروفايل</h1>
-    <p class="page-lead">معلوماتك الشخصية وموقعك.</p>
-
-    <section class="panel-card">
-      <form id="profileForm" class="stack-form">
-        <div class="profile-avatar-row">
-          <div id="avatarPreview" class="profile-avatar-preview">?</div>
-          <label class="file-field">تغيير الصورة<input id="avatarFile" type="file" accept="image/*"></label>
-        </div>
-        <label>الاسم<input id="profileName" type="text" required></label>
-        <label>البريد<input id="profileEmail" type="email" readonly></label>
-        <label>رقم سوري<input id="profilePhone" type="tel" placeholder="09xxxxxxxx"></label>
-        <label>موقعك الشخصي
-          <div class="location-row">
-            <input id="profileLocation" type="text" placeholder="المدينة / العنوان">
-            <button type="button" class="secondary-btn" id="getLocationBtn">📍</button>
-          </div>
-        </label>
-        <button class="primary-btn" type="submit">حفظ</button>
-      </form>
-      <div id="profileMessage" class="form-message"></div>
+  <main class="app-screen profile-hub">
+    <section class="profile-hero">
+      <div class="profile-hero-top">
+        <a href="notifications.html" class="icon-plain-btn">🔔</a>
+        <div id="profileAvatar" class="profile-hero-avatar">?</div>
+      </div>
+      <h1 id="profileName">—</h1>
+      <p id="profileEmail">—</p>
+      <span class="member-badge" id="memberBadge">عضو متجر الشايب</span>
     </section>
 
-    <section class="panel-card highlight">
-      <h2>تريد تفتح متجر؟</h2>
-      <p>قدّم طلب فتح متجر وبيع منتجاتك من صفحة الإعدادات.</p>
-      <a class="primary-btn" href="settings.html#store">طلب فتح متجر ←</a>
+    <section class="profile-quick-grid">
+      <a href="index.html#history" class="quick-tile"><span>🕒</span><small id="tileHistory">سجل التصفح</small></a>
+      <a href="cart.html" class="quick-tile"><span>🏷️</span><small id="tileCoupons">كوبوناتي</small></a>
+      <a href="help.html" class="quick-tile"><span>💬</span><small id="tileHelp">المساعدة</small></a>
+      <a href="notifications.html" class="quick-tile"><span>✉️</span><small id="tileQuestions">أسئلتي</small></a>
+    </section>
+
+    <section class="profile-action-grid">
+      <a href="cart.html" class="action-tile"><span>📦</span><div><strong id="tileOrders">طلباتي</strong><small>Orders</small></div></a>
+      <a href="favorites.html" class="action-tile"><span>💎</span><div><strong id="tileFav">المفضلة</strong><small>Favorites</small></div></a>
+      <a href="help.html" class="action-tile"><span>💬</span><div><strong id="tileComments">التعليقات</strong><small>Reviews</small></div></a>
+      <a href="index.html" class="action-tile"><span>🛍️</span><div><strong id="tileBuyAgain">اشترِ مجدداً</strong><small>Buy Again</small></div></a>
+    </section>
+
+    <section class="app-card profile-services">
+      <div class="section-head">
+        <h2 id="servicesTitle">الخدمات</h2>
+        <a href="settings.html" class="view-all-link" id="servicesAll">عرض الكل ›</a>
+      </div>
+      <a href="account-info.html" class="service-row"><span>👤</span><div><strong id="servicePersonal">بياناتي الشخصية</strong><small>Personal info</small></div><em>›</em></a>
+      <a href="checkout.html?plan=cart" class="service-row"><span>💳</span><div><strong id="serviceSham">شام كاش</strong><small id="serviceShamSub">الدفع عبر شام كاش</small></div><em>›</em></a>
+      <a href="settings.html" class="service-row"><span>⚙️</span><div><strong id="serviceSettings">إعدادات الحساب</strong><small>Settings</small></div><em>›</em></a>
+      <a href="help.html" class="service-row"><span>❓</span><div><strong id="serviceHelp">المساعدة والتواصل</strong><small>Help</small></div><em>›</em></a>
+    </section>
+
+    <section class="app-card sham-cash-mini" id="shamCashMini">
+      <img src="assets/images/sham-cash-barcode.svg" alt="Sham Cash" class="sham-cash-barcode">
+      <p><span id="shamNameLabel">اسم الحساب:</span> <strong id="shamAccountName">—</strong></p>
+      <p><span id="shamNumLabel">رقم الحساب:</span> <strong id="shamAccountNumber">—</strong></p>
+    </section>
+
+    <section id="sellerCard" class="app-card highlight" hidden>
+      <h2 id="sellerTitle">متجرك نشط</h2>
+      <a class="primary-btn" href="dashboard.html" id="sellerBtn">لوحة المتجر</a>
+    </section>
+
+    <section id="guestCard" class="app-card highlight">
+      <h2 id="guestTitle">سجّل دخولك</h2>
+      <p id="guestText">للوصول لطلباتك وبياناتك الشخصية</p>
+      <a class="primary-btn" href="login.html" id="guestBtn">تسجيل الدخول</a>
     </section>
   </main>
 
@@ -42,6 +65,7 @@
   <script src="js/db-config.js"></script>
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/nav-shell.js"></script>
   <script src="js/profile.js"></script>
 </body>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بياناتي الشخصية | متجر الشايب</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <main class="app-screen account-info-screen">
+    <header class="mobile-page-header">
+      <a href="profile.html" class="back-link">›</a>
+      <h1 id="pageTitle">بياناتي الشخصية</h1>
+    </header>
+
+    <section class="app-card">
+      <form id="profileForm" class="account-form">
+        <label id="nameLabel">الاسم<input id="profileName" type="text" required></label>
+        <label id="lastNameLabel">اسم العائلة<input id="profileLastName" type="text"></label>
+        <label id="emailLabel">البريد الإلكتروني<input id="profileEmail" type="email" readonly></label>
+        <label id="phoneLabel">رقم الهاتف<input id="profilePhone" type="tel" placeholder="09xxxxxxxx"></label>
+        <label id="locationLabel" class="full">موقع التسليم
+          <div class="location-row">
+            <input id="profileLocation" type="text" placeholder="المدينة / العنوان">
+            <button type="button" class="secondary-btn" id="getLocationBtn">📍</button>
+          </div>
+        </label>
+        <label class="file-field full" id="avatarLabel">تغيير الصورة<input id="avatarFile" type="file" accept="image/*"></label>
+        <button class="primary-btn full" type="submit" id="saveBtn">تحديث</button>
+      </form>
+      <div id="profileMessage" class="form-message"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/nav-shell.js"></script>
+  <script src="js/account-info.js"></script>
+</body>
+</html>

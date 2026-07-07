@@ -3,17 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>متجر | ALSHAYEB SHOP</title>
+  <title>الإشعارات | متجر الشايب</title>
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <div id="storeApp"></div>
+  <main class="app-screen notifications-screen">
+    <header class="mobile-page-header">
+      <h1 id="pageTitle">الإشعارات</h1>
+      <a href="index.html" class="icon-plain-btn">×</a>
+    </header>
+
+    <div class="notify-tabs" id="notifyTabs"></div>
+    <section class="notify-banner app-card" id="notifyBanner"></section>
+    <div id="notifyList" class="notify-list"></div>
+  </main>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/db-config.js"></script>
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/nav-shell.js"></script>
-  <script src="js/store.js"></script>
+  <script src="js/notifications.js"></script>
 </body>
 </html>

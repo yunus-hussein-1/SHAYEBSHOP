@@ -8,46 +8,46 @@
 </head>
 <body>
   <main class="page-shell">
-    <h1 class="page-title">⚙️ إعدادات</h1>
-    <p class="page-lead">كلمة المرور، الدفع، وطلب المتجر.</p>
+    <h1 class="page-title" id="settingsTitle">إعدادات</h1>
+    <p class="page-lead" id="settingsLead">كلمة المرور، الدفع، وطلب المتجر.</p>
 
     <section class="panel-card">
-      <h2>كلمة المرور</h2>
+      <h2 id="passwordSection">كلمة المرور</h2>
       <form id="passwordForm" class="stack-form">
-        <label>الحالية<input id="currentPassword" type="password"></label>
-        <label>الجديدة<input id="newPassword" type="password" minlength="6"></label>
-        <label>تأكيد<input id="confirmPassword" type="password" minlength="6"></label>
-        <button class="secondary-btn" type="submit">تغيير كلمة المرور</button>
+        <label id="currentPasswordLabel">الحالية<input id="currentPassword" type="password"></label>
+        <label id="newPasswordLabel">الجديدة<input id="newPassword" type="password" minlength="6"></label>
+        <label id="confirmPasswordLabel">تأكيد<input id="confirmPassword" type="password" minlength="6"></label>
+        <button class="secondary-btn" id="changePasswordBtn" type="submit">تغيير كلمة المرور</button>
       </form>
       <div id="passwordMessage" class="form-message"></div>
     </section>
 
     <section class="panel-card">
-      <h2>طريقة الدفع <small>(اختياري)</small></h2>
+      <h2 id="paymentSection">طريقة الدفع (اختياري)</h2>
       <form id="paymentForm" class="stack-form">
         <select id="paymentMethod">
           <option value="">— اختر لاحقاً —</option>
           <option value="تسليم باليد">تسليم باليد</option>
           <option value="شام كاش">شام كاش</option>
         </select>
-        <button class="secondary-btn" type="submit">حفظ</button>
+        <button class="secondary-btn" id="savePaymentBtn" type="submit">حفظ</button>
       </form>
       <div id="paymentMessage" class="form-message"></div>
     </section>
 
     <section class="panel-card" id="store">
-      <h2>طلب فتح متجر / بيع منتجات</h2>
-      <p>إذا عندك متجر، عبّي البيانات ووافق على العمولة 10%.</p>
+      <h2 id="storeSection">طلب فتح متجر / بيع منتجات</h2>
+      <p id="storeSectionLead">إذا عندك متجر، عبّي البيانات ووافق على العمولة 10%.</p>
       <form id="storeForm" class="stack-form">
-        <label>اسم المتجر<input id="storeName" type="text" required></label>
-        <label>رابط المتجر<input id="storeSlug" type="text" placeholder="my-shop" required></label>
-        <label>موقع المتجر<input id="storeLocation" type="text" placeholder="المدينة / العنوان" required></label>
-        <label>نبذة عن المتجر<textarea id="storeDescription" rows="3" required></textarea></label>
-        <label>أول منتج<input id="productTitle" type="text" required></label>
-        <label>السعر (ل.س)<input id="productPrice" type="number" min="1" required></label>
-        <label>التصنيف<select id="productCategory" required></select></label>
-        <label class="agreement-inline"><input id="agreeCommission" type="checkbox" required> أوافق على عمولة 10%</label>
-        <button class="primary-btn" type="submit">تقديم طلب المتجر</button>
+        <label id="storeNameLabel">اسم المتجر<input id="storeName" type="text" required></label>
+        <label id="storeSlugLabel">رابط المتجر<input id="storeSlug" type="text" placeholder="my-shop" required></label>
+        <label id="storeLocationLabel">موقع المتجر<input id="storeLocation" type="text" required></label>
+        <label id="storeDescLabel">نبذة عن المتجر<textarea id="storeDescription" rows="3" required></textarea></label>
+        <label id="productTitleLabel">أول منتج<input id="productTitle" type="text" required></label>
+        <label id="productPriceLabel">السعر (ل.س)<input id="productPrice" type="number" min="1" required></label>
+        <label id="productCategoryLabel">التصنيف<select id="productCategory" required></select></label>
+        <label class="agreement-inline" id="agreeCommissionLabel"><input id="agreeCommission" type="checkbox" required> أوافق على عمولة 10%</label>
+        <button class="primary-btn" id="submitStoreBtn" type="submit">تقديم طلب المتجر</button>
       </form>
       <div id="storeMessage" class="form-message"></div>
     </section>

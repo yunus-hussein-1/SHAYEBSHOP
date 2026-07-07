@@ -7,7 +7,7 @@ const CATEGORY_META = {
 
 storelyInit().then(() => {
   storelyApplyLang();
-  const lang = storelyGetLang();
+  document.title = `${storelyT("categories")} | ${storelySiteName()}`;
   const searchInput = document.getElementById("categorySearch");
   const cameraBtn = document.getElementById("cameraSearchBtn");
   const cameraInput = document.getElementById("cameraSearchInput");
@@ -17,13 +17,16 @@ storelyInit().then(() => {
 
   function renderGrid(query = "") {
     const q = query.trim().toLowerCase();
-    const cats = STORELY_CATEGORIES.filter((cat) => !q || cat.includes(q) || cat.toLowerCase().includes(q));
+    const cats = STORELY_CATEGORIES.filter((cat) => {
+      if (!q) return true;
+      return cat.includes(q) || storelyCategoryLabel(cat).toLowerCase().includes(q);
+    });
     document.getElementById("categoryGrid").innerHTML = cats.map((cat) => {
       const meta = CATEGORY_META[cat] || { emoji: "🛍️", image: "assets/images/product-placeholder.svg" };
       return `
         <a href="index.html" class="category-card" data-cat="${cat}">
           <div class="category-card-img" style="background-image:url('${meta.image}')"></div>
-          <strong>${cat}</strong>
+          <strong>${storelyCategoryLabel(cat)}</strong>
           <span>${meta.emoji}</span>
         </a>`;
     }).join("");
@@ -40,7 +43,7 @@ storelyInit().then(() => {
   searchInput.addEventListener("input", () => renderGrid(searchInput.value));
   cameraBtn.addEventListener("click", () => cameraInput.click());
   cameraInput.addEventListener("change", () => {
-    if (cameraInput.files?.length) storelyToast(lang === "en" ? "Image selected" : "تم اختيار صورة");
+    if (cameraInput.files?.length) storelyToast(storelyT("imageSelected"));
   });
 
   renderGrid();

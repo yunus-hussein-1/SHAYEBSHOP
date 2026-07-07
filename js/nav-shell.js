@@ -46,7 +46,7 @@ function appMountNav() {
   const user = storelyCurrentUser();
   const cartCount = storelyCartCount();
   const path = appPageName();
-  const brand = APP_CONFIG.siteNameAr || APP_CONFIG.siteName || storelyT("siteName");
+  const brand = storelySiteName();
   const lang = storelyGetLang();
   const badge = cartCount > 0 ? `<span class="badge">${cartCount}</span>` : "";
   const accountPages = ["profile.html", "account-info.html", "settings.html"];

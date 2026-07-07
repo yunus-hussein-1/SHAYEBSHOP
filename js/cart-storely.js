@@ -1,10 +1,10 @@
 storelyInit().then(async () => {
   storelyApplyLang();
-  const lang = storelyGetLang();
   const t = (k) => storelyT(k);
+  document.title = `${t("cartYour")} | ${storelySiteName()}`;
   const cartStores = storelyGetStores();
 
-  document.getElementById("cartPageTitle").textContent = `${t("cart")} ${lang === "ar" ? "مشترياتك" : ""}`.trim();
+  document.getElementById("cartPageTitle").textContent = t("cartYour");
   document.getElementById("cartTotalLabel").textContent = t("total");
   document.getElementById("prevTabBtn").textContent = t("previouslyAdded");
   document.getElementById("favTabBtn").textContent = t("favorites");
@@ -130,7 +130,7 @@ storelyInit().then(async () => {
     renderSuggestions("fav");
   });
   document.getElementById("shareCartBtn").addEventListener("click", () => {
-    storelyToast(lang === "en" ? "Cart link copied" : "تم نسخ رابط السلة");
+    storelyToast(t("cartCopied"));
   });
 
   renderCart();

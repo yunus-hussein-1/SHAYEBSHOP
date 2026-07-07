@@ -2,12 +2,14 @@ storelyInit().then(async () => {
   if (!(await storelyRequireLoginAsync("account-info.html"))) return;
   storelyApplyLang();
 
+  document.title = `${storelyT("personalInfo")} | ${storelySiteName()}`;
   document.getElementById("pageTitle").textContent = storelyT("personalInfo");
-  document.getElementById("nameLabel").childNodes[0].textContent = storelyGetLang() === "en" ? "First Name" : "الاسم";
-  document.getElementById("lastNameLabel").childNodes[0].textContent = storelyGetLang() === "en" ? "Last Name" : "اسم العائلة";
-  document.getElementById("emailLabel").childNodes[0].textContent = storelyGetLang() === "en" ? "Email" : "البريد الإلكتروني";
-  document.getElementById("phoneLabel").childNodes[0].textContent = storelyGetLang() === "en" ? "Phone" : "رقم الهاتف";
-  document.getElementById("locationLabel").childNodes[0].textContent = storelyGetLang() === "en" ? "Delivery Location" : "موقع التسليم";
+  document.getElementById("nameLabel").childNodes[0].textContent = storelyT("firstName");
+  document.getElementById("lastNameLabel").childNodes[0].textContent = storelyT("lastName");
+  document.getElementById("emailLabel").childNodes[0].textContent = storelyT("email");
+  document.getElementById("phoneLabel").childNodes[0].textContent = storelyT("phone");
+  document.getElementById("locationLabel").childNodes[0].textContent = storelyT("deliveryLocation");
+  document.getElementById("avatarLabel").childNodes[0].textContent = storelyT("changePhoto");
   document.getElementById("saveBtn").textContent = storelyT("update");
 
   const user = storelyCurrentUser();
@@ -20,14 +22,14 @@ storelyInit().then(async () => {
 
   document.getElementById("getLocationBtn").addEventListener("click", () => {
     const msg = document.getElementById("profileMessage");
-    if (!navigator.geolocation) { msg.textContent = "غير مدعوم"; msg.dataset.type = "error"; return; }
+    if (!navigator.geolocation) { msg.textContent = storelyGetLang() === "en" ? "Not supported" : "غير مدعوم"; msg.dataset.type = "error"; return; }
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         document.getElementById("profileLocation").value = `${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`;
-        msg.textContent = storelyGetLang() === "en" ? "Location captured" : "تم تحديد الموقع";
+        msg.textContent = storelyT("locationOk");
         msg.dataset.type = "success";
       },
-      () => { msg.textContent = storelyGetLang() === "en" ? "Location failed" : "تعذر تحديد الموقع"; msg.dataset.type = "error"; }
+      () => { msg.textContent = storelyT("locationFail"); msg.dataset.type = "error"; }
     );
   });
 
@@ -51,7 +53,7 @@ storelyInit().then(async () => {
     if (pending) updates.avatar = pending;
     try {
       await storelyUpdateProfile(updates);
-      msg.textContent = storelyGetLang() === "en" ? "Saved" : "تم الحفظ";
+      msg.textContent = storelyT("saved");
       msg.dataset.type = "success";
       appRefreshNav();
     } catch (err) {

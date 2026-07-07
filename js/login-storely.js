@@ -16,7 +16,7 @@ async function storelyAfterAuthRedirect() {
 function storelyLocalSignUp(name, email, password) {
   const users = storelyGetUsers();
   if (users.some((u) => u.email === email)) {
-    throw new Error("هذا البريد مسجل. جرّب تسجيل الدخول.");
+    throw new Error(storelyGetLang() === "en" ? "Email already registered. Try signing in." : "هذا البريد مسجل. جرّب تسجيل الدخول.");
   }
   const user = {
     id: "user-" + Date.now(),
@@ -42,7 +42,7 @@ function storelyLocalSignUp(name, email, password) {
 function storelyLocalSignIn(email, password) {
   const user = storelyGetUsers().find((u) => u.email === email && u.password === password);
   if (!user) {
-    throw new Error("البريد أو كلمة المرور غير صحيحة.");
+    throw new Error(storelyGetLang() === "en" ? "Invalid email or password." : "البريد أو كلمة المرور غير صحيحة.");
   }
   const session = {
     userId: user.id,
@@ -62,6 +62,8 @@ function storelyLocalSignIn(email, password) {
 }
 
 async function initLoginPage() {
+  storelyApplyAuthPage();
+  document.title = `${storelyT("login")} | ${storelySiteName()}`;
   const message = document.getElementById("authMessage");
   const tabs = document.querySelectorAll(".tab-btn");
   const panels = document.querySelectorAll(".auth-panel");
@@ -95,11 +97,11 @@ async function initLoginPage() {
     message.textContent = "";
     try {
       if (!dbIsConfigured()) {
-        throw new Error("Google يعمل بعد إعداد Supabase في db-config.js");
+        throw new Error(storelyGetLang() === "en" ? "Google sign-in requires Supabase setup in db-config.js" : "Google يعمل بعد إعداد Supabase في db-config.js");
       }
       await dbSignInWithGoogle();
     } catch (err) {
-      message.textContent = err.message || "تعذر الدخول عبر Google";
+      message.textContent = err.message || (storelyGetLang() === "en" ? "Google sign-in failed" : "تعذر الدخول عبر Google");
       message.dataset.type = "error";
     }
   });
@@ -116,7 +118,9 @@ async function initLoginPage() {
     try {
       if (storelyUsingDatabase()) {
         await dbSignUp(name, email, password);
-        message.textContent = "تم إنشاء الحساب. افحص بريدك وفعّل الحساب ثم سجّل الدخول.";
+        message.textContent = storelyGetLang() === "en"
+          ? "Account created. Check your email to verify, then sign in."
+          : "تم إنشاء الحساب. افحص بريدك وفعّل الحساب ثم سجّل الدخول.";
         message.dataset.type = "success";
         return;
       }
@@ -124,7 +128,7 @@ async function initLoginPage() {
       await storelyMergeGuestCartOnLogin();
       window.location.href = await storelyAfterAuthRedirect();
     } catch (err) {
-      message.textContent = err.message || "تعذر إنشاء الحساب";
+      message.textContent = err.message || (storelyGetLang() === "en" ? "Could not create account" : "تعذر إنشاء الحساب");
       message.dataset.type = "error";
     } finally {
       btn.disabled = false;
@@ -149,7 +153,7 @@ async function initLoginPage() {
       await storelyMergeGuestCartOnLogin();
       window.location.href = await storelyAfterAuthRedirect();
     } catch (err) {
-      message.textContent = err.message || "تعذر تسجيل الدخول";
+      message.textContent = err.message || (storelyGetLang() === "en" ? "Sign in failed" : "تعذر تسجيل الدخول");
       message.dataset.type = "error";
     } finally {
       btn.disabled = false;

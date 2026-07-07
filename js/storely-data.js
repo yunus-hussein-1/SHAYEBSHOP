@@ -128,7 +128,10 @@ function storelyActiveStores(stores) {
 }
 
 function storelyMoney(value) {
-  return `${Number(value || 0).toLocaleString("ar-SY")} ل.س`;
+  const lang = typeof storelyGetLang === "function" ? storelyGetLang() : "ar";
+  const locale = lang === "en" ? "en-US" : "ar-SY";
+  const suffix = lang === "en" ? " SYP" : " ل.س";
+  return `${Number(value || 0).toLocaleString(locale)}${suffix}`;
 }
 
 function storelyCommission(amount) {
@@ -332,7 +335,7 @@ function storelyImageFromFile(input) {
 
 function storelyCategoryOptions(selected = "") {
   return STORELY_CATEGORIES.map((cat) =>
-    `<option value="${cat}"${cat === selected ? " selected" : ""}>${cat}</option>`
+    `<option value="${cat}"${cat === selected ? " selected" : ""}>${typeof storelyCategoryLabel === "function" ? storelyCategoryLabel(cat) : cat}</option>`
   ).join("");
 }
 
@@ -446,9 +449,9 @@ async function storelyRequestAddToCartAsync(storeId, productId, returnUrl) {
   await storelyAddToCartAsync(storeId, productId);
   storelyUpdateCartBadge();
   if (storelyIsLoggedIn()) {
-    storelyToast("تمت الإضافة للسلة");
+    storelyToast(typeof storelyT === "function" ? storelyT("addedToCart") : "تمت الإضافة للسلة");
   } else {
-    storelyToast("تمت الإضافة — سجّل دخولك لإتمام الشراء");
+    storelyToast(typeof storelyT === "function" ? storelyT("addedSignIn") : "تمت الإضافة — سجّل دخولك لإتمام الشراء");
   }
   return true;
 }
@@ -456,7 +459,9 @@ async function storelyRequestAddToCartAsync(storeId, productId, returnUrl) {
 function storelyRequestAddToCart(storeId, productId) {
   storelyAddToCart(storeId, productId);
   storelyUpdateCartBadge();
-  storelyToast(storelyIsLoggedIn() ? "تمت الإضافة للسلة" : "تمت الإضافة — سجّل دخولك لإتمام الشراء");
+  storelyToast(storelyIsLoggedIn()
+    ? (typeof storelyT === "function" ? storelyT("addedToCart") : "تمت الإضافة للسلة")
+    : (typeof storelyT === "function" ? storelyT("addedSignIn") : "تمت الإضافة — سجّل دخولك لإتمام الشراء"));
   return true;
 }
 

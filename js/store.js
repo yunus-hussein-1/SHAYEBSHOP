@@ -110,7 +110,7 @@ async function submitReview(storeId, productId) {
     await storelySubmitReview(storeId, productId, rating, comment);
     msg.textContent = "تم إرسال تقييمك.";
     msg.dataset.type = "success";
-    storelyToast("شكراً على تقييمك!");
+    storelyToast(typeof storelyT === "function" ? storelyT("thanksReview") : "شكراً على تقييمك!");
   } catch (err) {
     msg.textContent = err.message || "تعذر الإرسال";
     msg.dataset.type = "error";

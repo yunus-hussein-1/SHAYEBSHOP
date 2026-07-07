@@ -1,5 +1,7 @@
 storelyInit().then(async () => {
   if (!(await storelyRequireLoginAsync("settings.html"))) return;
+  storelyApplySettingsPage();
+  document.title = `${storelyT("settings")} | ${storelySiteName()}`;
 
   const user = storelyCurrentUser();
   document.getElementById("paymentMethod").value = user.paymentMethod || "";
@@ -8,10 +10,10 @@ storelyInit().then(async () => {
   if (storelyCurrentStore()) {
     const store = storelyCurrentStore();
     document.getElementById("store").innerHTML = `
-      <h2>متجرك</h2>
+      <h2>${storelyGetLang() === "en" ? "Your store" : "متجرك"}</h2>
       <p><strong>${store.storeName}</strong> — ${store.tagline || ""}</p>
-      <p>الموقع: ${store.storeLocation || store.location || "—"}</p>
-      <a class="primary-btn" href="dashboard.html">إدارة المتجر</a>`;
+      <p>${storelyGetLang() === "en" ? "Location" : "الموقع"}: ${store.storeLocation || store.location || "—"}</p>
+      <a class="primary-btn" href="dashboard.html">${storelyT("storeDashboard")}</a>`;
   }
 
   document.getElementById("passwordForm").addEventListener("submit", async (e) => {
@@ -20,7 +22,7 @@ storelyInit().then(async () => {
     const newPassword = document.getElementById("newPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
     if (newPassword !== confirmPassword) {
-      msg.textContent = "كلمتا المرور غير متطابقتين";
+      msg.textContent = storelyGetLang() === "en" ? "Passwords do not match" : "كلمتا المرور غير متطابقتين";
       msg.dataset.type = "error";
       return;
     }
@@ -30,7 +32,7 @@ storelyInit().then(async () => {
         : { currentPassword: document.getElementById("currentPassword").value, newPassword };
       await storelyUpdateProfile(payload);
       e.target.reset();
-      msg.textContent = "تم تغيير كلمة المرور";
+      msg.textContent = storelyGetLang() === "en" ? "Password changed" : "تم تغيير كلمة المرور";
       msg.dataset.type = "success";
     } catch (err) {
       msg.textContent = err.message;
@@ -43,7 +45,7 @@ storelyInit().then(async () => {
     const msg = document.getElementById("paymentMessage");
     try {
       await storelyUpdateProfile({ paymentMethod: document.getElementById("paymentMethod").value });
-      msg.textContent = "تم الحفظ";
+      msg.textContent = storelyT("saved");
       msg.dataset.type = "success";
     } catch (err) {
       msg.textContent = err.message;
@@ -55,7 +57,7 @@ storelyInit().then(async () => {
     e.preventDefault();
     const msg = document.getElementById("storeMessage");
     if (!document.getElementById("agreeCommission").checked) {
-      msg.textContent = "وافق على العمولة";
+      msg.textContent = storelyGetLang() === "en" ? "Agree to commission" : "وافق على العمولة";
       msg.dataset.type = "error";
       return;
     }
@@ -64,7 +66,7 @@ storelyInit().then(async () => {
     const stores = storelyGetStores(true);
     const slug = storelySlug(document.getElementById("storeSlug").value);
     if (stores.some((s) => s.slug === slug)) {
-      msg.textContent = "الرابط مستخدم";
+      msg.textContent = storelyGetLang() === "en" ? "URL already taken" : "الرابط مستخدم";
       msg.dataset.type = "error";
       return;
     }
@@ -103,7 +105,7 @@ storelyInit().then(async () => {
     }
 
     localStorage.setItem(STORELY_SESSION_KEY, JSON.stringify({ ...session, storeId: newStore.id, role: "seller" }));
-    msg.textContent = "تم إنشاء متجرك!";
+    msg.textContent = storelyGetLang() === "en" ? "Store created!" : "تم إنشاء متجرك!";
     msg.dataset.type = "success";
     setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
   });

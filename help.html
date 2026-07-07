@@ -8,31 +8,22 @@
 </head>
 <body>
   <main class="page-shell">
-    <h1 class="page-title">❓ مساعدة</h1>
-    <p class="page-lead">دليل استخدام متجر الشايب.</p>
+    <h1 class="page-title" id="helpTitle">مساعدة</h1>
+    <p class="page-lead" id="helpLead">دليل استخدام متجر الشايب.</p>
 
     <section class="panel-card">
-      <h2>كيف يعمل التطبيق؟</h2>
-      <ol class="help-steps">
-        <li><strong>تصفّح</strong> — أي زائر يشوف المنتجات ويضيف للسلة.</li>
-        <li><strong>شراء</strong> — يتطلب تسجيل دخول ثم <strong>ادفع الآن</strong>.</li>
-        <li><strong>بروفايل</strong> — اسم، صورة، موقعك الشخصي.</li>
-        <li><strong>إعدادات</strong> — كلمة مرور، دفع، طلب متجر.</li>
-        <li><strong>نسيت كلمة السر؟</strong> — من صفحة الدخول → أدخل بريدك → رابط تغيير كلمة المرور.</li>
-      </ol>
+      <h2 id="helpHowTitle">كيف يعمل التطبيق؟</h2>
+      <ol class="help-steps" id="helpSteps"></ol>
     </section>
 
     <section class="panel-card">
-      <h2>الدفع (إلزامي)</h2>
-      <p>عند إتمام الطلب بالليرة السورية:</p>
-      <ul class="help-list">
-        <li>🤝 تسليم باليد</li>
-        <li>📱 شام كاش</li>
-      </ul>
+      <h2 id="helpPayTitle">الدفع (إلزامي)</h2>
+      <p id="helpPayLead">عند إتمام الطلب بالليرة السورية:</p>
+      <ul class="help-list" id="helpPayList"></ul>
     </section>
 
     <section class="panel-card">
-      <h2>تواصل</h2>
+      <h2 id="helpContactTitle">تواصل</h2>
       <a class="help-email" id="supportEmailLink" href="#">support@shayebshop.com</a>
     </section>
   </main>
@@ -43,13 +34,6 @@
   <script src="js/storely-data.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/nav-shell.js"></script>
-  <script>
-    storelyInit().then(() => {
-      const email = (window.APP_CONFIG || {}).supportEmail || "support@shayebshop.com";
-      const link = document.getElementById("supportEmailLink");
-      link.textContent = email;
-      link.href = "mailto:" + email;
-    });
-  </script>
+  <script src="js/help.js"></script>
 </body>
 </html>

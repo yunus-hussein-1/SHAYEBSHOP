@@ -10,35 +10,35 @@
   <main class="auth-page">
     <section class="auth-card">
       <a class="brand centered" href="index.html">
-        <span class="brand-title">متجر الشايب</span>
-        <small class="brand-sub">إلكترونيات وألبسة</small>
+        <span class="brand-title" id="authBrandTitle">متجر الشايب</span>
+        <small class="brand-sub" id="authBrandSub">إلكترونيات وألبسة</small>
       </a>
-      <p class="auth-lead">تسجيل دخول عبر <strong>Google</strong> أو <strong>البريد الإلكتروني</strong></p>
+      <p class="auth-lead" id="authLead">تسجيل دخول عبر Google أو البريد الإلكتروني</p>
 
       <button class="google-btn" id="googleLoginBtn" type="button">الدخول عبر Google</button>
-      <div class="auth-divider">أو</div>
+      <div class="auth-divider" id="authDivider">أو</div>
 
       <div class="auth-tabs">
-        <button class="tab-btn active" type="button">دخول</button>
-        <button class="tab-btn" type="button">حساب جديد</button>
+        <button class="tab-btn active" type="button" id="authTabLogin">دخول</button>
+        <button class="tab-btn" type="button" id="authTabSignup">حساب جديد</button>
       </div>
 
       <form id="loginForm" class="stack-form auth-panel active">
         <input id="loginEmail" type="email" placeholder="البريد" required>
         <input id="loginPassword" type="password" placeholder="كلمة المرور" required>
-        <a class="auth-forgot-link" href="forgot-password.html">نسيت كلمة السر؟</a>
-        <button class="primary-btn" type="submit">دخول</button>
+        <a class="auth-forgot-link" id="forgotLink" href="forgot-password.html">نسيت كلمة السر؟</a>
+        <button class="primary-btn" id="loginSubmit" type="submit">دخول</button>
       </form>
 
       <form id="signupForm" class="stack-form auth-panel">
         <input id="signupName" type="text" placeholder="الاسم" required>
         <input id="signupEmail" type="email" placeholder="البريد" required>
         <input id="signupPassword" type="password" placeholder="كلمة المرور" minlength="6" required>
-        <button class="primary-btn" type="submit">إنشاء حساب</button>
+        <button class="primary-btn" id="signupSubmit" type="submit">إنشاء حساب</button>
       </form>
 
       <div id="authMessage" class="form-message"></div>
-      <a href="index.html" class="auth-back">← الرئيسية</a>
+      <a href="index.html" class="auth-back" id="authBack">الرئيسية</a>
     </section>
   </main>
 
@@ -46,6 +46,7 @@
   <script src="js/db-config.js"></script>
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/login-storely.js"></script>
 </body>
 </html>

@@ -3,12 +3,12 @@ let _query = "";
 
 storelyInit().then(() => {
   storelyApplyLang();
-  const lang = storelyGetLang();
+  document.title = `${storelyT("favorites")} | ${storelySiteName()}`;
 
   document.getElementById("pageTitle").textContent = storelyT("favorites");
   document.getElementById("favTab").textContent = storelyT("favorites");
   document.getElementById("historyTab").textContent = storelyT("browsingHistory");
-  document.getElementById("favSearch").placeholder = lang === "en" ? "Search" : "البحث";
+  document.getElementById("favSearch").placeholder = storelyT("search");
 
   function render() {
     const entries = _mode === "fav" ? storelyGetFavorites() : storelyGetBrowseHistory();
@@ -17,12 +17,7 @@ storelyInit().then(() => {
 
     const box = document.getElementById("favoritesList");
     if (!items.length) {
-      box.innerHTML = storelyEmptyState(
-        lang === "en" ? "No items" : "لا عناصر",
-        lang === "en" ? "Browse products and add favorites." : "تصفّح المنتجات وأضف للمفضلة.",
-        lang === "en" ? "Browse" : "تصفح",
-        "index.html"
-      );
+      box.innerHTML = storelyEmptyState(storelyT("noItems"), storelyT("browseAddFav"), storelyT("browse"), "index.html");
       return;
     }
 
@@ -31,7 +26,7 @@ storelyInit().then(() => {
         <button type="button" class="fav-btn active" data-fav="${storeId}:${product.id}">♥</button>
         <div class="trendy-img" style="${storelyMediaStyle(product.image)}"></div>
         <div class="trendy-body">
-          <span class="trendy-cat">${product.category}</span>
+          <span class="trendy-cat">${storelyCategoryLabel(product.category)}</span>
           <h3>${product.title}</h3>
           <strong>${storelyMoney(product.price)}</strong>
         </div>
@@ -65,6 +60,9 @@ storelyInit().then(() => {
     render();
   });
   document.getElementById("cameraSearchBtn").addEventListener("click", () => document.getElementById("cameraSearchInput").click());
+  document.getElementById("cameraSearchInput").addEventListener("change", () => {
+    storelyToast(storelyT("imageSelected"));
+  });
 
   render();
 });

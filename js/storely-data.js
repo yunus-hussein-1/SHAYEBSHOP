@@ -448,8 +448,9 @@ async function storelyRequestAddToCartAsync(storeId, productId, returnUrl) {
   await storelyInit();
   await storelyAddToCartAsync(storeId, productId);
   storelyUpdateCartBadge();
+  if (typeof desktopRefreshCartCount === "function") desktopRefreshCartCount();
   if (storelyIsLoggedIn()) {
-    storelyToast(typeof storelyT === "function" ? storelyT("addedToCart") : "تمت الإضافة للسلة");
+    storelyCartAddedPrompt();
   } else {
     storelyToast(typeof storelyT === "function" ? storelyT("addedSignIn") : "تمت الإضافة — سجّل دخولك لإتمام الشراء");
   }
@@ -459,9 +460,12 @@ async function storelyRequestAddToCartAsync(storeId, productId, returnUrl) {
 function storelyRequestAddToCart(storeId, productId) {
   storelyAddToCart(storeId, productId);
   storelyUpdateCartBadge();
-  storelyToast(storelyIsLoggedIn()
-    ? (typeof storelyT === "function" ? storelyT("addedToCart") : "تمت الإضافة للسلة")
-    : (typeof storelyT === "function" ? storelyT("addedSignIn") : "تمت الإضافة — سجّل دخولك لإتمام الشراء"));
+  if (typeof desktopRefreshCartCount === "function") desktopRefreshCartCount();
+  if (storelyIsLoggedIn()) {
+    storelyCartAddedPrompt();
+  } else {
+    storelyToast(typeof storelyT === "function" ? storelyT("addedSignIn") : "تمت الإضافة — سجّل دخولك لإتمام الشراء");
+  }
   return true;
 }
 
@@ -525,6 +529,23 @@ function storelyToast(text) {
   toast.textContent = text;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 1800);
+}
+
+function storelyCartAddedPrompt() {
+  document.getElementById("cartAddedPrompt")?.remove();
+  const t = (k) => (typeof storelyT === "function" ? storelyT(k) : k);
+  const box = document.createElement("div");
+  box.id = "cartAddedPrompt";
+  box.className = "cart-added-prompt";
+  box.innerHTML = `
+    <div class="cart-added-inner">
+      <span class="cart-added-text">✓ ${t("addedToCart")}</span>
+      <a href="cart.html" class="primary-btn cart-added-btn">${t("goToCart")}</a>
+      <button type="button" class="cart-added-close" aria-label="close">✕</button>
+    </div>`;
+  document.body.appendChild(box);
+  box.querySelector(".cart-added-close")?.addEventListener("click", () => box.remove());
+  setTimeout(() => box.remove(), 8000);
 }
 
 function storelyEmptyState(title, text, btnLabel, btnHref) {

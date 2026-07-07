@@ -30,13 +30,13 @@
             <label class="full" id="payerAddressLabel">موقع التسليم<textarea id="payerAddress" required placeholder="المدينة، الحي، معلم قريب..."></textarea></label>
             <label id="deliveryTimeLabel">موعد الاستلام
               <select id="deliveryTime" required>
-                <option value="">اختر الموعد</option>
-                <option value="صباحاً (9-12)">صباحاً (9-12)</option>
-                <option value="ظهراً (12-3)">ظهراً (12-3)</option>
-                <option value="مساءً (3-6)">مساءً (3-6)</option>
-                <option value="ليلاً (6-9)">ليلاً (6-9)</option>
+                <option value="">اختر الفترة المناسبة</option>
+                <option value="near">خلال 3–5 أيام عمل</option>
+                <option value="week">خلال أسبوع</option>
+                <option value="far">خلال 10–14 يوماً</option>
               </select>
             </label>
+            <p class="schedule-hint full" id="scheduleHint"></p>
 
             <div class="full payment-method-box">
               <strong id="paymentMethodTitle">طريقة الدفع</strong>

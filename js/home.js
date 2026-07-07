@@ -37,9 +37,13 @@ storelyInit().then(() => {
   const desktopViewAll = document.getElementById("desktopViewAll");
   if (desktopViewAll) desktopViewAll.textContent = `${t("viewAll")} ›`;
 
-  if (typeof desktopMountQuickIcons === "function") desktopMountQuickIcons("desktopQuickIcons");
-
   document.title = `${storelySiteName()} | ${storelyT("siteTagline")}`;
+
+  const urlCatKey = new URLSearchParams(location.search).get("cat");
+  if (urlCatKey && typeof desktopCatFromKey === "function") {
+    const mapped = desktopCatFromKey(urlCatKey);
+    if (mapped) _activeCategory = mapped;
+  }
 
   const savedCat = localStorage.getItem("storelySelectedCategory");
   if (savedCat) {
@@ -63,9 +67,14 @@ storelyInit().then(() => {
     { id: "all", label: t("all") },
     { id: "women", label: t("women"), cat: "ألبسة نسائية" },
     { id: "men", label: t("men"), cat: "ألبسة رجالية" },
-    { id: "offers", label: t("offers") },
+    { id: "kids", label: t("kids"), cat: "ألبسة أطفال" },
     { id: "electronics", label: t("electronics"), cat: "إلكترونيات" }
   ];
+
+  if (urlCatKey) {
+    const tab = homeTabs.find((x) => x.id === urlCatKey);
+    if (tab) _homeTab = tab.id;
+  }
 
   document.getElementById("homeCategoryTabs").innerHTML = homeTabs.map((tab) =>
     `<button type="button" class="home-cat-tab${_homeTab === tab.id ? " active" : ""}" data-tab="${tab.id}" data-cat="${tab.cat || ""}">${tab.label}</button>`

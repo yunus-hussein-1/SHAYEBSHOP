@@ -1,13 +1,13 @@
 const DESKTOP_CATS = [
-  { key: "new", ar: "جديد", en: "New" },
   { key: "women", ar: "امرأة", en: "Women", cat: "ألبسة نسائية" },
   { key: "men", ar: "رجل", en: "Men", cat: "ألبسة رجالية" },
-  { key: "kids", ar: "أم و طفل", en: "Kids", cat: "ألبسة أطفال" },
-  { key: "home", ar: "المنزل", en: "Home" },
-  { key: "market", ar: "السوبرماركت", en: "Supermarket" },
-  { key: "beauty", ar: "مستحضرات", en: "Beauty" },
+  { key: "kids", ar: "أطفال", en: "Kids", cat: "ألبسة أطفال" },
   { key: "electronics", ar: "إلكترونيات", en: "Electronics", cat: "إلكترونيات" }
 ];
+
+function desktopCatFromKey(key) {
+  return DESKTOP_CATS.find((c) => c.key === key)?.cat || null;
+}
 
 function desktopPage() {
   return location.pathname.split("/").pop() || "index.html";
@@ -72,8 +72,9 @@ function desktopMountShell() {
   document.body.insertBefore(shell, document.body.firstChild);
 
   const catNav = document.getElementById("desktopCatNav");
-  catNav.innerHTML = DESKTOP_CATS.map((c, i) =>
-    `<a href="${c.cat ? `index.html?cat=${encodeURIComponent(c.cat)}` : "index.html"}" class="desktop-cat-link${path === "index.html" && i === 1 ? " active" : ""}">${lang === "en" ? c.en : c.ar}</a>`
+  const activeKey = new URLSearchParams(location.search).get("cat") || "";
+  catNav.innerHTML = DESKTOP_CATS.map((c) =>
+    `<a href="index.html?cat=${c.key}" data-cat-key="${c.key}" class="desktop-cat-link${activeKey === c.key ? " active" : ""}">${lang === "en" ? c.en : c.ar}</a>`
   ).join("");
 
   const footer = document.createElement("footer");
@@ -126,21 +127,12 @@ function desktopMountShell() {
   });
 }
 
-function desktopMountQuickIcons(containerId) {
-  const box = document.getElementById(containerId);
-  if (!box) return;
-  const lang = storelyGetLang();
-  const icons = [
-    { emoji: "🚚", ar: "توصيل سريع", en: "Fast Delivery" },
-    { emoji: "🏷️", ar: "تخفيضات", en: "Discounts" },
-    { emoji: "🍔", ar: "طعام", en: "Food" },
-    { emoji: "🛒", ar: "سوبرماركت", en: "Market" },
-    { emoji: "⭐", ar: "شايب بلس", en: "Shaib Plus" },
-    { emoji: "🎟️", ar: "كوبونات", en: "Coupons" }
-  ];
-  box.innerHTML = icons.map((i) =>
-    `<a href="index.html" class="desktop-quick-icon"><div class="circle">${i.emoji}</div><small>${lang === "en" ? i.en : i.ar}</small></a>`
-  ).join("");
+function desktopRefreshCartCount() {
+  const cartLink = document.querySelector(".desktop-header-actions a[href='cart.html']");
+  if (!cartLink || typeof storelyCartCount !== "function" || typeof storelyT !== "function") return;
+  const count = storelyCartCount();
+  const label = storelyT("cart");
+  cartLink.innerHTML = `<span class="icon">🛒</span>${label}${count ? ` (${count})` : ""}`;
 }
 
 function desktopSummaryHtml({ title, subtotal, shipping, total, showDiscount = true, btnText, btnId, btnDisabled = false }) {

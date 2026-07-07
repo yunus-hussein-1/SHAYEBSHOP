@@ -58,10 +58,11 @@ storelyInit().then(async () => {
 
   const deliverySelect = document.getElementById("deliveryTime");
   deliverySelect.options[0].textContent = t("chooseSchedule");
-  deliverySelect.options[1].textContent = t("morning");
-  deliverySelect.options[2].textContent = t("noon");
-  deliverySelect.options[3].textContent = t("evening");
-  deliverySelect.options[4].textContent = t("night");
+  deliverySelect.options[1].textContent = t("deliveryNear");
+  deliverySelect.options[2].textContent = t("deliveryWeek");
+  deliverySelect.options[3].textContent = t("deliveryFar");
+  const scheduleHint = document.getElementById("scheduleHint");
+  if (scheduleHint) scheduleHint.textContent = t("scheduleHint");
 
   const planBox = document.getElementById("selectedPlan");
   if (planBox) {
@@ -120,6 +121,12 @@ storelyInit().then(async () => {
   document.getElementById("paymentForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || "hand";
+    const deliveryVal = document.getElementById("deliveryTime").value;
+    const deliveryMap = {
+      near: t("deliveryNear"),
+      week: t("deliveryWeek"),
+      far: t("deliveryFar")
+    };
 
     const order = {
       id: "order-" + Date.now(),
@@ -138,7 +145,7 @@ storelyInit().then(async () => {
       buyerPhone: document.getElementById("payerPhone").value.trim(),
       buyerAddress: document.getElementById("payerAddress").value.trim(),
       buyerLocation: document.getElementById("payerAddress").value.trim(),
-      deliveryTime: document.getElementById("deliveryTime").value,
+      deliveryTime: deliveryMap[deliveryVal] || deliveryVal,
       paymentMethod: payMethod === "sham_cash" ? t("shamPay") : t("handPay"),
       paymentType: payMethod,
       shamCashRef: document.getElementById("shamCashRef")?.value.trim() || "",

@@ -8,7 +8,7 @@ const STORELY_DATA_VERSION_KEY = "storelyDataVersion";
 const STORELY_GUEST_CART_KEY = "storelyGuestCart";
 const STORELY_DATA_VERSION = "4";
 const SITE_NAME = "ALSHAYEB SHOP";
-const SITE_NAME_AR = "ALSHAYEB SHOP";
+const SITE_NAME_AR = "متجر الشايب";
 const SITE_TAGLINE = "إلكترونيات وألبسة";
 const PLATFORM_COMMISSION = () => (window.ALSHAYEB_DB_CONFIG?.platformCommission ?? 0.10);
 
@@ -24,8 +24,25 @@ const STORELY_PAYMENT_OPTIONS = [
   { id: "sham_cash", label: "شام كاش — الدفع بالليرة السورية" }
 ];
 
+const STORELY_LANG_KEY = "storelyLang";
+
 function storelyShamCashNumber() {
   return storelyConfig().shamCashNumber || "";
+}
+
+function storelyShamCashAccountName() {
+  return storelyConfig().shamCashAccountName || storelyConfig().siteNameAr || SITE_NAME_AR;
+}
+
+function storelyGetLang() {
+  const lang = localStorage.getItem(STORELY_LANG_KEY) || "ar";
+  return lang === "en" ? "en" : "ar";
+}
+
+function storelySetLang(lang) {
+  const next = lang === "en" ? "en" : "ar";
+  localStorage.setItem(STORELY_LANG_KEY, next);
+  return next;
 }
 
 function storelyConfig() {

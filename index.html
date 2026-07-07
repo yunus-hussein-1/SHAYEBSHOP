@@ -8,18 +8,33 @@
 </head>
 <body>
   <main class="market-home">
-    <section class="market-search-band">
-      <h1>ALSHAYEB SHOP</h1>
-      <p>منصة إلكترونيات وألبسة — تصفّح واشتري بأمان</p>
-      <input type="search" id="searchInput" class="market-search" placeholder="ابحث عن منتج...">
+    <section class="market-search-band app-like">
+      <div class="home-account-strip">
+        <div>
+          <strong id="homeWelcomeTitle">متجر الشايب</strong>
+          <p id="homeWelcomeSub">تسوق بأسلوب تطبيقات حديثة</p>
+        </div>
+        <a href="profile.html" class="secondary-btn profile-mini-btn" id="profileBtnLabel">الحساب</a>
+      </div>
+      <div class="search-row">
+        <button type="button" id="cameraSearchBtn" class="camera-btn" aria-label="بحث بالكاميرا">📷</button>
+        <input type="search" id="searchInput" class="market-search" placeholder="ابحث عن ماركة أو منتج أو فئة">
+      </div>
+      <input type="file" id="cameraSearchInput" accept="image/*" capture="environment" hidden>
+      <div class="quick-tabs">
+        <button type="button" class="quick-tab active" data-role="featured" id="featuredTabLabel">عروض مميزة</button>
+        <button type="button" class="quick-tab" data-role="history" id="historyTabLabel">سجل التصفح</button>
+        <button type="button" class="quick-tab" data-role="notifications" id="notifyTabLabel">الإشعارات</button>
+      </div>
     </section>
 
     <section class="market-categories">
+      <h2 class="section-mobile-title" id="categoryTitle">كل الفئات</h2>
       <div class="category-scroll" id="categoryFilter"></div>
     </section>
 
     <section class="market-products">
-      <h2>المنتجات</h2>
+      <h2 id="productsTitle">قطع لك خصيصاً</h2>
       <div id="featuredProducts" class="product-grid-trendy"></div>
     </section>
 

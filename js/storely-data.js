@@ -7,7 +7,7 @@ const STORELY_CART_PREFIX = "storelyCart_";
 const STORELY_DATA_VERSION_KEY = "storelyDataVersion";
 const STORELY_GUEST_CART_KEY = "storelyGuestCart";
 const STORELY_DATA_VERSION = "4";
-const SITE_NAME = "ALSHAYEB SHOP";
+const SITE_NAME = "متجر الشايب";
 const SITE_NAME_AR = "متجر الشايب";
 const SITE_TAGLINE = "إلكترونيات وألبسة";
 const PLATFORM_COMMISSION = () => (window.ALSHAYEB_DB_CONFIG?.platformCommission ?? 0.10);
@@ -153,7 +153,7 @@ function storelySeedDemoStores() {
       id: "demo-electronics",
       userId: "demo",
       slug: "tech-syria",
-      ownerName: "ALSHAYEB SHOP",
+      ownerName: "متجر الشايب",
       storeName: "تك سوريا",
       tagline: "إلكترونيات بأسعار منافسة",
       storeLocation: "دمشق",
@@ -171,7 +171,7 @@ function storelySeedDemoStores() {
       id: "demo-fashion",
       userId: "demo",
       slug: "style-shop",
-      ownerName: "ALSHAYEB SHOP",
+      ownerName: "متجر الشايب",
       storeName: "ستايل شوب",
       tagline: "ألبسة عصرية للجميع",
       storeLocation: "حلب",
@@ -491,7 +491,7 @@ function storelyShowAdModal() {
     <div class="ad-modal">
       <span class="ad-tag">إعلان</span>
       <div class="ad-modal-img" style="background-image:url('assets/images/marketplace-hero.svg')"></div>
-      <h3>ALSHAYEB SHOP</h3>
+      <h3>متجر الشايب</h3>
       <p>منصة متخصصة للإلكترونيات والألبسة</p>
       <div class="ad-actions">
         <button class="secondary-btn" type="button" id="storelyAdClose">متابعة</button>

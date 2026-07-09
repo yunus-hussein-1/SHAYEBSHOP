@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="css/storely.css">
 </head>
 <body>
-  <!-- Desktop account info -->
   <div class="desktop-only">
     <div class="desktop-main">
       <div class="desktop-account-layout">
@@ -17,12 +16,19 @@
           <form id="desktopProfileForm" class="desktop-form-grid">
             <label id="deskNameLabel">الاسم<input id="deskProfileName" type="text" required></label>
             <label id="deskLastNameLabel">اسم العائلة<input id="deskProfileLastName" type="text"></label>
-            <label class="full" id="deskEmailLabel">البريد الإلكتروني<input id="deskProfileEmail" type="email" readonly></label>
+            <label class="full" id="deskEmailLabel">البريد الإلكتروني<input id="deskProfileEmail" type="email" required></label>
             <label id="deskPhoneLabel">هاتف محمول<input id="deskProfilePhone" type="tel" placeholder="09xxxxxxxx"></label>
-            <label class="full" id="deskLocationLabel">موقع التسليم
+            <label id="deskBirthLabel">تاريخ الميلاد
+              <div class="dob-row">
+                <input id="deskBirthDay" type="number" min="1" max="31" placeholder="يوم">
+                <input id="deskBirthMonth" type="number" min="1" max="12" placeholder="شهر">
+                <input id="deskBirthYear" type="number" min="1950" max="2015" placeholder="سنة">
+              </div>
+            </label>
+            <label class="full" id="deskLocationLabel">العنوان الرئيسي
               <div class="location-row">
                 <input id="deskProfileLocation" type="text" placeholder="المدينة / العنوان">
-                <button type="button" class="secondary-btn" id="deskGetLocationBtn">📍</button>
+                <a href="addresses.html" class="secondary-btn">+ عناوين</a>
               </div>
             </label>
             <button class="primary-btn full" type="submit" id="deskSaveBtn">تحديث</button>
@@ -33,23 +39,28 @@
     </div>
   </div>
 
-  <!-- Mobile account info -->
   <main class="app-screen account-info-screen mobile-only">
     <header class="mobile-page-header">
       <a href="profile.html" class="back-link">›</a>
       <h1 id="pageTitle">بياناتي الشخصية</h1>
     </header>
-
     <section class="app-card">
       <form id="profileForm" class="account-form">
         <label id="nameLabel">الاسم<input id="profileName" type="text" required></label>
         <label id="lastNameLabel">اسم العائلة<input id="profileLastName" type="text"></label>
-        <label id="emailLabel">البريد الإلكتروني<input id="profileEmail" type="email" readonly></label>
+        <label id="emailLabel">البريد الإلكتروني<input id="profileEmail" type="email" required></label>
         <label id="phoneLabel">رقم الهاتف<input id="profilePhone" type="tel" placeholder="09xxxxxxxx"></label>
-        <label id="locationLabel" class="full">موقع التسليم
+        <label id="birthLabel">تاريخ الميلاد
+          <div class="dob-row">
+            <input id="birthDay" type="number" min="1" max="31" placeholder="يوم">
+            <input id="birthMonth" type="number" min="1" max="12" placeholder="شهر">
+            <input id="birthYear" type="number" min="1950" max="2015" placeholder="سنة">
+          </div>
+        </label>
+        <label id="locationLabel" class="full">العنوان الرئيسي
           <div class="location-row">
             <input id="profileLocation" type="text" placeholder="المدينة / العنوان">
-            <button type="button" class="secondary-btn" id="getLocationBtn">📍</button>
+            <a href="addresses.html" class="secondary-btn">عناوين</a>
           </div>
         </label>
         <label class="file-field full" id="avatarLabel">تغيير الصورة<input id="avatarFile" type="file" accept="image/*"></label>

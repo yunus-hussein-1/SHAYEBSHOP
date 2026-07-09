@@ -159,7 +159,11 @@ function renderSellerDashboard(store) {
       title: document.getElementById("newProductTitle").value.trim(),
       price: Number(document.getElementById("newProductPrice").value),
       category: document.getElementById("newProductCategory").value,
-      featured: false, sales: 0,
+      description: document.getElementById("newProductDesc")?.value.trim() || "",
+      sellerNote: document.getElementById("newProductComment")?.value.trim() || "",
+      featured: false,
+      onSale: !!document.getElementById("newProductOnSale")?.checked,
+      sales: 0,
       image: upload || document.getElementById("newProductImageUrl").value.trim() || "assets/images/product-electronics.svg"
     });
     await persistStore();

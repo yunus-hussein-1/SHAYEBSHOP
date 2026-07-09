@@ -40,9 +40,15 @@ storelyInit().then(() => {
   document.title = `${storelySiteName()} | ${storelyT("siteTagline")}`;
 
   const urlCatKey = new URLSearchParams(location.search).get("cat");
-  if (urlCatKey && typeof desktopCatFromKey === "function") {
+  if (urlCatKey === "new") {
+    _homeTab = "new";
+    _activeCategory = t("all");
+  } else if (urlCatKey && typeof desktopCatFromKey === "function") {
     const mapped = desktopCatFromKey(urlCatKey);
-    if (mapped) _activeCategory = mapped;
+    if (mapped) {
+      _activeCategory = mapped;
+      _homeTab = urlCatKey;
+    }
   }
 
   const savedCat = localStorage.getItem("storelySelectedCategory");
@@ -51,11 +57,11 @@ storelyInit().then(() => {
     localStorage.removeItem("storelySelectedCategory");
   }
 
-  document.getElementById("promoTag").textContent = t("promoTag");
+  document.getElementById("promoTag").textContent = t("offersSection");
   document.getElementById("promoTitle").textContent = t("promoTitle");
   document.getElementById("categoryTitle").textContent = t("categories");
   document.getElementById("productsTitle").textContent = t("pickedForYou");
-  document.getElementById("flashTitle").textContent = t("flashSale");
+  document.getElementById("flashTitle").textContent = t("offersSection");
   document.getElementById("popularSearchTitle").textContent = t("popularSearch");
   document.getElementById("viewAllCategories").textContent = `${t("viewAll")} ›`;
   document.getElementById("viewAllPicks").textContent = `${t("viewAll")} ›`;
@@ -64,7 +70,7 @@ storelyInit().then(() => {
   searchInput.placeholder = t("searchPlaceholder");
 
   const homeTabs = [
-    { id: "all", label: t("all") },
+    { id: "new", label: t("new") },
     { id: "women", label: t("women"), cat: "ألبسة نسائية" },
     { id: "men", label: t("men"), cat: "ألبسة رجالية" },
     { id: "kids", label: t("kids"), cat: "ألبسة أطفال" },
@@ -105,7 +111,7 @@ storelyInit().then(() => {
     _homeTab = btn.dataset.tab;
     document.querySelectorAll(".home-cat-tab").forEach((el) => el.classList.toggle("active", el.dataset.tab === _homeTab));
     if (btn.dataset.cat) _activeCategory = btn.dataset.cat;
-    else if (_homeTab === "all") _activeCategory = t("all");
+    else if (_homeTab === "new") _activeCategory = t("all");
     categoryFilter.querySelectorAll(".cat-chip").forEach((el) => el.classList.toggle("active", el.dataset.cat === _activeCategory));
     renderAll(stores);
   });
@@ -123,9 +129,16 @@ storelyInit().then(() => {
     renderAll(stores);
   });
 
+  const cameraHint = document.getElementById("cameraHint");
+  if (cameraHint) cameraHint.textContent = t("cameraMontageTip");
+  const desktopOffersTitle = document.getElementById("desktopOffersTitle");
+  if (desktopOffersTitle) desktopOffersTitle.textContent = t("offersSection");
+  const desktopOffersBarTitle = document.getElementById("desktopOffersBarTitle");
+  if (desktopOffersBarTitle) desktopOffersBarTitle.textContent = `${t("offersSection")} — ${t("new")}`;
+
   cameraSearchBtn?.addEventListener("click", () => cameraSearchInput.click());
   cameraSearchInput?.addEventListener("change", () => {
-    if (cameraSearchInput.files?.length) storelyToast(t("cameraTip"));
+    if (cameraSearchInput.files?.length) storelyToast(t("cameraMontageTip"));
   });
 
   startFlashTimer();
@@ -149,7 +162,7 @@ storelyInit().then(() => {
       (store.products || []).map((p) => ({ ...p, storeName: store.storeName, storeSlug: store.slug, storeId: store.id }))
     );
     if (_activeCategory !== t("all")) products = products.filter((p) => p.category === _activeCategory);
-    if (_homeTab === "offers") products = products.filter((p) => p.featured || (p.sales || 0) > 8);
+    if (_homeTab === "new") products = products.filter((p) => p.featured || p.onSale || (p.sales || 0) > 8);
     if (_searchQuery) products = products.filter((p) =>
       p.title.toLowerCase().includes(_searchQuery) ||
       p.category.toLowerCase().includes(_searchQuery) ||
@@ -165,7 +178,7 @@ storelyInit().then(() => {
         <button type="button" class="fav-btn${fav ? " active" : ""}" data-fav="${product.storeId}:${product.id}">♥</button>
         <div class="trendy-img" style="${storelyMediaStyle(product.image, "assets/images/product-electronics.svg")}"></div>
         <div class="trendy-body">
-          ${product.featured ? `<span class="badge-fast">${t("fastDelivery")}</span>` : ""}
+          ${product.featured || product.onSale ? `<span class="badge-fast">${product.onSale ? t("onSale") : t("new")}</span>` : ""}
           <span class="trendy-cat">${storelyCategoryLabel(product.category)}</span>
           <h3>${product.title}</h3>
           <p>${product.storeName}</p>
@@ -210,7 +223,7 @@ storelyInit().then(() => {
     const fav = storelyIsFavorite(product.storeId, product.id);
     return `
       <article class="desktop-product-card" data-store="${product.storeId}" data-product="${product.id}" data-slug="${product.storeSlug}">
-        <span class="badge-bestseller">${lang === "en" ? "BEST SELLER" : "الأكثر مبيعاً"}</span>
+        <span class="badge-bestseller">${product.onSale ? t("onSale") : t("new")}</span>
         <button type="button" class="fav-corner${fav ? " active" : ""}" data-fav="${product.storeId}:${product.id}">♥</button>
         <div class="img" style="${storelyMediaStyle(product.image, "assets/images/product-electronics.svg")}"></div>
         <div class="body">
@@ -260,13 +273,19 @@ storelyInit().then(() => {
 
   function renderAll(allStores) {
     const products = filterProducts(allStores);
+    const offers = products.filter((p) => p.featured || p.onSale || (p.sales || 0) > 8);
+    const offersBox = document.getElementById("desktopOffersProducts");
+    if (offersBox) {
+      offersBox.innerHTML = offers.slice(0, 12).map(desktopProductCard).join("");
+      bindDesktopProducts(offersBox);
+    }
     if (!products.length) {
       productsContainer.innerHTML = storelyEmptyState(t("noProducts"), t("tryAnother"), "", "");
       flashProducts.innerHTML = "";
       renderDesktop(allStores, []);
       return;
     }
-    flashProducts.innerHTML = products.slice(0, 6).map((p) => productCard(p, true)).join("");
+    flashProducts.innerHTML = offers.slice(0, 6).map((p) => productCard(p, true)).join("");
     productsContainer.innerHTML = products.map((p) => productCard(p)).join("");
     bindProductActions(flashProducts);
     bindProductActions(productsContainer);

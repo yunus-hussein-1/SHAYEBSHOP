@@ -23,16 +23,8 @@
     </section>
 
     <section class="panel-card">
-      <h2 id="paymentSection">طريقة الدفع (اختياري)</h2>
-      <form id="paymentForm" class="stack-form">
-        <select id="paymentMethod">
-          <option value="">— اختر لاحقاً —</option>
-          <option value="تسليم باليد">تسليم باليد</option>
-          <option value="شام كاش">شام كاش</option>
-        </select>
-        <button class="secondary-btn" id="savePaymentBtn" type="submit">حفظ</button>
-      </form>
-      <div id="paymentMessage" class="form-message"></div>
+      <h2 id="paymentSection">الدفع</h2>
+      <p id="shamOnlyNote">الدفع عبر شام كاش فقط على شايب شوب.</p>
     </section>
 
     <section class="panel-card" id="store">
@@ -51,6 +43,12 @@
       </form>
       <div id="storeMessage" class="form-message"></div>
     </section>
+    <section class="panel-card danger-zone">
+      <h2 id="deleteAccountSection">حذف الحساب</h2>
+      <p id="deleteAccountLead">حذف حسابك نهائياً مع جميع بياناتك المحلية.</p>
+      <button type="button" class="danger-btn" id="deleteAccountBtn">حذف الحساب</button>
+      <div id="deleteMessage" class="form-message"></div>
+    </section>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -58,6 +56,7 @@
   <script src="js/database.js"></script>
   <script src="js/storely-data.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/desktop-shell.js"></script>
   <script src="js/nav-shell.js"></script>
   <script src="js/settings.js"></script>
 </body>

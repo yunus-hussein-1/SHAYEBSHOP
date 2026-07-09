@@ -20,9 +20,11 @@ const STORELY_CATEGORIES = [
 ];
 
 const STORELY_PAYMENT_OPTIONS = [
-  { id: "hand", label: "تسليم باليد — الدفع عند الاستلام (ل.س)" },
-  { id: "sham_cash", label: "شام كاش — الدفع بالليرة السورية" }
+  { id: "sham_cash", label: "شام كاش" }
 ];
+
+const STORELY_ADDRESSES_KEY = "storelyAddresses";
+const STORELY_ORDER_RATINGS_KEY = "storelyOrderRatings";
 
 const STORELY_LANG_KEY = "storelyLang";
 const STORELY_FAVORITES_KEY = "storelyFavorites";
@@ -36,15 +38,35 @@ function storelyShamCashAccountName() {
   return storelyConfig().shamCashAccountName || storelyConfig().siteNameAr || SITE_NAME_AR;
 }
 
+const STORELY_LANGS = ["ar", "en", "tr"];
+
 function storelyGetLang() {
   const lang = localStorage.getItem(STORELY_LANG_KEY) || "ar";
-  return lang === "en" ? "en" : "ar";
+  return STORELY_LANGS.includes(lang) ? lang : "ar";
 }
 
 function storelySetLang(lang) {
-  const next = lang === "en" ? "en" : "ar";
+  const next = STORELY_LANGS.includes(lang) ? lang : "ar";
   localStorage.setItem(STORELY_LANG_KEY, next);
   return next;
+}
+
+function storelyNextLang() {
+  const i = STORELY_LANGS.indexOf(storelyGetLang());
+  return STORELY_LANGS[(i + 1) % STORELY_LANGS.length];
+}
+
+function storelyLangToggleLabel() {
+  const lang = storelyGetLang();
+  if (lang === "ar") return "EN";
+  if (lang === "en") return "TR";
+  return "AR";
+}
+
+function storelyCurrencyConfig() {
+  const lang = storelyGetLang();
+  const cfg = storelyConfig().currencies || {};
+  return cfg[lang] || cfg.ar || { locale: "ar-SY", suffix: " ل.س", divisor: 1, decimals: 0 };
 }
 
 function storelyGetFavorites() {
@@ -128,10 +150,14 @@ function storelyActiveStores(stores) {
 }
 
 function storelyMoney(value) {
-  const lang = typeof storelyGetLang === "function" ? storelyGetLang() : "ar";
-  const locale = lang === "en" ? "en-US" : "ar-SY";
-  const suffix = lang === "en" ? " SYP" : " ل.س";
-  return `${Number(value || 0).toLocaleString(locale)}${suffix}`;
+  const c = storelyCurrencyConfig();
+  const amount = Number(value || 0) / (c.divisor || 1);
+  const formatted = amount.toLocaleString(c.locale, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: c.decimals ?? (c.divisor > 1 ? 2 : 0)
+  });
+  if (c.prefix) return `${c.prefix}${formatted}`;
+  return `${formatted}${c.suffix || ""}`;
 }
 
 function storelyCommission(amount) {
@@ -166,7 +192,7 @@ function storelySeedDemoStores() {
       rating: 4.8, sales: 120, revenue: 0, reviews: [],
       banned: false, agreedCommission: true, status: "active",
       products: [
-        { id: "p1", title: "سماعات بلوتوث", price: 85000, category: "إلكترونيات", featured: true, sales: 45, image: "assets/images/product-electronics.svg" },
+        { id: "p1", title: "سماعات بلوتوث", price: 85000, category: "إلكترونيات", featured: true, onSale: true, sales: 45, image: "assets/images/product-electronics.svg" },
         { id: "p2", title: "شاحن سريع 65W", price: 42000, category: "إلكترونيات", featured: false, sales: 30, image: "assets/images/product-electronics.svg" }
       ]
     },
@@ -590,7 +616,8 @@ async function storelyUpdateProfile(updates = {}) {
   if (!user?.userId) throw new Error("يجب تسجيل الدخول أولاً.");
 
   const {
-    name, phone, avatar, location, deliveryAddress, deliveryTime, paymentMethod,
+    name, email, phone, avatar, location, deliveryAddress, deliveryTime, paymentMethod,
+    birthDay, birthMonth, birthYear, birthDate,
     currentPassword, newPassword
   } = updates;
 
@@ -627,8 +654,18 @@ async function storelyUpdateProfile(updates = {}) {
     users[index].password = newPassword;
   }
 
+  if (email !== undefined) {
+    const taken = users.some((u) => u.email === email && u.id !== user.userId);
+    if (taken) throw new Error(storelyGetLang() === "en" ? "Email already in use." : "البريد مستخدم.");
+    users[index].email = email;
+  }
+
   const fields = {
-    name, phone: normalizedPhone, avatar, location, deliveryAddress, deliveryTime, paymentMethod
+    name, phone: normalizedPhone, avatar, location, deliveryAddress, deliveryTime, paymentMethod,
+    birthDay, birthMonth, birthYear,
+    birthDate: birthDate !== undefined ? birthDate : (
+      birthDay && birthMonth && birthYear ? `${birthYear}-${birthMonth}-${birthDay}` : undefined
+    )
   };
   Object.entries(fields).forEach(([key, value]) => {
     if (value !== undefined) users[index][key] = value;
@@ -637,13 +674,105 @@ async function storelyUpdateProfile(updates = {}) {
 
   return storelySyncSession({
     name: users[index].name,
+    email: users[index].email,
     phone: users[index].phone || "",
     avatar: users[index].avatar || "",
     location: users[index].location || "",
     deliveryAddress: users[index].deliveryAddress || "",
     deliveryTime: users[index].deliveryTime || "",
-    paymentMethod: users[index].paymentMethod || ""
+    paymentMethod: users[index].paymentMethod || "",
+    birthDay: users[index].birthDay || "",
+    birthMonth: users[index].birthMonth || "",
+    birthYear: users[index].birthYear || ""
   });
+}
+
+/* -------------------- العناوين والطلبات -------------------- */
+
+function storelyAddressesKey(userId) {
+  return `${STORELY_ADDRESSES_KEY}_${userId || storelyCurrentUser()?.userId || "guest"}`;
+}
+
+function storelyGetAddresses(userId) {
+  const id = userId || storelyCurrentUser()?.userId;
+  if (!id) return [];
+  return JSON.parse(localStorage.getItem(storelyAddressesKey(id)) || "[]");
+}
+
+function storelySaveAddresses(list, userId) {
+  const id = userId || storelyCurrentUser()?.userId;
+  if (!id) return;
+  localStorage.setItem(storelyAddressesKey(id), JSON.stringify(list));
+}
+
+function storelyAddAddress(entry) {
+  const list = storelyGetAddresses();
+  const item = {
+    id: "addr-" + Date.now(),
+    label: entry.label || "",
+    city: entry.city || "",
+    district: entry.district || "",
+    street: entry.street || "",
+    details: entry.details || "",
+    isDefault: !!entry.isDefault || !list.length
+  };
+  if (item.isDefault) list.forEach((a) => { a.isDefault = false; });
+  list.unshift(item);
+  storelySaveAddresses(list);
+  return item;
+}
+
+function storelyRemoveAddress(addressId) {
+  const list = storelyGetAddresses().filter((a) => a.id !== addressId);
+  if (list.length && !list.some((a) => a.isDefault)) list[0].isDefault = true;
+  storelySaveAddresses(list);
+  return list;
+}
+
+function storelyGetUserOrders(userId) {
+  const id = userId || storelyCurrentUser()?.userId;
+  const orders = JSON.parse(localStorage.getItem("shayebOrders") || "[]");
+  return orders.filter((o) => o.userId === id);
+}
+
+function storelyRateOrder(orderId, rating, comment) {
+  const ratings = JSON.parse(localStorage.getItem(STORELY_ORDER_RATINGS_KEY) || "[]");
+  const user = storelyCurrentUser();
+  const entry = {
+    orderId,
+    userId: user?.userId,
+    rating: Number(rating),
+    comment: String(comment || "").trim(),
+    at: Date.now()
+  };
+  const idx = ratings.findIndex((r) => r.orderId === orderId && r.userId === user?.userId);
+  if (idx >= 0) ratings[idx] = entry;
+  else ratings.unshift(entry);
+  localStorage.setItem(STORELY_ORDER_RATINGS_KEY, JSON.stringify(ratings));
+  return entry;
+}
+
+function storelyGetOrderRating(orderId) {
+  const user = storelyCurrentUser();
+  const ratings = JSON.parse(localStorage.getItem(STORELY_ORDER_RATINGS_KEY) || "[]");
+  return ratings.find((r) => r.orderId === orderId && r.userId === user?.userId) || null;
+}
+
+async function storelyDeleteAccount() {
+  await storelyInit();
+  const user = storelyCurrentUser();
+  if (!user?.userId) throw new Error("يجب تسجيل الدخول.");
+
+  if (storelyUsingDatabase()) {
+    throw new Error(storelyGetLang() === "en" ? "Contact support to delete cloud account." : "تواصل مع الدعم لحذف الحساب السحابي.");
+  }
+
+  const users = storelyGetUsers().filter((u) => u.id !== user.userId);
+  storelySaveUsers(users);
+  localStorage.removeItem(STORELY_SESSION_KEY);
+  localStorage.removeItem(storelyAddressesKey(user.userId));
+  await storelySaveCartAsync([]);
+  storelyLogout?.();
 }
 
 /* -------------------- تقييمات المنتجات -------------------- */

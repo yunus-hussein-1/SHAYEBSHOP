@@ -9,21 +9,32 @@
 <body>
   <div class="desktop-sell-hero">
     <h1 id="sellTitle">نمِّ أعمالك مع شايب شوب!</h1>
-    <p id="sellLead">انضم إلى منصتنا وابدأ البيع اليوم بعملة سورية.</p>
+    <p id="sellLead">انضم إلى منصتنا وابدأ البيع بعملة مناسبة لغتك.</p>
   </div>
-  <div class="desktop-sell-cards sell-single" id="sellCards">
-    <article class="desktop-sell-card">
-      <div class="emoji">👕🎮👶</div>
-      <h3 id="sellMarketTitle">سوق شايب شوب</h3>
-      <p id="sellMarketDesc">بيع الألبسة والإلكترونيات لملايين المشترين في سوريا.</p>
-      <a href="create.html" class="primary-btn" id="sellMarketBtn">التقديم إلى السوق</a>
-    </article>
+
+  <div class="desktop-main agreement-panel">
+    <section class="panel-card">
+      <h2 id="agreementTitle">اتفاقية البائع والمشتري</h2>
+      <div class="agreement-scroll" id="agreementText">
+        <p><strong>1. الأطراف:</strong> هذه الاتفاقية بين منصة شايب شوب (الوسيط) والبائع والمشتري.</p>
+        <p><strong>2. العمولة:</strong> تستقطع شايب شوب عمولة قدرها <strong>10%</strong> من قيمة كل عملية بيع ناجحة لصالح تشغيل المنصة والدعم.</p>
+        <p><strong>3. التزامات البائع:</strong> عرض منتجات حقيقية بصور وأسعار صحيحة، الالتزام بالتوصيل المتفق عليه، واحترام حق المشتري في الاسترجاع حسب سياسة المتجر.</p>
+        <p><strong>4. التزامات المشتري:</strong> الدفع عبر <strong>شام كاش</strong> فقط، تقديم عنوان صحيح، والتعامل باحترام مع البائع والمنصة.</p>
+        <p><strong>5. شايب شوب:</strong> منصة وسيطة تربط البائع بالمشتري ولا تتحمل مسؤولية جودة المنتج عن البائع، مع حقها في إيقاف أي متجر يخالف الشروط.</p>
+        <p><strong>6. القبول:</strong> بالضغط على «أوافق وأفتح متجري» فإنك تقر بقراءة هذه الشروط والموافقة عليها.</p>
+      </div>
+      <label class="agreement-inline full">
+        <input type="checkbox" id="agreeSellerTerms" required>
+        <span id="agreeLabel">أوافق على شروط البيع وعمولة 10%</span>
+      </label>
+      <a href="settings.html#store" class="primary-btn" id="openStoreBtn" style="margin-top:16px;display:inline-block">أوافق وأفتح متجري</a>
+    </section>
   </div>
 
   <main class="app-screen mobile-only" style="padding:20px">
     <h1 id="sellMobileTitle">بيع على شايب شوب</h1>
-    <p id="sellMobileLead">افتح متجرك وابدأ البيع بالليرة السورية.</p>
-    <a href="create.html" class="primary-btn full" style="margin-top:16px" id="sellMobileBtn">إنشاء متجر</a>
+    <p id="sellMobileLead">اقرأ الاتفاقية ثم افتح متجرك.</p>
+    <a href="settings.html#store" class="primary-btn full" style="margin-top:16px" id="sellMobileBtn">اتفاقية البائع</a>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -40,11 +51,18 @@
       document.title = `${t("sellTitle")} | ${storelySiteName()}`;
       document.getElementById("sellTitle").textContent = t("sellTitle");
       document.getElementById("sellLead").textContent = t("sellLead");
-      document.getElementById("sellMarketTitle").textContent = t("sellMarket");
-      document.getElementById("sellMarketBtn").textContent = storelyGetLang() === "en" ? "Apply to Marketplace" : "التقديم إلى السوق";
+      document.getElementById("agreementTitle").textContent = t("sellerAgreement");
+      document.getElementById("agreeLabel").textContent = t("agreeSellerTerms");
+      document.getElementById("openStoreBtn").textContent = storelyGetLang() === "en" ? "I Agree — Open Store" : "أوافق وأفتح متجري";
       document.getElementById("sellMobileTitle").textContent = t("sellTitle");
-      document.getElementById("sellMobileLead").textContent = t("sellLead");
-      document.getElementById("sellMobileBtn").textContent = storelyGetLang() === "en" ? "Create Store" : "إنشاء متجر";
+      document.getElementById("sellMobileLead").textContent = t("agreeSellerTerms");
+      document.getElementById("sellMobileBtn").textContent = t("sellerAgreement");
+      document.getElementById("openStoreBtn").addEventListener("click", (e) => {
+        if (!document.getElementById("agreeSellerTerms").checked) {
+          e.preventDefault();
+          storelyToast(t("agreeSellerTerms"));
+        }
+      });
     });
   </script>
 </body>

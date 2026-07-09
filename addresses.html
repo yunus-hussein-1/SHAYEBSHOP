@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عناويني | شايب شوب</title>
+  <link rel="stylesheet" href="css/storely.css">
+</head>
+<body>
+  <div class="desktop-only">
+    <div class="desktop-main">
+      <div class="desktop-account-layout">
+        <div id="desktopAccountSidebar"></div>
+        <div class="desktop-form-panel">
+          <h2 id="addrPageTitle">عناويني</h2>
+          <div id="addressesList"></div>
+          <form id="addAddressForm" class="stack-form" style="margin-top:20px">
+            <label id="addrLabelLabel">اسم العنوان<input id="addrLabel" type="text" placeholder="المنزل / العمل"></label>
+            <label id="addrCityLabel">المدينة<input id="addrCity" type="text" required></label>
+            <label id="addrDistrictLabel">الحي<input id="addrDistrict" type="text"></label>
+            <label id="addrStreetLabel">الشارع<input id="addrStreet" type="text"></label>
+            <label id="addrDetailsLabel">تفاصيل إضافية<textarea id="addrDetails" rows="2"></textarea></label>
+            <button class="primary-btn" type="submit" id="addrSaveBtn">إضافة عنوان</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="app-screen mobile-only">
+    <header class="mobile-page-header">
+      <a href="profile.html" class="back-link">›</a>
+      <h1 id="mobileAddrTitle">عناويني</h1>
+    </header>
+    <div id="mobileAddressesList"></div>
+    <section class="app-card">
+      <form id="mobileAddAddressForm" class="stack-form">
+        <label>اسم العنوان<input id="mAddrLabel" type="text"></label>
+        <label>المدينة<input id="mAddrCity" type="text" required></label>
+        <label>الحي<input id="mAddrDistrict" type="text"></label>
+        <label>الشارع<input id="mAddrStreet" type="text"></label>
+        <label>تفاصيل<textarea id="mAddrDetails" rows="2"></textarea></label>
+        <button class="primary-btn" type="submit">إضافة عنوان</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db-config.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/storely-data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/desktop-shell.js"></script>
+  <script src="js/nav-shell.js"></script>
+  <script src="js/addresses.js"></script>
+</body>
+</html>

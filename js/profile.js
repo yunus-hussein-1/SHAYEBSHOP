@@ -15,8 +15,8 @@ storelyInit().then(async () => {
   document.title = `${storelyT("account")} | ${storelySiteName()}`;
 
   document.getElementById("memberBadge").textContent = storelyT("member");
-  document.getElementById("tileHistory").textContent = storelyT("browsingHistory");
-  document.getElementById("tileCoupons").textContent = storelyT("myCoupons");
+  document.getElementById("tileOrders")?.textContent = storelyT("myPurchases");
+  document.getElementById("tileAddresses")?.textContent = storelyT("myAddresses");
   document.getElementById("tileHelp").textContent = storelyT("help");
   document.getElementById("tileQuestions").textContent = storelyT("myQuestions");
   document.getElementById("tileOrders").textContent = storelyT("orders");

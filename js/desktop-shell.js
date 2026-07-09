@@ -1,12 +1,18 @@
 const DESKTOP_CATS = [
-  { key: "women", ar: "امرأة", en: "Women", cat: "ألبسة نسائية" },
-  { key: "men", ar: "رجل", en: "Men", cat: "ألبسة رجالية" },
-  { key: "kids", ar: "أطفال", en: "Kids", cat: "ألبسة أطفال" },
-  { key: "electronics", ar: "إلكترونيات", en: "Electronics", cat: "إلكترونيات" }
+  { key: "new", ar: "جديد", en: "New", tr: "Yeni", filter: "offers" },
+  { key: "women", ar: "امرأة", en: "Women", tr: "Kadın", cat: "ألبسة نسائية" },
+  { key: "men", ar: "رجل", en: "Men", tr: "Erkek", cat: "ألبسة رجالية" },
+  { key: "kids", ar: "أطفال", en: "Kids", tr: "Çocuk", cat: "ألبسة أطفال" },
+  { key: "electronics", ar: "إلكترونيات", en: "Electronics", tr: "Elektronik", cat: "إلكترونيات" }
 ];
 
 function desktopCatFromKey(key) {
-  return DESKTOP_CATS.find((c) => c.key === key)?.cat || null;
+  const item = DESKTOP_CATS.find((c) => c.key === key);
+  return item?.cat || null;
+}
+
+function desktopCatFilter(key) {
+  return DESKTOP_CATS.find((c) => c.key === key)?.filter || null;
 }
 
 function desktopPage() {
@@ -38,11 +44,10 @@ function desktopMountShell() {
       <div class="desktop-util-inner">
         <div class="desktop-util-links">
           <a href="help.html">${t("help")}</a>
-          <a href="sell.html">${lang === "en" ? "Sell on Shaib Shop" : "بيع على شايب شوب"}</a>
-          <a href="settings.html">${t("myCoupons")}</a>
+          <a href="sell.html">${lang === "en" ? "Sell on Shaib Shop" : lang === "tr" ? "Shaib Shop'ta Sat" : "بيع على شايب شوب"}</a>
         </div>
         <div class="desktop-util-links">
-          <button type="button" class="desktop-lang-btn" id="desktopLangBtn">${lang === "ar" ? "EN" : "AR"}</button>
+          <button type="button" class="desktop-lang-btn" id="desktopLangBtn">${typeof storelyLangToggleLabel === "function" ? storelyLangToggleLabel() : "EN"}</button>
         </div>
       </div>
     </div>
@@ -53,7 +58,7 @@ function desktopMountShell() {
           <small>plus</small>
         </a>
         <div class="desktop-search-wrap">
-          <button type="button" class="desktop-cam-btn" id="desktopCamBtn" title="camera">📷</button>
+          <button type="button" class="desktop-cam-btn" id="desktopCamBtn" title="${t("cameraMontageTip")}">📷</button>
           <input type="search" id="desktopSearch" placeholder="${t("searchPlaceholder")}">
           <button type="button" class="desktop-search-btn">🔍</button>
         </div>
@@ -73,9 +78,10 @@ function desktopMountShell() {
 
   const catNav = document.getElementById("desktopCatNav");
   const activeKey = new URLSearchParams(location.search).get("cat") || "";
-  catNav.innerHTML = DESKTOP_CATS.map((c) =>
-    `<a href="index.html?cat=${c.key}" data-cat-key="${c.key}" class="desktop-cat-link${activeKey === c.key ? " active" : ""}">${lang === "en" ? c.en : c.ar}</a>`
-  ).join("");
+  catNav.innerHTML = DESKTOP_CATS.map((c) => {
+    const label = lang === "en" ? c.en : lang === "tr" ? c.tr : c.ar;
+    return `<a href="index.html?cat=${c.key}" data-cat-key="${c.key}" class="desktop-cat-link${activeKey === c.key ? " active" : ""}">${label}</a>`;
+  }).join("");
 
   const footer = document.createElement("footer");
   footer.className = "desktop-footer desktop-only";
@@ -110,7 +116,7 @@ function desktopMountShell() {
   document.body.appendChild(footer);
 
   document.getElementById("desktopLangBtn")?.addEventListener("click", () => {
-    storelySetLang(lang === "ar" ? "en" : "ar");
+    storelySetLang(typeof storelyNextLang === "function" ? storelyNextLang() : "en");
     window.location.reload();
   });
 
@@ -170,7 +176,7 @@ function desktopMountAccountSidebar(containerId, active = "") {
   ];
   const personal = [
     { href: "account-info.html", icon: "👤", key: "myUserInfo", id: "userInfo" },
-    { href: "account-info.html#address", icon: "📍", key: "myAddress", fallback: lang === "en" ? "My Address" : "معلومات عنواني" },
+    { href: "addresses.html", icon: "📍", key: "myAddresses", id: "addresses" },
     { href: "settings.html", icon: "💳", key: "savedCards", fallback: lang === "en" ? "Saved Cards" : "بطاقاتي المسجلة" },
     { href: "settings.html", icon: "🔔", key: "adPrefs", fallback: lang === "en" ? "Ad Preferences" : "تفضيلات الإعلانات" },
     { href: "settings.html", icon: "🔒", key: "changePassword", fallback: lang === "en" ? "Change Password" : "تغيير كلمة المرور" },
@@ -195,8 +201,8 @@ function desktopMountAccountSidebar(containerId, active = "") {
         ${orders.map(link).join("")}
       </div>
       <div class="desktop-side-menu">
-        <h4>${lang === "en" ? "Just For You" : "فقط لأجلك"}</h4>
-        <a href="settings.html" class="desktop-side-link"><span>🎟️</span>${t("myCoupons")}</a>
+        <h4>${lang === "en" ? "Just For You" : lang === "tr" ? "Sana Özel" : "فقط لأجلك"}</h4>
+        <a href="orders.html" class="desktop-side-link"><span>📦</span>${t("myPurchases")}</a>
         <a href="favorites.html" class="desktop-side-link"><span>🕒</span>${t("browsingHistory")}</a>
       </div>
       <div class="desktop-side-menu">

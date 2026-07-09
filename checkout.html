@@ -12,7 +12,7 @@
       <div class="checkout-left">
         <section class="checkout-card mobile-only">
           <h1 id="checkoutHeading">إتمام الطلب والدفع</h1>
-          <p class="checkout-lead" id="checkoutLead">جميع الأسعار بالليرة السورية (ل.س)</p>
+          <p class="checkout-lead" id="checkoutLead">الدفع عبر شام كاش فقط</p>
           <div id="selectedPlan" class="selected-plan"></div>
         </section>
 
@@ -22,7 +22,7 @@
         </div>
 
         <div class="desktop-checkout-section checkout-form-panel">
-          <h3 class="desktop-only" id="desktopPaymentTitle">خيارات الدفع</h3>
+          <h3 class="desktop-only" id="desktopPaymentTitle">الدفع عبر شام كاش</h3>
 
           <form id="paymentForm" class="form-grid checkout-form">
             <label id="payerNameLabel">الاسم<input id="payerName" type="text" required></label>
@@ -38,13 +38,7 @@
             </label>
             <p class="schedule-hint full" id="scheduleHint"></p>
 
-            <div class="full payment-method-box">
-              <strong id="paymentMethodTitle">طريقة الدفع</strong>
-              <label class="payment-option"><input type="radio" name="payMethod" value="hand" checked> <span id="handPayText">تسليم باليد</span></label>
-              <label class="payment-option"><input type="radio" name="payMethod" value="sham_cash"> <span id="shamPayText">شام كاش</span></label>
-            </div>
-
-            <div id="shamCashBox" class="sham-cash-box full desktop-sham-box" style="display:none;">
+            <div id="shamCashBox" class="sham-cash-box full desktop-sham-box">
               <strong id="shamCashTitle">تحويل شام كاش</strong>
               <p id="shamCashHint">حوّل المبلغ إلى الرقم التالي:</p>
               <img src="assets/images/sham-cash-barcode.svg" alt="Sham Cash Barcode" class="sham-cash-barcode">
@@ -52,6 +46,7 @@
               <div class="sham-cash-number" id="shamCashNumber">—</div>
               <label id="shamCashRefLabel">رقم عملية التحويل<input id="shamCashRef" type="text" placeholder="اختياري"></label>
             </div>
+            <input type="hidden" name="payMethod" value="sham_cash">
 
             <label class="full" id="payerNotesLabel">ملاحظات<input id="payerNotes" type="text" placeholder="اختياري"></label>
             <button class="primary-btn full mobile-only" type="submit" id="submitOrderBtn">تأكيد الطلب والدفع</button>

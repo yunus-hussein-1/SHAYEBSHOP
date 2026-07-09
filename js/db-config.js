@@ -11,7 +11,11 @@ window.APP_CONFIG = {
   founderEmail: "yunuselhuseyin82@gmail.com",
   platformCommission: 0.10,
   shamCashNumber: "09xxxxxxxx",
-  currency: "ل.س"
+  currencies: {
+    ar: { locale: "ar-SY", suffix: " ل.س", divisor: 1, decimals: 0 },
+    en: { locale: "en-US", prefix: "$", divisor: 15000, decimals: 2 },
+    tr: { locale: "tr-TR", suffix: " ₺", divisor: 480, decimals: 2 }
+  }
 };
 
 window.ALSHAYEB_DB_CONFIG = window.APP_CONFIG;

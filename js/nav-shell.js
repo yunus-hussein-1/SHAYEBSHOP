@@ -16,7 +16,7 @@ function appIsAuthPage() {
 }
 
 function appIsProtectedPage() {
-  return ["account-info.html", "settings.html", "dashboard.html", "checkout.html", "admin.html"].includes(appPageName());
+  return ["account-info.html", "addresses.html", "orders.html", "settings.html", "dashboard.html", "checkout.html", "admin.html"].includes(appPageName());
 }
 
 function appRequireLogin() {
@@ -56,7 +56,7 @@ function appMountNav() {
   top.className = "app-topbar";
   top.innerHTML = `
     <button type="button" class="menu-btn" id="menuBtn" aria-label="menu">☰</button>
-    <button type="button" class="lang-chip-btn" id="langToggleBtn">${lang === "ar" ? "EN" : "AR"}</button>
+    <button type="button" class="lang-chip-btn" id="langToggleBtn">${typeof storelyLangToggleLabel === "function" ? storelyLangToggleLabel() : "EN"}</button>
     <a class="topbar-brand" href="index.html">${brand}</a>
     <a class="topbar-icon-btn" href="notifications.html" title="${storelyT("notifications")}">🔔</a>
     <a class="topbar-cart" href="cart.html" title="${storelyT("cart")}">🛒${badge}</a>
@@ -112,7 +112,7 @@ function appMountNav() {
     window.location.href = "login.html";
   });
   top.querySelector("#langToggleBtn")?.addEventListener("click", () => {
-    storelySetLang(storelyGetLang() === "ar" ? "en" : "ar");
+    storelySetLang(typeof storelyNextLang === "function" ? storelyNextLang() : "en");
     window.location.reload();
   });
   document.body.classList.add("has-bottomnav");

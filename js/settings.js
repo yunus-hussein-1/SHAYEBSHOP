@@ -4,7 +4,9 @@ storelyInit().then(async () => {
   document.title = `${storelyT("settings")} | ${storelySiteName()}`;
 
   const user = storelyCurrentUser();
-  document.getElementById("paymentMethod").value = user.paymentMethod || "";
+  document.getElementById("shamOnlyNote").textContent = storelyT("shamOnlyPay");
+  document.getElementById("deleteAccountSection").textContent = storelyT("deleteAccount");
+  document.getElementById("deleteAccountBtn").textContent = storelyT("deleteAccount");
   document.getElementById("productCategory").innerHTML = storelyCategoryOptions("إلكترونيات");
 
   if (storelyCurrentStore()) {
@@ -40,20 +42,19 @@ storelyInit().then(async () => {
     }
   });
 
-  document.getElementById("paymentForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const msg = document.getElementById("paymentMessage");
+  document.getElementById("deleteAccountBtn")?.addEventListener("click", async () => {
+    if (!confirm(storelyT("deleteAccountConfirm"))) return;
+    const msg = document.getElementById("deleteMessage");
     try {
-      await storelyUpdateProfile({ paymentMethod: document.getElementById("paymentMethod").value });
-      msg.textContent = storelyT("saved");
-      msg.dataset.type = "success";
+      await storelyDeleteAccount();
+      window.location.href = "index.html";
     } catch (err) {
       msg.textContent = err.message;
       msg.dataset.type = "error";
     }
   });
 
-  document.getElementById("storeForm").addEventListener("submit", async (e) => {
+  document.getElementById("storeForm")?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const msg = document.getElementById("storeMessage");
     if (!document.getElementById("agreeCommission").checked) {

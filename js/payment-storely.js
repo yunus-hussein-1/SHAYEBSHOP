@@ -33,15 +33,13 @@ storelyInit().then(async () => {
   const checkoutHeading = document.getElementById("checkoutHeading");
   if (checkoutHeading) checkoutHeading.textContent = t("checkoutTitle");
   const checkoutLead = document.getElementById("checkoutLead");
-  if (checkoutLead) checkoutLead.textContent = t("checkoutLead");
+  if (checkoutLead) checkoutLead.textContent = t("shamOnlyPay");
   const desktopDeliveryTitle = document.getElementById("desktopDeliveryTitle");
   if (desktopDeliveryTitle) desktopDeliveryTitle.textContent = t("deliveryAddress");
   const desktopPaymentTitle = document.getElementById("desktopPaymentTitle");
-  if (desktopPaymentTitle) desktopPaymentTitle.textContent = t("paymentOptions");
-  document.getElementById("paymentMethodTitle").textContent = t("payMethod");
-  document.getElementById("handPayText").textContent = t("handPay");
-  document.getElementById("shamPayText").textContent = t("shamPay");
-  document.getElementById("shamCashTitle").textContent = t("shamTitle");
+  if (desktopPaymentTitle) desktopPaymentTitle.textContent = t("shamCash");
+  const shamCashTitle = document.getElementById("shamCashTitle");
+  if (shamCashTitle) shamCashTitle.textContent = t("shamTitle");
   document.getElementById("shamCashHint").textContent = t("shamHint");
   document.getElementById("shamCashAccountLabel").textContent = `${t("accountName")}:`;
   document.getElementById("shamCashAccountName").textContent = shamAccount;
@@ -111,16 +109,9 @@ storelyInit().then(async () => {
 
   document.getElementById("shamCashNumber").textContent = shamNum || t("unspecified");
 
-  document.querySelectorAll('input[name="payMethod"]').forEach((radio) => {
-    radio.addEventListener("change", () => {
-      document.getElementById("shamCashBox").style.display =
-        document.querySelector('input[name="payMethod"]:checked')?.value === "sham_cash" ? "block" : "none";
-    });
-  });
-
   document.getElementById("paymentForm").addEventListener("submit", async (event) => {
     event.preventDefault();
-    const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || "hand";
+    const payMethod = "sham_cash";
     const deliveryVal = document.getElementById("deliveryTime").value;
     const deliveryMap = {
       near: t("deliveryNear"),
@@ -146,7 +137,7 @@ storelyInit().then(async () => {
       buyerAddress: document.getElementById("payerAddress").value.trim(),
       buyerLocation: document.getElementById("payerAddress").value.trim(),
       deliveryTime: deliveryMap[deliveryVal] || deliveryVal,
-      paymentMethod: payMethod === "sham_cash" ? t("shamPay") : t("handPay"),
+      paymentMethod: t("shamPay"),
       paymentType: payMethod,
       shamCashRef: document.getElementById("shamCashRef")?.value.trim() || "",
       notes: document.getElementById("payerNotes").value.trim(),

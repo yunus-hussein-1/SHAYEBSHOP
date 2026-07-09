@@ -5,22 +5,23 @@
 :root {
   --ink: #000000;
   --muted: #000000;
-  --paper: #f4fafb;
+  --paper: #f0f7f2;
   --panel: #ffffff;
-  --soft: #e8f7f4;
-  --line: #b8e0e8;
-  --primary: #06b6d4;
-  --primary-dark: #0891b2;
-  --primary-light: #22d3ee;
+  --soft: #e8f5ec;
+  --line: #b8dcc4;
+  --primary: #16a34a;
+  --primary-dark: #15803d;
+  --primary-light: #4ade80;
   --accent: #16a34a;
-  --accent-dark: #15803d;
-  --accent-light: #4ade80;
-  --gradient-main: linear-gradient(135deg, #06b6d4, #16a34a);
-  --gradient-soft: linear-gradient(135deg, #e8f5ea 0%, #ecfeff 50%, #e0f7fa 100%);
-  --gradient-hero: linear-gradient(145deg, #c7f0e8 0%, #b8eef8 50%, #d4f5e4 100%);
-  --gradient-animated: linear-gradient(-45deg, #06b6d4, #16a34a, #22d3ee, #4ade80);
+  --accent-dark: #14532d;
+  --accent-light: #86efac;
+  --cyan-soft: #d8f0e4;
+  --gradient-main: linear-gradient(135deg, #16a34a, #22c55e);
+  --gradient-soft: linear-gradient(135deg, #ecfdf3 0%, #f0fdf4 55%, #e8f5ec 100%);
+  --gradient-hero: linear-gradient(145deg, #d4f5e4 0%, #e8f7ee 50%, #ecfdf3 100%);
+  --gradient-animated: linear-gradient(-45deg, #16a34a, #22c55e, #4ade80, #86efac);
   --danger: #dc2626;
-  --shadow: 0 18px 40px rgba(6, 182, 212, .16);
+  --shadow: 0 18px 40px rgba(22, 163, 74, .14);
   --shadow-sm: 0 8px 24px rgba(22, 163, 74, .1);
   --radius: 16px;
   --radius-sm: 10px;
@@ -522,7 +523,24 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--p
   border-radius: 50%; cursor: pointer; font-weight: 900; color: #000;
 }
 
+.camera-hint {
+  font-size: .78rem; color: #000; margin-top: 6px; padding: 0 4px;
+}
+.dob-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 6px; }
+.order-card, .address-card { margin-bottom: 12px; }
+.order-card-head { display: flex; justify-content: space-between; gap: 12px; }
+.agreement-scroll {
+  max-height: 280px; overflow-y: auto; background: var(--soft);
+  border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin: 12px 0;
+  color: #000; font-size: .9rem;
+}
+.agreement-panel { max-width: 800px; }
+.danger-zone { border-color: var(--danger); }
 .schedule-hint {
+  font-size: .88rem; color: #000; line-height: 1.6;
+  background: linear-gradient(90deg, #e8f5ea, #ecfdf3);
+  border-radius: 8px; padding: 10px 12px; margin-top: -4px;
+}
   font-size: .88rem; color: #000; line-height: 1.6;
   background: linear-gradient(90deg, #e8f5ea, #ecfeff);
   border-radius: 8px; padding: 10px 12px; margin-top: -4px;

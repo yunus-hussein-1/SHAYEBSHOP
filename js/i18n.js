@@ -51,6 +51,23 @@ const APP_I18N = {
     offers: "عروض",
     electronics: "إلكترونيات",
     kids: "أطفال",
+    new: "جديد",
+    myPurchases: "مشترياتي",
+    newOrders: "طلبات جديدة",
+    pastOrders: "مشتريات سابقة",
+    rateOrder: "قيّم الطلب",
+    myAddresses: "عناويني",
+    addAddress: "إضافة عنوان",
+    deleteAccount: "حذف الحساب",
+    deleteAccountConfirm: "هل أنت متأكد من حذف حسابك نهائياً؟",
+    shamOnlyPay: "الدفع عبر شام كاش فقط",
+    offersSection: "عروض الشايب",
+    onSale: "عرض",
+    cameraMontageTip: "التقط صورة أو ارفع مونتاجاً للبحث عن منتج مشابه بالكاميرا",
+    sellerAgreement: "اتفاقية البائع",
+    agreeSellerTerms: "أوافق على شروط البيع وعمولة 10%",
+    productDesc: "وصف المنتج",
+    productComment: "ملاحظة / تعليق",
     hello: "أهلاً",
     enjoyShopping: "تسوق ممتع من شايب شوب",
     browseFree: "تصفّح بحرية",
@@ -226,7 +243,7 @@ const APP_I18N = {
     remove: "Remove",
     payNow: "Pay Now",
     total: "Total",
-    pricesNote: "All prices in Syrian Pound",
+    pricesNote: "All prices in US Dollars",
     promoTag: "Shaib Shop Offers",
     promoTitle: "Discounts on electronics and fashion",
     women: "Women",
@@ -234,6 +251,23 @@ const APP_I18N = {
     offers: "Offers",
     electronics: "Electronics",
     kids: "Kids",
+    new: "New",
+    myPurchases: "My Purchases",
+    newOrders: "New Orders",
+    pastOrders: "Past Orders",
+    rateOrder: "Rate Order",
+    myAddresses: "My Addresses",
+    addAddress: "Add Address",
+    deleteAccount: "Delete Account",
+    deleteAccountConfirm: "Are you sure you want to permanently delete your account?",
+    shamOnlyPay: "Sham Cash payment only",
+    offersSection: "Shaib Shop Offers",
+    onSale: "Sale",
+    cameraMontageTip: "Take a photo or upload an image to search for similar products",
+    sellerAgreement: "Seller Agreement",
+    agreeSellerTerms: "I agree to seller terms and 10% commission",
+    productDesc: "Product description",
+    productComment: "Note / comment",
     hello: "Hello",
     enjoyShopping: "Enjoy shopping at Alshayeb Store",
     browseFree: "Browse freely",
@@ -364,6 +398,33 @@ const APP_I18N = {
     mobilePhone: "Mobile Phone",
     dateOfBirth: "Date of Birth",
     commercialOffers: "I want commercial offer updates"
+  },
+  tr: {
+    siteName: "Shaib Shop",
+    siteTagline: "Elektronik ve Giyim",
+    home: "Ana Sayfa",
+    cart: "Sepet",
+    account: "Hesabım",
+    login: "Giriş",
+    favorites: "Favoriler",
+    settings: "Ayarlar",
+    help: "Yardım",
+    searchPlaceholder: "Marka, ürün veya kategori ara",
+    pricesNote: "Tüm fiyatlar Türk Lirası",
+    new: "Yeni",
+    women: "Kadın",
+    men: "Erkek",
+    kids: "Çocuk",
+    electronics: "Elektronik",
+    addToCart: "Sepete Ekle",
+    goToCart: "Sepete Git",
+    shamCash: "Sham Cash",
+    shamOnlyPay: "Yalnızca Sham Cash ile ödeme",
+    myPurchases: "Alışverişlerim",
+    myAddresses: "Adreslerim",
+    deleteAccount: "Hesabı Sil",
+    offersSection: "Shaib Shop Fırsatları",
+    onSale: "İndirim"
   }
 };
 
@@ -386,14 +447,14 @@ function storelyCategoryLabel(category) {
 
 function storelySiteName() {
   const lang = storelyGetLang();
-  if (lang === "en") return window.APP_CONFIG?.siteName || APP_I18N.en.siteName;
+  if (lang === "en" || lang === "tr") return window.APP_CONFIG?.siteName || APP_I18N.en.siteName;
   return window.APP_CONFIG?.siteNameAr || APP_I18N.ar.siteName;
 }
 
 function storelyApplyLang() {
   const lang = storelyGetLang();
   document.documentElement.lang = lang;
-  document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   document.title = document.title.replace(/متجر الشايب|Alshayeb Store|Shaib Shop/g, storelySiteName());
   return lang;
 }

@@ -302,6 +302,50 @@ function storelySaveUsers(users) {
   localStorage.setItem(STORELY_USERS_KEY, JSON.stringify(users));
 }
 
+function storelyRandomSalt(size = 16) {
+  if (!window.crypto?.getRandomValues) {
+    throw new Error("المتصفح لا يدعم توليد مفاتيح آمنة.");
+  }
+  const bytes = new Uint8Array(size);
+  window.crypto.getRandomValues(bytes);
+  return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function storelySha256Hex(text) {
+  if (!window.crypto?.subtle) {
+    throw new Error("المتصفح لا يدعم تشفير كلمة المرور.");
+  }
+  const data = new TextEncoder().encode(text);
+  const digest = await window.crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function storelyHashPassword(password, salt) {
+  return storelySha256Hex(`${salt}:${password}`);
+}
+
+async function storelySetUserPassword(user, password) {
+  const salt = storelyRandomSalt();
+  user.passwordSalt = salt;
+  user.passwordHash = await storelyHashPassword(password, salt);
+  delete user.password; // ترحيل من الصيغة القديمة (plain text)
+  return user;
+}
+
+async function storelyVerifyUserPassword(user, password) {
+  if (!user || !password) return false;
+  if (user.passwordHash && user.passwordSalt) {
+    const hash = await storelyHashPassword(password, user.passwordSalt);
+    return hash === user.passwordHash;
+  }
+  if (typeof user.password === "string" && user.password) {
+    if (user.password !== password) return false;
+    await storelySetUserPassword(user, password);
+    return true;
+  }
+  return false;
+}
+
 function storelyCurrentUser() {
   const local = JSON.parse(localStorage.getItem(STORELY_SESSION_KEY) || "null");
   if (_dbMode) {
@@ -648,10 +692,11 @@ async function storelyUpdateProfile(updates = {}) {
 
   if (newPassword) {
     if (!currentPassword) throw new Error("أدخل كلمة المرور الحالية.");
-    if (users[index].password !== currentPassword) {
+    const currentOk = await storelyVerifyUserPassword(users[index], currentPassword);
+    if (!currentOk) {
       throw new Error("كلمة المرور الحالية غير صحيحة.");
     }
-    users[index].password = newPassword;
+    await storelySetUserPassword(users[index], newPassword);
   }
 
   if (email !== undefined) {

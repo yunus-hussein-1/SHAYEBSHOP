@@ -13,7 +13,7 @@ async function storelyAfterAuthRedirect() {
   return target;
 }
 
-function storelyLocalSignUp(name, email, password) {
+async function storelyLocalSignUp(name, email, password) {
   const users = storelyGetUsers();
   if (users.some((u) => u.email === email)) {
     throw new Error(storelyGetLang() === "en" ? "Email already registered. Try signing in." : "هذا البريد مسجل. جرّب تسجيل الدخول.");
@@ -22,7 +22,6 @@ function storelyLocalSignUp(name, email, password) {
     id: "user-" + Date.now(),
     name,
     email,
-    password,
     storeId: null,
     role: "buyer",
     phone: "",
@@ -32,6 +31,7 @@ function storelyLocalSignUp(name, email, password) {
     deliveryTime: "",
     paymentMethod: ""
   };
+  await storelySetUserPassword(user, password);
   users.push(user);
   storelySaveUsers(users);
   const session = { userId: user.id, name, email, storeId: null, role: "buyer", phone: "", avatar: "", location: "", deliveryAddress: "", deliveryTime: "", paymentMethod: "" };
@@ -39,11 +39,15 @@ function storelyLocalSignUp(name, email, password) {
   return session;
 }
 
-function storelyLocalSignIn(email, password) {
-  const user = storelyGetUsers().find((u) => u.email === email && u.password === password);
-  if (!user) {
+async function storelyLocalSignIn(email, password) {
+  const users = storelyGetUsers();
+  const user = users.find((u) => u.email === email);
+  const validPassword = await storelyVerifyUserPassword(user, password);
+  if (!user || !validPassword) {
     throw new Error(storelyGetLang() === "en" ? "Invalid email or password." : "البريد أو كلمة المرور غير صحيحة.");
   }
+  // حفظ أي ترحيل تلقائي من كلمات مرور قديمة plaintext إلى hash+salt.
+  storelySaveUsers(users);
   const session = {
     userId: user.id,
     name: user.name,
@@ -164,7 +168,7 @@ async function initLoginPage() {
         await dbSignIn(email, password);
         localStorage.setItem(STORELY_SESSION_KEY, JSON.stringify(dbCurrentUser()));
       } else {
-        storelyLocalSignIn(email, password);
+        await storelyLocalSignIn(email, password);
       }
       await storelyMergeGuestCartOnLogin();
       window.location.href = await storelyAfterAuthRedirect();
@@ -194,7 +198,7 @@ async function initLoginPage() {
         message.dataset.type = "success";
         return;
       }
-      storelyLocalSignUp(name, email, password);
+      await storelyLocalSignUp(name, email, password);
       await storelyMergeGuestCartOnLogin();
       window.location.href = await storelyAfterAuthRedirect();
     } catch (err) {
@@ -218,7 +222,7 @@ async function initLoginPage() {
         await dbSignIn(email, password);
         localStorage.setItem(STORELY_SESSION_KEY, JSON.stringify(dbCurrentUser()));
       } else {
-        storelyLocalSignIn(email, password);
+        await storelyLocalSignIn(email, password);
       }
       await storelyMergeGuestCartOnLogin();
       window.location.href = await storelyAfterAuthRedirect();
